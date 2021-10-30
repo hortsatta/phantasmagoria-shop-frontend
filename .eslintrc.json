@@ -1,0 +1,37 @@
+{
+  "root": true,
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "airbnb",
+    "plugin:prettier/recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint", "prettier"],
+  "rules": {
+    "prettier/prettier": "error",
+    "@typescript-eslint/indent": ["error", 2],
+    "@typescript-eslint/no-explicit-any": "error",
+    "@typescript-eslint/no-unused-vars": "error",
+    "arrow-parens": ["warn", "as-needed"],
+    "import/extensions": "off",
+    "import/prefer-default-export": "off",
+    "jsx-quotes": ["error", "prefer-single"],
+    "react/jsx-filename-extension": ["error", { "extensions": [".tsx"] }],
+    "react/jsx-max-props-per-line": [1, { "when": "multiline" }],
+    "react/react-in-jsx-scope": "off",
+    // immer.js specific rules
+    "no-param-reassign": ["error", {
+      "props": true,
+      "ignorePropertyModificationsFor": ["state", "draftState", "draft"]
+    }]
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+          "extensions": [".ts", ".tsx"],
+          "moduleDirectory": ["node_modules", "src/"]
+      }
+    }
+  }
+}
