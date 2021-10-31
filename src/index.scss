@@ -1,16 +1,11 @@
 @use './assets/styles/fonts';
-@use './assets/styles/variables';
+@use './assets/styles/variables.module';
 
 body {
   margin: 0;
   font-family: variables.$text-font;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
-  .ass {
-    width: 800px;
-    letter-spacing: -0.1;
-  }
 }
 
 code {
