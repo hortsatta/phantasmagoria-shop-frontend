@@ -10,21 +10,27 @@
   "plugins": ["@typescript-eslint", "prettier"],
   "rules": {
     "prettier/prettier": "error",
-    "@typescript-eslint/indent": ["error", 2],
-    "@typescript-eslint/no-explicit-any": "error",
-    "@typescript-eslint/no-unused-vars": "error",
     "arrow-parens": ["warn", "as-needed"],
-    "import/extensions": "off",
-    "import/prefer-default-export": "off",
     "jsx-quotes": ["error", "prefer-single"],
-    "react/jsx-filename-extension": ["error", { "extensions": [".tsx"] }],
-    "react/jsx-max-props-per-line": [1, { "when": "multiline" }],
-    "react/react-in-jsx-scope": "off",
+    "no-unused-vars": "off",
     // immer.js specific rules
     "no-param-reassign": ["error", {
       "props": true,
       "ignorePropertyModificationsFor": ["state", "draftState", "draft"]
-    }]
+    }],
+    // typescript
+    "@typescript-eslint/indent": ["error", 2],
+    "@typescript-eslint/no-explicit-any": "off",
+    // imports
+    "import/extensions": "off",
+    "import/order": "off",
+    "import/prefer-default-export": "off",
+    // react
+    "react/jsx-filename-extension": ["error", { "extensions": [".tsx"] }],
+    "react/jsx-max-props-per-line": [1, { "when": "multiline" }],
+    "react/jsx-props-no-spreading": "off",
+    "react/react-in-jsx-scope": "off"
+    
   },
   "settings": {
     "import/resolver": {
