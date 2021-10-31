@@ -10,9 +10,11 @@ export const App: FC = () => {
     <ChakraProvider theme={extendTheme(theme)}>
       <Box>
         <Header />
-        <Suspense fallback={null}>
-          <AppRoutes />
-        </Suspense>
+        <Box my={10}>
+          <Suspense fallback={null}>
+            <AppRoutes />
+          </Suspense>
+        </Box>
       </Box>
     </ChakraProvider>
   );

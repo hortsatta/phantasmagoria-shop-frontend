@@ -2,5 +2,6 @@ export type NavItem = {
   path: string;
   label: string;
   iconName?: string;
-  isHidden?: boolean;
+  hidden?: boolean;
+  children?: { [x: string]: NavItem };
 };

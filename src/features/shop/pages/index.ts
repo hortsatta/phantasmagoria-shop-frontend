@@ -1,1 +1,2 @@
-export * from './shop-landing-page.component';
+export * from './shop-landing.page';
+export * from './shop-list.page';

@@ -1,5 +1,5 @@
 import { FC, useCallback, useMemo } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 import { SimpleGrid } from '@chakra-ui/react';
 import { Brain, Knife, Storefront, Tray, UserCircle } from 'phosphor-react';
 
@@ -11,7 +11,18 @@ export const navConfig: { [x: string]: NavItemModel } = {
   shop: {
     path: '/shop',
     label: 'Shop',
-    iconName: 'storefront'
+    children: {
+      list: {
+        path: '/',
+        label: 'Shop List',
+        hidden: true
+      },
+      landing: {
+        path: '/landing',
+        label: 'Landing',
+        iconName: 'storefront'
+      }
+    }
   },
   cart: {
     path: '/cart',
@@ -55,20 +66,36 @@ const getIcon = (name: string) => {
 type MenuItemProps = {
   active: boolean;
   item: NavItemModel;
+  onClick?: () => void;
 };
 
-const MenuItem: FC<MenuItemProps> = ({ active, item }) => {
+const MenuItem: FC<MenuItemProps> = ({ active, item, onClick }) => {
   const Component = getIcon(item.iconName || '');
 
   return (
-    <NavItem aria-label={item.label} active={active} iconAs={props => <Component {...props} />} />
+    <NavItem
+      aria-label={item.label}
+      active={active}
+      iconAs={props => <Component {...props} />}
+      onClick={onClick}
+    />
   );
 };
 
+MenuItem.defaultProps = {
+  onClick: undefined
+};
+
 export const Nav: FC = () => {
+  const history = useHistory();
   const { pathname: locationPathname } = useLocation();
   const menuItems = useMemo(
-    () => Object.values(navConfig).filter(item => !item.isHidden),
+    () => Object.values(navConfig).filter(item => !item.hidden),
+    [navConfig]
+  );
+
+  const getMenuChildren = useCallback(
+    children => Object.values(children).filter((childItem: any) => !childItem.hidden),
     [navConfig]
   );
 
@@ -77,22 +104,39 @@ export const Nav: FC = () => {
     [locationPathname]
   );
 
+  const handleNavigate = (path: string) => {
+    history.push(path);
+  };
+
   return (
     <SimpleGrid
       pos='absolute'
       alignSelf='center'
       left='50%'
+      h='100%'
       transform='translate(-50%)'
       columns={5}
-      spacingX='40px'
+      spacingX={8}
     >
-      {menuItems.map(item => (
-        <MenuItem
-          key={item.label.toLowerCase().trim()}
-          active={checkActivePath(item.path)}
-          item={item}
-        />
-      ))}
+      {menuItems.map(item =>
+        item.children ? (
+          getMenuChildren(item.children).map((childItem: any) => (
+            <MenuItem
+              key={childItem.label.toLowerCase().trim()}
+              active={checkActivePath(`${item.path}`)}
+              item={childItem}
+              onClick={() => handleNavigate(`${item.path}${childItem.path}`)}
+            />
+          ))
+        ) : (
+          <MenuItem
+            key={item.label.toLowerCase().trim()}
+            active={checkActivePath(item.path)}
+            item={item}
+            onClick={() => handleNavigate(item.path)}
+          />
+        )
+      )}
     </SimpleGrid>
   );
 };
