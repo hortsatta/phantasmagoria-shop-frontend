@@ -1,0 +1,19 @@
+$primary-font: 'StAugustin', sans-serif;
+$accent-font: 'Diesirae', sans-serif;
+$text-font: 'SfPro', sans-serif;
+$code-font: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+$primary-color: #d81681;
+$accent-color: #740f31;
+$background-color: #0f050c;
+$text-color: #fff;
+
+:export {
+  primaryColor: $primary-color;
+  accentColor: $accent-color;
+  backgroundColor: $background-color;
+  textColor: $text-color;
+  primaryFont: $primary-font;
+  accentFont: $accent-font;
+  textFont: $text-font;
+  codeFont: $code-font;
+}
