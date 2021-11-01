@@ -1,14 +1,13 @@
 import { FC } from 'react';
-import { Box, Flex } from '@chakra-ui/react';
+import { Box, BoxProps, Flex } from '@chakra-ui/react';
+import { motion } from 'framer-motion';
 
 import { ReactComponent as NavIndicatorSvg } from 'assets/svgs/nav-indicator.svg';
 import variables from 'assets/styles/_variables.module.scss';
 
-type Props = {
-  active?: boolean;
-};
+const MotionBox = motion<Omit<BoxProps, 'transition'>>(Box);
 
-export const NavIndicator: FC<Props> = ({ active }) => (
+export const NavActiveIndicator: FC = () => (
   <Flex
     justifyContent='center'
     pos='absolute'
@@ -17,31 +16,30 @@ export const NavIndicator: FC<Props> = ({ active }) => (
     h='20px'
     transform='translateY(50%)'
     zIndex={1}
-    opacity={active ? 1 : 0}
   >
-    <Box
+    <MotionBox
       pos='relative'
       w='100%'
       h='100%'
       backgroundColor={variables.backgroundColor}
       borderRadius='999px'
-      transform={active ? 'scale(1)' : 'scale(0)'}
-      transition='transform 0.3s'
       zIndex={1}
+      initial={{ scale: 0 }}
+      animate={{ scale: 1 }}
+      transition={{ type: 'tween', duration: 0.2 }}
     >
       <NavIndicatorSvg fill={variables.primaryColor} />
-    </Box>
+    </MotionBox>
     <Box
       background={`linear-gradient(90deg, rgba(0,0,0,0) 0%, ${variables.primaryColor} 20%, ${variables.primaryColor} 80%, rgba(0,0,0,0) 100%)`}
       pos='absolute'
-      top='50%'
-      w={active ? '200px' : '0px'}
+      top='10px'
+      w='200px'
       h='2px'
-      transition='width 0.5s'
     />
   </Flex>
 );
 
-NavIndicator.defaultProps = {
+NavActiveIndicator.defaultProps = {
   active: false
 };

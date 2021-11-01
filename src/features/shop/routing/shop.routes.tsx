@@ -19,7 +19,7 @@ export const ShopRoutes: FC<RouteComponentProps> = ({ match }) => (
     <Route exact path={match.path} component={ShopListPage} />
     <Route
       path={`${navConfig.shop.path}${navConfig.shop.children?.landing.path}`}
-      component={ShopLandingPage}
+      component={ShopListPage}
     />
   </>
 );

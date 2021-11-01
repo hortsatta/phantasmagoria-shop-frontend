@@ -3,7 +3,7 @@ import { As, Flex, IconButtonProps } from '@chakra-ui/react';
 
 import { Icon } from './icon.component';
 import { IconButton } from './icon-button.component';
-import { NavIndicator } from './nav-indicator.component';
+import { NavActiveIndicator } from './nav-active-indicator.component';
 
 type Props = IconButtonProps & {
   iconAs: As;
@@ -19,7 +19,7 @@ export const NavItem: FC<Props> = ({ active, iconAs, ...moreProps }) => (
       icon={<Icon boxSizing='content-box' px={2} as={iconAs} active={active} />}
       {...moreProps}
     />
-    <NavIndicator active={active} />
+    {active && <NavActiveIndicator />}
   </Flex>
 );
 

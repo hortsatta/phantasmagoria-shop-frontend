@@ -24,6 +24,6 @@ export const Header: FC = () => (
       <Nav />
       <Box />
     </Flex>
-    <Divider />
+    <Divider opacity={0.3} />
   </>
 );
