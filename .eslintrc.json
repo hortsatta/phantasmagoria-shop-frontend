@@ -9,9 +9,10 @@
   "parser": "@typescript-eslint/parser",
   "plugins": ["@typescript-eslint", "prettier"],
   "rules": {
-    "prettier/prettier": "error",
+    "prettier/prettier": ["error", { "endOfLine": "auto" }],
     "arrow-parens": ["warn", "as-needed"],
     "jsx-quotes": ["error", "prefer-single"],
+    "no-shadow": "off",
     "no-unused-vars": "off",
     // immer.js specific rules
     "no-param-reassign": ["error", {
@@ -21,6 +22,7 @@
     // typescript
     "@typescript-eslint/indent": ["error", 2],
     "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-shadow": ["error"],
     // imports
     "import/extensions": "off",
     "import/order": "off",
@@ -29,8 +31,7 @@
     "react/jsx-filename-extension": ["error", { "extensions": [".tsx"] }],
     "react/jsx-max-props-per-line": [1, { "when": "multiline" }],
     "react/jsx-props-no-spreading": "off",
-    "react/react-in-jsx-scope": "off"
-    
+    "react/react-in-jsx-scope": "off"    
   },
   "settings": {
     "import/resolver": {
