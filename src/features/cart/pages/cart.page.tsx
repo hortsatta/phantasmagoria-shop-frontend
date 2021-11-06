@@ -1,7 +1,8 @@
 import { FC } from 'react';
+import { PageBox } from 'features/core/components';
 
 export const CartPage: FC = () => (
-  <div>
+  <PageBox>
     <span>Cart Page</span>
-  </div>
+  </PageBox>
 );

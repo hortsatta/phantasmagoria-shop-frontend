@@ -5,12 +5,14 @@ $code-font: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 $primary-color: #d81681;
 $accent-color: #740f31;
 $background-color: #0f050c;
+$surface-color: #1a0914;
 $text-color: #fff;
 
 :export {
   primaryColor: $primary-color;
   accentColor: $accent-color;
   backgroundColor: $background-color;
+  surfaceColor: $surface-color;
   textColor: $text-color;
   primaryFont: $primary-font;
   accentFont: $accent-font;
