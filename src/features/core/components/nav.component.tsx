@@ -1,23 +1,27 @@
-import { FC, useCallback, useMemo } from 'react';
+import { FC, useCallback, useContext, useMemo, useState } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import { SimpleGrid } from '@chakra-ui/react';
 import { Brain, Knife, Storefront, Tray, UserCircle } from 'phosphor-react';
 
 import { NavItem as NavItemModel } from 'models';
+import { PageContext } from '../contexts';
 import { NavItem } from './nav-item.component';
 
 // tempo
 export const navConfig: { [x: string]: NavItemModel } = {
   shop: {
+    key: 'shop',
     path: '/shop',
     label: 'Shop',
     children: {
       list: {
+        key: 'shop-list',
         path: '/',
         label: 'Shop List',
         hidden: true
       },
       landing: {
+        key: 'shop-landing',
         path: '/landing',
         label: 'Landing',
         iconName: 'storefront'
@@ -25,21 +29,25 @@ export const navConfig: { [x: string]: NavItemModel } = {
     }
   },
   cart: {
+    key: 'cart',
     path: '/cart',
     label: 'Cart',
     iconName: 'tray'
   },
   favorite: {
+    key: 'favorite',
     path: '/favorites',
     label: 'My Favorites',
     iconName: 'knife'
   },
   user: {
+    key: 'user',
     path: '/user',
     label: 'User Account',
     iconName: 'user-circle'
   },
   about: {
+    key: 'about',
     path: '/about',
     label: 'About Us',
     iconName: 'brain'
@@ -89,6 +97,9 @@ MenuItem.defaultProps = {
 export const Nav: FC = () => {
   const history = useHistory();
   const { pathname: locationPathname } = useLocation();
+  const { setCurrentPath } = useContext(PageContext);
+  const [currentMenuItem, setCurrentMenuItem] = useState('');
+
   const menuItems = useMemo(
     () => Object.values(navConfig).filter(item => !item.hidden),
     [navConfig]
@@ -104,7 +115,9 @@ export const Nav: FC = () => {
     [locationPathname]
   );
 
-  const handleNavigate = (path: string) => {
+  const handleNavigate = (key: string, path: string) => {
+    setCurrentPath(path);
+    setCurrentMenuItem(key);
     history.push(path);
   };
 
@@ -122,18 +135,18 @@ export const Nav: FC = () => {
         item.children ? (
           getMenuChildren(item.children).map((childItem: any) => (
             <MenuItem
-              key={childItem.label.toLowerCase().trim()}
-              active={checkActivePath(`${item.path}`)}
+              key={childItem.key}
+              active={currentMenuItem === childItem.key || checkActivePath(`${item.path}`)}
               item={childItem}
-              onClick={() => handleNavigate(`${item.path}${childItem.path}`)}
+              onClick={() => handleNavigate(childItem.key, `${item.path}${childItem.path}`)}
             />
           ))
         ) : (
           <MenuItem
-            key={item.label.toLowerCase().trim()}
-            active={checkActivePath(item.path)}
+            key={item.key}
+            active={currentMenuItem === item.key || checkActivePath(item.path)}
             item={item}
-            onClick={() => handleNavigate(item.path)}
+            onClick={() => handleNavigate(item.key, item.path)}
           />
         )
       )}
