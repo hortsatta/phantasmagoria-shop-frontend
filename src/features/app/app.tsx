@@ -10,7 +10,7 @@ export const App: FC = () => {
   return (
     <PageContextProvider>
       <ChakraProvider theme={extendTheme(theme)}>
-        <Box>
+        <Box pt='61px'>
           <Header />
           <Suspense fallback={null}>
             <AppRoutes />

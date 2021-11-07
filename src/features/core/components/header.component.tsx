@@ -4,8 +4,10 @@ import { Box, Divider, Flex, Heading } from '@chakra-ui/react';
 import { Nav } from './nav.component';
 import { ReactComponent as LogoSvg } from 'assets/svgs/logo.svg';
 
+import variables from 'assets/styles/_variables.module.scss';
+
 export const Header: FC = () => (
-  <>
+  <Box pos='fixed' top='0px' w='100%' backgroundColor={variables.backgroundColor} zIndex={1}>
     <Flex
       justifyContent='space-between'
       alignItems='center'
@@ -25,5 +27,5 @@ export const Header: FC = () => (
       <Box />
     </Flex>
     <Divider opacity={0.3} />
-  </>
+  </Box>
 );
