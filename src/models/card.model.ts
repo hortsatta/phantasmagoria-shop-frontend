@@ -18,6 +18,7 @@ export enum CardType {
   DEMON,
   GHOST,
   SERIAL_KILLER,
+  UNKNOWN,
   VAMPIRE,
   WITCH,
   ZOMBIE
@@ -35,5 +36,5 @@ export type Card = {
   image: string;
   rarity: CardRarity | string;
   category: CardCategory;
-  type: CardType;
+  type: CardType[];
 };
