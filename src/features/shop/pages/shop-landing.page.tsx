@@ -1,7 +1,8 @@
 import { FC } from 'react';
+import { PageBox } from 'features/core/components';
 
 export const ShopLandingPage: FC = () => (
-  <div>
+  <PageBox>
     <span>Shop Landing Page</span>
-  </div>
+  </PageBox>
 );
