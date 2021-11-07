@@ -1,25 +1,20 @@
-import { FC, createContext, useEffect, useState } from 'react';
+import { FC, createContext } from 'react';
 import { useBoolean } from '@chakra-ui/react';
 
 type PageContextType = {
   pageLoading: boolean;
-  setCurrentPath: any;
+  setPageLoading: any;
   showPage: () => void;
 };
 
 const PageContext = createContext<PageContextType>({
   pageLoading: false,
-  setCurrentPath: () => null,
+  setPageLoading: null,
   showPage: () => null
 });
 
 const PageContextProvider: FC = ({ children }) => {
   const [pageLoading, setPageLoading] = useBoolean(true);
-  const [currentPath, setCurrentPath] = useState('');
-
-  useEffect(() => {
-    setPageLoading.on();
-  }, [currentPath]);
 
   const showPage = () => {
     const debounce = setTimeout(() => {
@@ -29,7 +24,7 @@ const PageContextProvider: FC = ({ children }) => {
   };
 
   return (
-    <PageContext.Provider value={{ pageLoading, setCurrentPath, showPage }}>
+    <PageContext.Provider value={{ pageLoading, showPage, setPageLoading }}>
       {children}
     </PageContext.Provider>
   );

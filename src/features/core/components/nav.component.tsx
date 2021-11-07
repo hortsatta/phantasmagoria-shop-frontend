@@ -97,7 +97,7 @@ MenuItem.defaultProps = {
 export const Nav: FC = () => {
   const history = useHistory();
   const { pathname: locationPathname } = useLocation();
-  const { setCurrentPath } = useContext(PageContext);
+  const { setPageLoading } = useContext(PageContext);
   const [currentMenuItem, setCurrentMenuItem] = useState('');
 
   const menuItems = useMemo(
@@ -116,7 +116,7 @@ export const Nav: FC = () => {
   );
 
   const handleNavigate = (key: string, path: string) => {
-    setCurrentPath(path);
+    setPageLoading.on();
     setCurrentMenuItem(key);
     history.push(path);
   };
