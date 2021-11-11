@@ -1,29 +1,3 @@
-export enum CardRarity {
-  COMMON = 1,
-  UNCOMMON,
-  RARE,
-  LEGENDARY
-}
-
-export enum CardCategory {
-  BODY = 1,
-  COSMIC,
-  MONSTER,
-  PARANORMAL,
-  SLASHER
-}
-
-export enum CardType {
-  ALIEN = 1,
-  DEMON,
-  GHOST,
-  SERIAL_KILLER,
-  UNKNOWN,
-  VAMPIRE,
-  WITCH,
-  ZOMBIE
-}
-
 export type Card = {
   id: string;
   name: string;
@@ -34,7 +8,8 @@ export type Card = {
     cost: number;
   };
   image: string;
-  rarity: CardRarity | string;
-  category: CardCategory;
-  type: CardType[];
+  coverImage: string;
+  rarity: number;
+  category: number;
+  type: number;
 };
