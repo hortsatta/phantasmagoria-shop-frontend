@@ -1,5 +1,5 @@
-import { FC, useCallback, useContext, useMemo, useState } from 'react';
-import { useLocation, useHistory } from 'react-router-dom';
+import { FC, useCallback, useContext, useMemo } from 'react';
+import { useLocation } from 'react-router-dom';
 import { SimpleGrid } from '@chakra-ui/react';
 import { Brain, Knife, Storefront, Tray, UserCircle } from 'phosphor-react';
 
@@ -43,14 +43,52 @@ export const navConfig: { [x: string]: NavItemModel } = {
   user: {
     key: 'user',
     path: '/user',
-    label: 'User Account',
-    iconName: 'user-circle'
+    label: 'User',
+    children: {
+      account: {
+        key: 'user-account',
+        path: '/',
+        label: 'User Account',
+        iconName: 'user-circle'
+      },
+      signIn: {
+        key: 'user-sign-in',
+        path: '/sign-in',
+        label: 'Sign In',
+        hidden: true
+      },
+      signUp: {
+        key: 'user-sign-up',
+        path: '/sign-up',
+        label: 'Sign Up',
+        hidden: true
+      }
+    }
   },
   about: {
     key: 'about',
     path: '/about',
     label: 'About Us',
     iconName: 'brain'
+  },
+  card: {
+    key: 'card',
+    path: '/card',
+    label: 'Card',
+    children: {
+      add: {
+        key: 'card-add',
+        path: '/add',
+        label: 'New Card',
+        hidden: true
+      },
+      edit: {
+        key: 'card-edit',
+        path: '/edit',
+        label: 'Update Card',
+        hidden: true
+      }
+    }
   }
 };
 
@@ -95,10 +133,8 @@ MenuItem.defaultProps = {
 };
 
 export const Nav: FC = () => {
-  const history = useHistory();
   const { pathname: locationPathname } = useLocation();
-  const { setPageLoading } = useContext(PageContext);
-  const [currentMenuItem, setCurrentMenuItem] = useState('');
+  const { currentPageKey, changePage } = useContext(PageContext);
 
   const menuItems = useMemo(
     () => Object.values(navConfig).filter(item => !item.hidden),
@@ -116,9 +152,7 @@ export const Nav: FC = () => {
   );
 
   const handleNavigate = (key: string, path: string) => {
-    setPageLoading.on();
-    setCurrentMenuItem(key);
-    history.push(path);
+    changePage(key, path);
   };
 
   return (
@@ -136,7 +170,7 @@ export const Nav: FC = () => {
           getMenuChildren(item.children).map((childItem: any) => (
             <MenuItem
               key={childItem.key}
-              active={currentMenuItem === childItem.key || checkActivePath(`${item.path}`)}
+              active={checkActivePath(`${item.path}`) || currentPageKey === childItem.key}
               item={childItem}
               onClick={() => handleNavigate(childItem.key, `${item.path}${childItem.path}`)}
             />
@@ -144,7 +178,7 @@ export const Nav: FC = () => {
         ) : (
           <MenuItem
             key={item.key}
-            active={currentMenuItem === item.key || checkActivePath(item.path)}
+            active={checkActivePath(item.path) || currentPageKey === item.key}
             item={item}
             onClick={() => handleNavigate(item.key, item.path)}
           />
