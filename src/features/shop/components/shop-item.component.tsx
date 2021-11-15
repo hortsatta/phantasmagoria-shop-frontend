@@ -1,14 +1,14 @@
 import { FC } from 'react';
-import { Button, Flex, Heading, Image } from '@chakra-ui/react';
+import { Button, Divider, Flex, Heading, Image } from '@chakra-ui/react';
 import { Brain, Knife, Tray } from 'phosphor-react';
 
-import { CardItem } from 'models';
-import { Divider, Icon, IconButton, Surface } from 'features/core/components';
+import { CardProduct } from 'models';
+import { Icon, IconButton, Surface } from 'features/core/components';
 
 import variables from 'assets/styles/_variables.module.scss';
 
 type Props = {
-  item: CardItem;
+  item: CardProduct;
 };
 
 export const ShopItem: FC<Props> = ({ item }) => {
@@ -36,7 +36,7 @@ export const ShopItem: FC<Props> = ({ item }) => {
           w='100%'
           color={variables.textColor}
         >
-          <Heading as='h4' py={2} fontSize={20} textAlign='center' textTransform='lowercase'>
+          <Heading as='h4' py={2} fontSize={20} textAlign='center'>
             {card.name}
           </Heading>
         </Button>

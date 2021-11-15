@@ -1,6 +1,7 @@
-import { navConfig } from 'features/core/components';
 import { FC, lazy } from 'react';
 import { Route, RouteComponentProps } from 'react-router-dom';
+
+import { navConfig } from 'features/core/components';
 
 const ShopLandingPage = lazy(() =>
   import('../pages/shop-landing.page').then((module: any) => ({
