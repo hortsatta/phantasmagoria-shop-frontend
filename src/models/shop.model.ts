@@ -1,7 +1,8 @@
 import { Card } from 'models';
 
-export type CardItem = {
-  id: string;
+export type CardProduct = {
+  id: number;
   price: number;
   card: Card;
+  slug?: string;
 };

@@ -1,5 +1,5 @@
 export type Card = {
-  id: string;
+  id: number;
   name: string;
   description: string;
   attributes: {
@@ -7,9 +7,10 @@ export type Card = {
     defense: number;
     cost: number;
   };
-  image: string;
-  coverImage: string;
   rarity: number;
   category: number;
-  type: number;
+  type: number[];
+  image?: string;
+  coverImage?: string;
+  slug?: string;
 };
