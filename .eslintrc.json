@@ -14,11 +14,15 @@
     "jsx-quotes": ["error", "prefer-single"],
     "no-shadow": "off",
     "no-unused-vars": "off",
+    "no-unused-expressions": "off",
     // immer.js specific rules
-    "no-param-reassign": ["error", {
-      "props": true,
-      "ignorePropertyModificationsFor": ["state", "draftState", "draft"]
-    }],
+    "no-param-reassign": [
+      "error",
+      {
+        "props": true,
+        "ignorePropertyModificationsFor": ["state", "draftState", "draft"]
+      }
+    ],
     // typescript
     "@typescript-eslint/indent": ["error", 2],
     "@typescript-eslint/no-explicit-any": "off",
@@ -31,13 +35,13 @@
     "react/jsx-filename-extension": ["error", { "extensions": [".tsx"] }],
     "react/jsx-max-props-per-line": [1, { "when": "multiline" }],
     "react/jsx-props-no-spreading": "off",
-    "react/react-in-jsx-scope": "off"    
+    "react/react-in-jsx-scope": "off"
   },
   "settings": {
     "import/resolver": {
       "node": {
-          "extensions": [".ts", ".tsx"],
-          "moduleDirectory": ["node_modules", "src/"]
+        "extensions": [".ts", ".tsx"],
+        "moduleDirectory": ["node_modules", "src/"]
       }
     }
   }

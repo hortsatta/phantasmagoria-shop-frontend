@@ -1,16 +1,13 @@
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+import { ApolloProvider } from '@apollo/client';
 
+import { client } from 'config';
 import { App } from './features/app/app';
 import reportWebVitals from './reportWebVitals';
-import './index.scss';
 
-const client = new ApolloClient({
-  uri: process.env.REACT_APP_API_URI,
-  cache: new InMemoryCache()
-});
+import './index.scss';
 
 ReactDOM.render(
   <StrictMode>

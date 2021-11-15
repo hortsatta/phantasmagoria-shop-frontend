@@ -1,1 +1,2 @@
-export * from './theme';
+export * from './graphql.config';
+export * from './theme.config';
