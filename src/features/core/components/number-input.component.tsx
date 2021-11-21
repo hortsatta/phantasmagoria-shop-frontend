@@ -1,23 +1,27 @@
 import { FC, ReactNode, useRef } from 'react';
 import {
   Flex,
-  Input as ChakraInput,
   InputAddonProps,
   InputGroup,
-  InputProps,
+  NumberDecrementStepper,
+  NumberIncrementStepper,
+  NumberInput as ChakraNumberInput,
+  NumberInputField,
+  NumberInputProps,
+  NumberInputStepper,
   Tooltip
 } from '@chakra-ui/react';
 
 import { InputLeftAddon } from './input-left-addon.component';
 
-type Props = InputProps & {
+type Props = NumberInputProps & {
   leftComponent?: ReactNode | string;
   rightComponent?: ReactNode | string;
   inputLeftAddonProps?: InputAddonProps;
   error?: string;
 };
 
-export const Input: FC<Props> = ({
+export const NumberInput: FC<Props> = ({
   leftComponent,
   rightComponent,
   inputLeftAddonProps,
@@ -41,13 +45,25 @@ export const Input: FC<Props> = ({
           </Flex>
         </Tooltip>
       </InputLeftAddon>
-      <ChakraInput ref={ref} {...moreProps} />
+      <ChakraNumberInput flex={1} {...moreProps}>
+        <NumberInputField ref={ref} />
+        <NumberInputStepper>
+          <NumberIncrementStepper
+            color='rgba(255,255,255,0.6)'
+            borderColor='rgba(255,255,255,0.1)'
+          />
+          <NumberDecrementStepper
+            color='rgba(255,255,255,0.6)'
+            borderColor='rgba(255,255,255,0.1)'
+          />
+        </NumberInputStepper>
+      </ChakraNumberInput>
       {rightComponent}
     </InputGroup>
   );
 };
 
-Input.defaultProps = {
+NumberInput.defaultProps = {
   leftComponent: undefined,
   rightComponent: undefined,
   inputLeftAddonProps: undefined,

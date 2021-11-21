@@ -54,7 +54,8 @@ const Divider = {
 
 const Heading = {
   baseStyle: {
-    textTransform: 'lowercase'
+    textTransform: 'lowercase',
+    lineHeight: 1
   }
 };
 
@@ -107,7 +108,12 @@ const Steps = {
         color: variables.textColor,
         fontFamily: variables.textFont
       },
-      steps: { mx: 'auto', mb: 8, maxW: '3xl' },
+      steps: {
+        mx: 'auto',
+        mb: 8,
+        px: 4,
+        maxW: '3xl'
+      },
       stepIconContainer: {
         ...stepIconContainer,
         '&[data-clickable]:hover': {
@@ -136,6 +142,7 @@ export const theme = extendTheme({
     Divider,
     Heading,
     Input,
+    NumberInput: Input,
     Link,
     Steps
   }

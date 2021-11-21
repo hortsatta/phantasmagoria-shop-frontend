@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Box, Button, ButtonGroup, Divider, Flex } from '@chakra-ui/react';
+import { Box, Button, ButtonGroup, Container, Divider, Flex } from '@chakra-ui/react';
 import { PlusCircle, StackSimple } from 'phosphor-react';
 
 import { Icon, navConfig, PageBox } from 'features/core/components';
@@ -17,7 +17,7 @@ export const ShopListPage: FC = () => {
       <Box flex={1} />
       <Flex minH='100vh' pos='relative' alignItems='flex-start'>
         <Divider pos='absolute' h='100%' orientation='vertical' />
-        <Box p={8} w='7xl'>
+        <Container p={8} maxW='7xl'>
           <Flex px={8} pb={4} justifyContent='flex-end'>
             <ButtonGroup variant='ghost' size='sm' isAttached>
               <Button leftIcon={<Icon w={7} as={PlusCircle} />}>Add Item</Button>
@@ -35,7 +35,7 @@ export const ShopListPage: FC = () => {
               <ShopItem key={item.id} item={item} />
             ))}
           </Flex>
-        </Box>
+        </Container>
         <Divider pos='absolute' right='0px' h='100%' orientation='vertical' />
       </Flex>
       <Box flex={1} />

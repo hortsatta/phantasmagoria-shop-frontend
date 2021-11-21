@@ -34,6 +34,7 @@ export const Scrollbars: FC<Props> = ({
         backgroundColor={variables.surfaceColor}
         {...trackVerticalProps}
         {...(hideVerticalScroll && { hidden: true })}
+        zIndex={1}
       />
     )}
     renderTrackHorizontal={props => (
@@ -44,6 +45,7 @@ export const Scrollbars: FC<Props> = ({
         backgroundColor={variables.surfaceColor}
         {...trackHorizontalProps}
         {...(hideHorizontalScroll && { hidden: true })}
+        zIndex={1}
       />
     )}
     renderThumbVertical={props => (

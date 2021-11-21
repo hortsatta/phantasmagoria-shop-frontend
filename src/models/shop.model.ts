@@ -1,7 +1,7 @@
-import { Card } from 'models';
+import { AuditTrail, Card } from 'models';
 
-export type CardProduct = {
-  id: number;
+export type CardProduct = AuditTrail & {
+  id: string;
   price: number;
   card: Card;
   slug?: string;

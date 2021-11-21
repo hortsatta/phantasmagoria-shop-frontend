@@ -10,7 +10,7 @@ export const PageBox: FC<BoxProps> = ({ children, ...moreProps }) => {
   }, []);
 
   return (
-    <Box opacity={pageLoading ? 0 : 1} transition='opacity 0.3s' {...moreProps}>
+    <Box pb='60px' opacity={pageLoading ? 0 : 1} transition='opacity 0.3s' {...moreProps}>
       {children}
     </Box>
   );

@@ -9,7 +9,6 @@ export const Surface: FC<FlexProps> = ({ children, ...moreProps }) => (
     borderColor='rgba(255,255,255,0.06)'
     borderWidth='1px'
     borderRadius={8}
-    overflow='hidden'
     {...moreProps}
   >
     {children}

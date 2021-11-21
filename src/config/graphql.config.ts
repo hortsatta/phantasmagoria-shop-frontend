@@ -1,9 +1,10 @@
-import { ApolloClient, createHttpLink, InMemoryCache, makeVar } from '@apollo/client';
+import { ApolloClient, InMemoryCache, makeVar } from '@apollo/client';
+import { createUploadLink } from 'apollo-upload-client';
 import { setContext } from '@apollo/client/link/context';
 
-import { User } from 'models';
+import { CardCategory, CardRarity, CardType, User } from 'models';
 
-const httpLink = createHttpLink({ uri: process.env.REACT_APP_API_URI });
+const httpLink = createUploadLink({ uri: process.env.REACT_APP_API_URI });
 
 const authLink = setContext((_, { headers }) => {
   // Get the authentication token from local storage if it exists.
@@ -19,6 +20,9 @@ const authLink = setContext((_, { headers }) => {
 });
 
 const currentUserVar = makeVar<User | null | undefined>(undefined);
+const cardRaritiesVar = makeVar<CardRarity[] | null | undefined>(undefined);
+const cardCategoriesVar = makeVar<CardCategory[] | null | undefined>(undefined);
+const cardTypesVar = makeVar<CardType[] | null | undefined>(undefined);
 
 const cache = new InMemoryCache({
   typePolicies: {
@@ -27,6 +31,21 @@ const cache = new InMemoryCache({
         currentUser: {
           read() {
             return currentUserVar();
+          }
+        },
+        cardRarities: {
+          read() {
+            return cardRaritiesVar();
+          }
+        },
+        cardCategories: {
+          read() {
+            return cardCategoriesVar();
+          }
+        },
+        cardTypes: {
+          read() {
+            return cardTypesVar();
           }
         }
       }
@@ -40,4 +59,4 @@ const client = new ApolloClient({
   connectToDevTools: true
 });
 
-export { currentUserVar, client };
+export { currentUserVar, cardRaritiesVar, cardCategoriesVar, cardTypesVar, client };

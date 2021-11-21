@@ -11,3 +11,49 @@ body {
 code {
   font-family: variables.$code-font; 
 }
+
+.filepond {
+  &--root {
+    margin: 0;
+  }
+
+  &--panel-center,
+  &--panel-top,
+  &--panel-bottom {
+    background-color: variables.$input-bg-focus-color; 
+  }
+
+  &--panel-top, &--panel-bottom {
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  &--credits {
+    display: none;
+  }
+
+  &--drop-label label {
+    color: variables.$text-color; 
+    font-size: 14px;
+  }
+
+  &--label-action {
+    margin: 0 8px;
+    padding: 8px 16px;
+    background-color: variables.$accent-color; 
+    font-family: variables.$text-font;
+    text-decoration: none;
+    text-transform: uppercase;
+    line-height: 1;
+    border-radius: 4px;
+  }
+
+  &--label-text {
+    font-size: 14px;
+    opacity: 0.7;
+  }
+
+  &--image-preview-wrapper {
+    border-radius: 4px;
+  }
+}

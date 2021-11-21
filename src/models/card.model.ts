@@ -1,5 +1,25 @@
-export type Card = {
-  id: number;
+import { AuditTrail } from 'models';
+
+type CardRarity = AuditTrail & {
+  id: string;
+  name: string;
+  slug: string;
+};
+
+type CardCategory = AuditTrail & {
+  id: string;
+  name: string;
+  slug: string;
+};
+
+type CardType = AuditTrail & {
+  id: string;
+  name: string;
+  slug: string;
+};
+
+type Card = AuditTrail & {
+  id: string;
   name: string;
   description: string;
   attributes: {
@@ -7,10 +27,12 @@ export type Card = {
     defense: number;
     cost: number;
   };
-  rarity: number;
-  category: number;
-  type: number[];
-  image?: string;
-  coverImage?: string;
+  rarity: CardRarity;
+  category: CardCategory;
+  types: CardType[];
+  image?: any;
+  coverImage?: any;
   slug?: string;
 };
+
+export type { CardRarity, CardCategory, CardType, Card };

@@ -1,4 +1,4 @@
-export type NavItem = {
+type NavItem = {
   key: string;
   path: string;
   label: string;
@@ -6,3 +6,11 @@ export type NavItem = {
   hidden?: boolean;
   children?: { [x: string]: NavItem };
 };
+
+type AuditTrail = {
+  createdAt?: Date;
+  updatedAt?: Date;
+  publishedAt?: Date;
+};
+
+export type { NavItem, AuditTrail };

@@ -1,5 +1,5 @@
 import { FC, FormEvent } from 'react';
-import { Button, ButtonGroup, Divider, Flex } from '@chakra-ui/react';
+import { Button, ButtonGroup, ButtonProps, Divider, Flex } from '@chakra-ui/react';
 import { CaretCircleLeft, CaretCircleRight, Rewind, RocketLaunch } from 'phosphor-react';
 
 import { Icon } from './icon.component';
@@ -9,10 +9,13 @@ type Props = {
   onNext: () => void;
   onReset: () => void;
   onSubmit: (event: FormEvent) => void;
-  prevDisabled: boolean;
-  nextDisabled: boolean;
-  resetDisabled: boolean;
+  prevDisabled?: boolean;
+  nextDisabled?: boolean;
+  resetDisabled?: boolean;
+  submitDisabled?: boolean;
   submitLabel?: string;
+  submitButtonProps?: ButtonProps;
+  loading?: boolean;
 };
 
 export const StepsControl: FC<Props> = ({
@@ -23,7 +26,10 @@ export const StepsControl: FC<Props> = ({
   prevDisabled,
   nextDisabled,
   resetDisabled,
-  submitLabel
+  submitDisabled,
+  submitLabel,
+  submitButtonProps,
+  loading
 }) => (
   <Flex justifyContent='space-between' mt={6} w='100%'>
     <ButtonGroup isAttached>
@@ -31,7 +37,7 @@ export const StepsControl: FC<Props> = ({
         variant='ghost'
         onClick={onPrev}
         leftIcon={<Icon as={CaretCircleLeft} />}
-        disabled={prevDisabled}
+        disabled={prevDisabled || loading}
       >
         Prev
       </Button>
@@ -40,7 +46,7 @@ export const StepsControl: FC<Props> = ({
         variant='ghost'
         onClick={onNext}
         rightIcon={<Icon as={CaretCircleRight} />}
-        disabled={nextDisabled}
+        disabled={nextDisabled || loading}
       >
         Next
       </Button>
@@ -49,7 +55,8 @@ export const StepsControl: FC<Props> = ({
       <Button
         variant='ghost'
         onClick={onReset}
-        leftIcon={<Icon as={Rewind} disabled={resetDisabled} />}
+        leftIcon={<Icon as={Rewind} />}
+        disabled={resetDisabled || loading}
       >
         Reset
       </Button>
@@ -57,7 +64,10 @@ export const StepsControl: FC<Props> = ({
         pl={6}
         pr={7}
         onClick={onSubmit}
-        leftIcon={<Icon w={6} as={RocketLaunch} disabled={resetDisabled} />}
+        leftIcon={<Icon w={6} as={RocketLaunch} />}
+        isLoading={loading}
+        disabled={submitDisabled}
+        {...submitButtonProps}
       >
         {submitLabel || 'Submit'}
       </Button>
@@ -66,5 +76,11 @@ export const StepsControl: FC<Props> = ({
 );
 
 StepsControl.defaultProps = {
-  submitLabel: undefined
+  prevDisabled: undefined,
+  nextDisabled: undefined,
+  resetDisabled: undefined,
+  submitDisabled: undefined,
+  submitLabel: undefined,
+  submitButtonProps: undefined,
+  loading: false
 };
