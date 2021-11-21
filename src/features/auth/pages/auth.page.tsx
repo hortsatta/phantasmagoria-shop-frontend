@@ -1,10 +1,11 @@
 import { FC, useContext, useEffect } from 'react';
 import { Link as ReactLink } from 'react-router-dom';
-import { Box, Flex, Heading, Image, Link } from '@chakra-ui/react';
+import { Center, Flex, Heading, Image, Link } from '@chakra-ui/react';
 import { useMutation, useReactiveVar } from '@apollo/client';
 
 import { currentUserVar } from 'config';
-import { signIn, SIGN_IN } from 'services';
+import { signIn } from 'services';
+import { SIGN_IN } from 'services/graphql';
 import { PageContext } from 'features/core/contexts';
 import { useDebounce } from 'features/core/hooks';
 import { navConfig, PageBox, SubHeading, Surface } from 'features/core/components';
@@ -43,12 +44,12 @@ export const AuthPage: FC = () => {
     <PageBox>
       <Surface flexDir='column' alignItems='flex-start' m='6rem auto 0 auto' w='xl'>
         <Flex d='flex' flexDir='column' alignItems='center' py={8} px={8} w='100%'>
-          <Box flex={1} mb={12} textAlign='center'>
-            <Heading as='h4' lineHeight={1}>
+          <Center flexDir='column' flex={1} mb={12}>
+            <Heading as='h2' fontSize='4xl'>
               Sign In
             </Heading>
-            <SubHeading lineHeight={1}>Enter your details below to continue.</SubHeading>
-          </Box>
+            <SubHeading>Enter your details below to continue.</SubHeading>
+          </Center>
           <SignInForm
             mb={2}
             w='100%'
