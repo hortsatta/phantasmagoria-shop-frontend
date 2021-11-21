@@ -163,7 +163,6 @@ export const Nav: FC = () => {
       h='100%'
       transform='translate(-50%)'
       columns={5}
-      spacingX={8}
     >
       {menuItems.map(item =>
         item.children ? (
