@@ -1,3 +1,4 @@
+export * from './form-section-heading.component';
 export * from './header.component';
 export * from './icon.component';
 export * from './icon-button.component';
