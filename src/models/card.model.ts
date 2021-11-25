@@ -22,7 +22,7 @@ type Card = AuditTrail & {
   id: string;
   name: string;
   description: string;
-  attributes: {
+  attr: {
     offense: number;
     defense: number;
     cost: number;
