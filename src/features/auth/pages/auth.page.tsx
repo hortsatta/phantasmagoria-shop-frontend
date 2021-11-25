@@ -1,14 +1,14 @@
 import { FC, useContext, useEffect } from 'react';
-import { Link as ReactLink } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import { Center, Flex, Heading, Image, Link } from '@chakra-ui/react';
 import { useMutation, useReactiveVar } from '@apollo/client';
 
-import { currentUserVar } from 'config';
+import { appModulesVar, currentUserVar } from 'config';
 import { signIn } from 'services';
 import { SIGN_IN } from 'services/graphql';
 import { PageContext } from 'features/core/contexts';
 import { useDebounce } from 'features/core/hooks';
-import { navConfig, PageBox, SubHeading, Surface } from 'features/core/components';
+import { PageBox, SubHeading, Surface } from 'features/core/components';
 import { SignInForm } from '../components';
 
 import signInCover from 'assets/images/sign-in-cover.jpg';
@@ -16,15 +16,16 @@ import signInCover from 'assets/images/sign-in-cover.jpg';
 export const AuthPage: FC = () => {
   const { debounce, loading: debounceLoading } = useDebounce();
   const { changePage } = useContext(PageContext);
-  const [login, { loading, error }] = useMutation(SIGN_IN);
+  const [login, { loading }] = useMutation(SIGN_IN);
   const currentUser = useReactiveVar(currentUserVar);
+  const appModules: any = useReactiveVar(appModulesVar);
 
   useEffect(() => {
     if (debounceLoading || loading || !currentUser) {
       return;
     }
 
-    const shopListNav = navConfig.shop.children?.list;
+    const shopListNav = appModules.shop.children?.list;
     changePage(shopListNav?.key, shopListNav?.path);
   }, [currentUser, debounceLoading, loading]);
 
@@ -59,8 +60,8 @@ export const AuthPage: FC = () => {
           <Link
             fontSize={14}
             opacity={0.8}
-            as={ReactLink}
-            to={`${navConfig.user.path}${navConfig.user.children?.signUp.path}` || ''}
+            as={RouterLink}
+            to={`${appModules.user.path}${appModules.user.children?.signUp.path}` || ''}
           >
             I don&apos;t have an account, sign me up.
           </Link>

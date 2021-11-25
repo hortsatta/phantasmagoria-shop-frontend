@@ -1,12 +1,13 @@
 import { FC, useContext, useEffect, useState } from 'react';
 import { Center, Heading } from '@chakra-ui/react';
-import { useMutation } from '@apollo/client';
+import { useMutation, useReactiveVar } from '@apollo/client';
 
+import { appModulesVar } from 'config';
 import { createCardImageBlob, createCoverImageBlob } from 'services';
 import { CREATE_CARD, UPDATE_CARD, UPLOAD } from 'services/graphql';
 import { PageContext } from 'features/core/contexts';
 import { useDebounce } from 'features/core/hooks';
-import { navConfig, PageBox } from 'features/core/components';
+import { PageBox } from 'features/core/components';
 import { CardFormData, UpsertCardForm } from '../components';
 
 export const AddCardPage: FC = () => {
@@ -15,6 +16,7 @@ export const AddCardPage: FC = () => {
   const [createCard, { loading: createCardLoading }] = useMutation(CREATE_CARD);
   const [updateCard, { loading: updateCardLoading }] = useMutation(UPDATE_CARD);
   const [upload, { loading: uploadLoading }] = useMutation(UPLOAD);
+  const appModules: any = useReactiveVar(appModulesVar);
   const [isComplete, setIsComplete] = useState(false);
 
   // Redirect to main shop page if process is fully complete.
@@ -23,7 +25,7 @@ export const AddCardPage: FC = () => {
       return;
     }
 
-    const shopListNav = navConfig.shop.children?.list;
+    const shopListNav = appModules.shop.children?.list;
     changePage(shopListNav?.key, shopListNav?.path);
   }, [isComplete]);
 

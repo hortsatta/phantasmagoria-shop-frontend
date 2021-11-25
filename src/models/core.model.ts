@@ -1,10 +1,10 @@
-type NavItem = {
+type AppModule = {
   key: string;
   path: string;
   label: string;
   iconName?: string;
   hidden?: boolean;
-  children?: { [x: string]: NavItem };
+  children?: { [x: string]: AppModule };
 };
 
 type AuditTrail = {
@@ -13,4 +13,4 @@ type AuditTrail = {
   publishedAt?: Date;
 };
 
-export type { NavItem, AuditTrail };
+export type { AppModule, AuditTrail };

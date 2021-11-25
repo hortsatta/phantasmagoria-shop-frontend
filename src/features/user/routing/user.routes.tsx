@@ -1,7 +1,8 @@
-import { FC, lazy } from 'react';
+import { FC, lazy, useMemo } from 'react';
+import { useReactiveVar } from '@apollo/client';
 import { Route, RouteComponentProps } from 'react-router-dom';
 
-import { navConfig } from 'features/core/components';
+import { appModulesVar } from 'config';
 
 const AuthPage = lazy(() =>
   import('features/auth/pages/auth.page').then((module: any) => ({
@@ -15,11 +16,17 @@ const UserAccountPage = lazy(() =>
   }))
 );
 
-const authPath = `${navConfig.user.path}${navConfig.user.children?.signIn.path}`;
+export const UserRoutes: FC<RouteComponentProps> = ({ match }) => {
+  const appModules: any = useReactiveVar(appModulesVar);
+  const authPath = useMemo(
+    () => `${appModules.user.path}${appModules.user.children?.signIn.path}`,
+    [appModules]
+  );
 
-export const UserRoutes: FC<RouteComponentProps> = ({ match }) => (
-  <>
-    <Route exact path={match.path} component={UserAccountPage} />
-    <Route path={authPath} component={AuthPage} />
-  </>
-);
+  return (
+    <>
+      <Route exact path={match.path} component={UserAccountPage} />
+      <Route path={authPath} component={AuthPage} />
+    </>
+  );
+};

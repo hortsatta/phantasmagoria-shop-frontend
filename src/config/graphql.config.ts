@@ -2,7 +2,7 @@ import { ApolloClient, InMemoryCache, makeVar } from '@apollo/client';
 import { createUploadLink } from 'apollo-upload-client';
 import { setContext } from '@apollo/client/link/context';
 
-import { CardCategory, CardRarity, CardType, User } from 'models';
+import { AppModule, CardCategory, CardRarity, CardType, User } from 'models';
 
 const httpLink = createUploadLink({ uri: process.env.REACT_APP_API_URI });
 
@@ -19,6 +19,7 @@ const authLink = setContext((_, { headers }) => {
   };
 });
 
+const appModulesVar = makeVar<{ [x: string]: AppModule } | null | undefined>(undefined);
 const currentUserVar = makeVar<User | null | undefined>(undefined);
 const cardRaritiesVar = makeVar<CardRarity[] | null | undefined>(undefined);
 const cardCategoriesVar = makeVar<CardCategory[] | null | undefined>(undefined);
@@ -28,6 +29,11 @@ const cache = new InMemoryCache({
   typePolicies: {
     Query: {
       fields: {
+        cardAppModules: {
+          read() {
+            return appModulesVar();
+          }
+        },
         currentUser: {
           read() {
             return currentUserVar();
@@ -59,4 +65,4 @@ const client = new ApolloClient({
   connectToDevTools: true
 });
 
-export { currentUserVar, cardRaritiesVar, cardCategoriesVar, cardTypesVar, client };
+export { appModulesVar, currentUserVar, cardRaritiesVar, cardCategoriesVar, cardTypesVar, client };
