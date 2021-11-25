@@ -1,11 +1,14 @@
-import { FC } from 'react';
+import { ComponentProps, FC } from 'react';
 import { Flex, FlexProps } from '@chakra-ui/react';
+import { motion } from 'framer-motion';
 
 import variables from 'assets/styles/_variables.module.scss';
 
-export const Surface: FC<FlexProps> = ({ children, ...moreProps }) => (
+const MotionFlex = motion<FlexProps>(Flex);
+
+const Surface: FC<FlexProps> = ({ children, ...moreProps }) => (
   <Flex
-    backgroundColor={variables.surfaceColor}
+    bgColor={variables.surfaceColor}
     borderColor='rgba(255,255,255,0.06)'
     borderWidth='1px'
     borderRadius={8}
@@ -14,3 +17,17 @@ export const Surface: FC<FlexProps> = ({ children, ...moreProps }) => (
     {children}
   </Flex>
 );
+
+const MotionSurface: FC<ComponentProps<typeof MotionFlex>> = ({ children, ...moreProps }) => (
+  <MotionFlex
+    bgColor={variables.surfaceColor}
+    borderColor='rgba(255,255,255,0.06)'
+    borderWidth='1px'
+    borderRadius={8}
+    {...moreProps}
+  >
+    {children}
+  </MotionFlex>
+);
+
+export { Surface, MotionSurface };
