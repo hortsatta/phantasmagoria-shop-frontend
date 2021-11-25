@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 import { Button, Divider, Flex, Heading, Image } from '@chakra-ui/react';
 import { Brain, Knife, Tray } from 'phosphor-react';
 
@@ -12,7 +12,8 @@ type Props = {
 };
 
 export const ShopItem: FC<Props> = ({ item }) => {
-  const { id, card } = item;
+  const { id, name, image, cards } = item;
+  const itemImage = useMemo(() => image || cards[0].coverImage, [item]);
 
   return (
     <Surface
@@ -27,7 +28,7 @@ export const ShopItem: FC<Props> = ({ item }) => {
       borderRadius={8}
       overflow='hidden'
     >
-      <Image src={card.coverImage} backgroundColor='rgba(0,0,0,0.3)' />
+      <Image src={itemImage} bgColor='rgba(0,0,0,0.3)' />
       <Flex w='100%' flexDir='column' alignItems='center'>
         <Divider />
         <Button
@@ -37,7 +38,7 @@ export const ShopItem: FC<Props> = ({ item }) => {
           color={variables.textColor}
         >
           <Heading as='h4' py={2} fontSize={20} textAlign='center'>
-            {card.name}
+            {name}
           </Heading>
         </Button>
         <Divider w='90%' />
