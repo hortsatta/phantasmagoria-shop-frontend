@@ -1,11 +1,11 @@
 import { FC, useMemo } from 'react';
 import { useReactiveVar } from '@apollo/client';
 import { Controller, useFormContext } from 'react-hook-form';
-import { Box, Divider, Stack, HStack, Heading } from '@chakra-ui/react';
+import { Stack, HStack } from '@chakra-ui/react';
 
 import { cardCategoriesVar, cardRaritiesVar, cardTypesVar } from 'config';
 import { CardCategory, CardRarity, CardType } from 'models';
-import { Input, NumberInput, Select } from 'features/core/components';
+import { FormSectionHeading, Input, NumberInput, Select } from 'features/core/components';
 import { CardFormData } from './upsert-card-form.component';
 
 const LABEL_WIDTH = '117px';
@@ -66,12 +66,7 @@ export const UpsertCardStep1: FC = () => {
           />
         )}
       />
-      <Box pt={4}>
-        <Heading fontSize='2xl' as='h6'>
-          Attributes
-        </Heading>
-        <Divider />
-      </Box>
+      <FormSectionHeading pb={0}>Attributes</FormSectionHeading>
       <HStack spacing={4}>
         <Controller
           name='offense'
@@ -116,12 +111,7 @@ export const UpsertCardStep1: FC = () => {
           )}
         />
       </HStack>
-      <Box pt={4}>
-        <Heading fontSize='2xl' as='h6'>
-          Properties
-        </Heading>
-        <Divider />
-      </Box>
+      <FormSectionHeading pb={0}>Properties</FormSectionHeading>
       <HStack spacing={4}>
         <Controller
           name='rarity'

@@ -1,8 +1,8 @@
 import { FC } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
-import { Box, Divider, Heading, HStack } from '@chakra-ui/react';
+import { Box, HStack } from '@chakra-ui/react';
 
-import { ImageUpload } from 'features/core/components';
+import { FormSectionHeading, ImageUpload } from 'features/core/components';
 import { CardFormData } from './upsert-card-form.component';
 
 export const UpsertCardStep2: FC = () => {
@@ -11,12 +11,7 @@ export const UpsertCardStep2: FC = () => {
   return (
     <HStack flex={1} alignItems='flex-start' spacing={4}>
       <Box flex={1}>
-        <Box pb={4}>
-          <Heading fontSize='2xl' as='h6'>
-            Card Image
-          </Heading>
-          <Divider />
-        </Box>
+        <FormSectionHeading pt={0}>Card Image</FormSectionHeading>
         <Controller
           name='image'
           control={control}
@@ -33,12 +28,7 @@ export const UpsertCardStep2: FC = () => {
         />
       </Box>
       <Box flex={1}>
-        <Box pb={4}>
-          <Heading fontSize='2xl' as='h6'>
-            Cover Image
-          </Heading>
-          <Divider />
-        </Box>
+        <FormSectionHeading pt={0}>Cover Image</FormSectionHeading>
         <Controller
           name='coverImage'
           control={control}
