@@ -30,6 +30,86 @@ const GET_ALL_TYPES = gql`
   }
 `;
 
+const GET_CARDS = gql`
+  query GetCards(
+    $where: JSON
+    $limit: Int
+    $start: Int
+    $sort: String = "name:asc"
+    $publicationState: PublicationState = LIVE
+  ) {
+    cards(
+      where: $where
+      limit: $limit
+      start: $start
+      sort: $sort
+      publicationState: $publicationState
+    ) {
+      id
+      name
+      slug
+      rarity {
+        id
+        name
+      }
+      category {
+        id
+        name
+      }
+      coverImage {
+        id
+        name
+        hash
+      }
+    }
+  }
+`;
+
+const GET_CARDS_DETAIL = gql`
+  query GetCards(
+    $where: JSON
+    $limit: Int
+    $start: Int
+    $sort: String = "name:asc"
+    $publicationState: PublicationState = LIVE
+  ) {
+    cards(
+      where: $where
+      limit: $limit
+      start: $start
+      sort: $sort
+      publicationState: $publicationState
+    ) {
+      id
+      name
+      description
+      slug
+      attr {
+        offense
+        defense
+        cost
+      }
+      rarity {
+        id
+        name
+      }
+      category {
+        id
+        name
+      }
+      types {
+        id
+        name
+      }
+      image {
+        id
+        name
+        url
+      }
+    }
+  }
+`;
+
 const CREATE_CARD = gql`
   mutation CreateCard($card: CardInput) {
     createCard(input: { data: $card }) {
@@ -54,33 +134,12 @@ const UPDATE_CARD = gql`
   }
 `;
 
-// const CREATE_CARD = gql`
-//   mutation CreateCard($cardInput: CardInput) {
-//     createCard(input: { data: $cardInput }) {
-//       card {
-//         id
-//         name
-//         description
-//         attr {
-//           offense
-//           defense
-//           cost
-//         }
-//         rarity {
-//           id
-//           name
-//         }
-//         category {
-//           id
-//           name
-//         }
-//         types {
-//           id
-//           name
-//         }
-//       }
-//     }
-//   }
-// `;
-
-export { GET_ALL_RARITIES, GET_ALL_CATEGORIES, GET_ALL_TYPES, CREATE_CARD, UPDATE_CARD };
+export {
+  GET_ALL_RARITIES,
+  GET_ALL_CATEGORIES,
+  GET_ALL_TYPES,
+  GET_CARDS,
+  GET_CARDS_DETAIL,
+  CREATE_CARD,
+  UPDATE_CARD
+};
