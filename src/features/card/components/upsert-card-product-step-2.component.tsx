@@ -1,0 +1,76 @@
+import { FC } from 'react';
+import { Controller, useFormContext } from 'react-hook-form';
+import { Box, Stack } from '@chakra-ui/react';
+
+import { FormSectionHeading, ImageUpload, Input, NumberInput } from 'features/core/components';
+import { CardProductFormData } from './upsert-card-product-form.component';
+
+const LABEL_WIDTH = '117px';
+
+export const UpsertCardProductStep2: FC = () => {
+  const { control } = useFormContext<CardProductFormData>();
+
+  return (
+    <Stack flex={1} spacing={4}>
+      <Controller
+        name='name'
+        control={control}
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        render={({ field: { ref, ...moreFields }, formState: { errors } }) => (
+          <Input
+            inputLeftAddonProps={{ w: LABEL_WIDTH }}
+            leftComponent='Name'
+            error={errors && errors.name?.message}
+            {...moreFields}
+          />
+        )}
+      />
+      <Controller
+        name='description'
+        control={control}
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        render={({ field: { ref, ...moreFields }, formState: { errors } }) => (
+          <Input
+            inputLeftAddonProps={{ w: LABEL_WIDTH }}
+            leftComponent='Description'
+            error={errors && errors.description?.message}
+            {...moreFields}
+          />
+        )}
+      />
+      <Box w='50%'>
+        <Controller
+          name='price'
+          control={control}
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          render={({ field: { ref, onChange, ...moreFields }, formState: { errors } }) => (
+            <NumberInput
+              inputLeftAddonProps={{ w: LABEL_WIDTH }}
+              leftComponent='Unit Price'
+              error={errors && errors.price?.message}
+              onChange={val => onChange(!val.trim() ? 0 : parseInt(val, 10))}
+              {...moreFields}
+            />
+          )}
+        />
+      </Box>
+      <Box pt={4} flex={1}>
+        <FormSectionHeading>Item Image</FormSectionHeading>
+        <Controller
+          name='image'
+          control={control}
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          render={({ field: { name, value, onChange } }) => (
+            <ImageUpload
+              name={name}
+              value={value}
+              onChange={onChange}
+              imagePreviewHeight={300}
+              acceptedFileTypes={['image/png', 'image/jpeg']}
+            />
+          )}
+        />
+      </Box>
+    </Stack>
+  );
+};

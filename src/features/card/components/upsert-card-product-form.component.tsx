@@ -6,60 +6,41 @@ import { Box, BoxProps } from '@chakra-ui/react';
 import { Step, Steps, useSteps } from 'chakra-ui-steps';
 import { Camera, Flask } from 'phosphor-react';
 
-import { Card } from 'models';
+import { CardProduct } from 'models';
 import { StepsControl, Surface } from 'features/core/components';
-import { UpsertCardStep1 } from './upsert-card-step-1.component';
-import { UpsertCardStep2 } from './upsert-card-step-2.component';
+import { UpsertCardProductStep1 } from './upsert-card-product-step-1.component';
+import { UpsertCardProductStep2 } from './upsert-card-product-step-2.component';
 import { UpsertCardStepDone } from './upsert-card-step-done.component';
 
-type CardFormData = Omit<Card, 'slug' | 'attr' | 'rarity' | 'category' | 'types'> & {
-  offense: number;
-  defense: number;
-  cost: number;
-  rarity: number;
-  category: number;
-  types: number[];
-};
+type CardProductFormData = Omit<CardProduct, 'slug'>;
 
 type Props = Omit<BoxProps, 'onSubmit'> & {
-  onSubmit: (card: CardFormData) => void;
+  onSubmit: (card: CardProductFormData) => void;
   loading?: boolean;
   isComplete?: boolean;
 };
 
 const schema = z.object({
   id: z.string(),
-  name: z.string().min(1, 'Name is required'),
-  description: z.string().min(1, 'Description is required'),
-  offense: z.number().int().nonnegative('Offense cannot be negative'),
-  defense: z.number().int().nonnegative('Defense cannot be negative'),
-  cost: z.number().int().nonnegative('Cost cannot be negative'),
-  rarity: z.number().positive(),
-  category: z.number().positive(),
-  types: z.array(z.number().positive('Type is Required')).min(1, 'Type is Required'),
-  image: z.any().optional(),
-  coverImage: z.any().optional()
+  name: z.string(),
+  price: z.number().nonnegative('Cost cannot be negative'),
+  cards: z.array(z.object({})).min(2, 'Must select at least 1 card')
 });
 
-const defaultValues: CardFormData = {
+const defaultValues: CardProductFormData = {
   id: '0',
   name: '',
-  description: '',
-  offense: 0,
-  defense: 0,
-  cost: 0,
-  rarity: 0,
-  category: 0,
-  types: [0]
+  price: 0,
+  cards: []
 };
 
 const steps = [
-  { label: 'Details', icon: Flask, Component: UpsertCardStep1 },
-  { label: 'Images', icon: Camera, Component: UpsertCardStep2 }
+  { label: 'Cards', icon: Flask, Component: UpsertCardProductStep1 },
+  { label: 'Details', icon: Camera, Component: UpsertCardProductStep2 }
 ];
 
-const UpsertCardForm: FC<Props> = ({ onSubmit, loading, isComplete, ...moreProps }) => {
-  const methods = useForm<CardFormData>({ defaultValues, resolver: zodResolver(schema) });
+const UpsertCardProductForm: FC<Props> = ({ onSubmit, loading, isComplete, ...moreProps }) => {
+  const methods = useForm<CardProductFormData>({ defaultValues, resolver: zodResolver(schema) });
   const [hasReachedLast, setHasReachedLast] = useState(false);
 
   const {
@@ -91,9 +72,9 @@ const UpsertCardForm: FC<Props> = ({ onSubmit, loading, isComplete, ...moreProps
       return;
     }
 
-    submitForm(async (cardFormData: CardFormData) => {
+    submitForm(async (cardProductFormData: CardProductFormData) => {
       setStep(steps.length);
-      onSubmit(cardFormData);
+      onSubmit(cardProductFormData);
     })();
   };
 
@@ -117,15 +98,15 @@ const UpsertCardForm: FC<Props> = ({ onSubmit, loading, isComplete, ...moreProps
         </Steps>
         {activeStep >= steps.length && <UpsertCardStepDone isComplete={isComplete} />}
         <StepsControl
-          submitLabel={!hasReachedLast ? 'Proceed' : 'Create Card'}
-          submitButtonProps={{ w: '190px' }}
+          submitLabel={!hasReachedLast ? 'Proceed' : 'Create Shop Item'}
+          submitButtonProps={{ w: '220px' }}
           onPrev={prevStep}
           onNext={nextStep}
           onReset={handleReset}
           onSubmit={handleSubmit}
           prevDisabled={activeStep === 0 || isComplete}
           nextDisabled={activeStep >= steps.length || isComplete}
-          resetDisabled={isDirty || isComplete}
+          resetDisabled={!isDirty || isComplete}
           submitDisabled={isComplete}
           loading={loading}
         />
@@ -134,10 +115,10 @@ const UpsertCardForm: FC<Props> = ({ onSubmit, loading, isComplete, ...moreProps
   );
 };
 
-UpsertCardForm.defaultProps = {
+UpsertCardProductForm.defaultProps = {
   loading: false,
   isComplete: false
 };
 
-export type { CardFormData };
-export { UpsertCardForm };
+export type { CardProductFormData };
+export { UpsertCardProductForm };
