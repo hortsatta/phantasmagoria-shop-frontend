@@ -7,7 +7,7 @@ import { ReactComponent as LogoSvg } from 'assets/svgs/logo.svg';
 import variables from 'assets/styles/_variables.module.scss';
 
 export const Header: FC = () => (
-  <Box pos='fixed' top='0px' w='100%' backgroundColor={variables.backgroundColor} zIndex={1}>
+  <Box pos='fixed' top='0px' w='100%' bgColor={variables.bgColor} zIndex={1}>
     <Flex
       justifyContent='space-between'
       alignItems='center'

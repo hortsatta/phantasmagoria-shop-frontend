@@ -28,7 +28,7 @@ export const NavActiveIndicator: FC<Props> = ({ active, loading }) => (
           pos='relative'
           w='100%'
           h='100%'
-          backgroundColor={variables.backgroundColor}
+          bgColor={variables.bgColor}
           borderRadius='999px'
           zIndex={1}
           initial={{ scale: 0 }}

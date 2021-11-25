@@ -10,7 +10,7 @@ type Props = InputAddonProps & {
 export const InputLeftAddon: FC<Props> = ({ error, children, ...moreProps }) => (
   <ChakraInputLeftAddon
     pos='relative'
-    backgroundColor={error ? variables.errorColor : variables.inputBgFocusColor}
+    bgColor={error ? variables.errorColor : variables.inputBgFocusColor}
     color={error ? variables.textColor : 'rgba(255,255,255,0.7)'}
     fontSize={13}
     textTransform='uppercase'

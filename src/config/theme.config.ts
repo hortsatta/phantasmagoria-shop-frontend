@@ -6,7 +6,7 @@ import variables from 'assets/styles/_variables.module.scss';
 const styles = {
   global: {
     body: {
-      bg: variables.backgroundColor,
+      bg: variables.bgColor,
       color: variables.textColor
     }
   }
@@ -24,6 +24,15 @@ const colors = {
   }
 };
 
+const Badge = {
+  variants: {
+    subtle: {
+      color: '#c0aec7',
+      bgColor: '#28131b'
+    }
+  }
+};
+
 const Button = {
   baseStyle: {
     fontWeight: 400,
@@ -33,22 +42,22 @@ const Button = {
   },
   variants: {
     solid: {
-      _active: { backgroundColor: variables.accentColor },
-      _focus: { backgroundColor: variables.accentColor, boxShadow: 0 },
-      _hover: { backgroundColor: variables.primaryColor },
-      backgroundColor: variables.accentColor
+      _active: { bgColor: variables.accentColor },
+      _focus: { bgColor: variables.accentColor, boxShadow: 0 },
+      _hover: { bgColor: variables.primaryColor },
+      bgColor: variables.accentColor
     },
     ghost: {
-      _active: { backgroundColor: 'rgba(0,0,0,0)' },
+      _active: { bgColor: 'rgba(0,0,0,0)' },
       _focus: { boxShadow: 0 },
-      _hover: { backgroundColor: 'rgba(0,0,0,0)', color: variables.primaryColor }
+      _hover: { bgColor: 'rgba(0,0,0,0)', color: variables.primaryColor }
     }
   }
 };
 
 const Divider = {
   baseStyle: {
-    opacity: 0.06
+    opacity: 0.2
   }
 };
 
@@ -68,8 +77,8 @@ const Input = {
   variants: {
     filled: {
       field: {
-        _focus: { backgroundColor: variables.inputBgFocusColor },
-        _hover: { backgroundColor: variables.inputBgFocusColor },
+        _focus: { bgColor: variables.inputBgFocusColor },
+        _hover: { bgColor: variables.inputBgFocusColor },
         paddingBottom: '2px',
         background: variables.inputBgColor,
         borderRadius: 4,
@@ -87,6 +96,12 @@ const Input = {
 const Link = {
   baseStyle: {
     _focus: { boxShadow: 0 }
+  }
+};
+
+const Spinner = {
+  baseStyle: {
+    color: variables.primaryColor
   }
 };
 
@@ -132,18 +147,22 @@ const Steps = {
 };
 
 export const theme = extendTheme({
-  initialColorMode: 'dark',
-  useSystemColorMode: false,
+  config: {
+    initialColorMode: 'dark',
+    useSystemColorMode: false
+  },
   styles,
   fonts,
   colors,
   components: {
+    Badge,
     Button,
     Divider,
     Heading,
     Input,
     NumberInput: Input,
     Link,
+    Spinner,
     Steps
   }
 });

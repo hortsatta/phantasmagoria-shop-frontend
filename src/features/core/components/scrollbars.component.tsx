@@ -31,7 +31,7 @@ export const Scrollbars: FC<Props> = ({
         {...props}
         h='100%'
         right={0}
-        backgroundColor={variables.surfaceColor}
+        bgColor={variables.inputBgColor}
         {...trackVerticalProps}
         {...(hideVerticalScroll && { hidden: true })}
         zIndex={1}
@@ -42,29 +42,19 @@ export const Scrollbars: FC<Props> = ({
         {...props}
         w='100%'
         bottom={0}
-        backgroundColor={variables.surfaceColor}
+        bgColor={variables.inputBgColor}
         {...trackHorizontalProps}
         {...(hideHorizontalScroll && { hidden: true })}
         zIndex={1}
       />
     )}
     renderThumbVertical={props => (
-      <Box
-        {...props}
-        backgroundColor={variables.primaryColor}
-        opacity={0.2}
-        {...thumbVerticalProps}
-      />
+      <Box {...props} bgColor={variables.primaryColor} opacity={0.2} {...thumbVerticalProps} />
     )}
     renderThumbHorizontal={props => (
-      <Box
-        {...props}
-        backgroundColor={variables.primaryColor}
-        opacity={0.2}
-        {...thumbHorizontalProps}
-      />
+      <Box {...props} bgColor={variables.primaryColor} opacity={0.2} {...thumbHorizontalProps} />
     )}
-    renderView={props => <Box {...props} {...viewProps} />}
+    {...(viewProps && { renderView: props => <Box {...props} {...viewProps} /> })}
     autoHide
     {...moreProps}
   >
