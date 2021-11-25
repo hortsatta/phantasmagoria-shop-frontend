@@ -74,7 +74,7 @@ export const UpsertCardProductStep1: FC = () => {
     }),
     [debounceKeyword]
   );
-
+  // Filter card results from api
   const filteredCards = useMemo(
     () => data?.cards.filter((c1: Card) => !selectedCards.some(c2 => c2.id === c1.id)) || [],
     [data, selectedCards]

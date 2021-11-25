@@ -23,13 +23,16 @@ type Props = Omit<BoxProps, 'onSubmit'> & {
 const schema = z.object({
   id: z.string(),
   name: z.string(),
+  description: z.string().optional(),
   price: z.number().nonnegative('Cost cannot be negative'),
-  cards: z.array(z.object({})).min(2, 'Must select at least 1 card')
+  cards: z.array(z.object({})).min(1, 'Must select at least 1 card'),
+  image: z.any().optional()
 });
 
 const defaultValues: CardProductFormData = {
   id: '0',
   name: '',
+  description: '',
   price: 0,
   cards: []
 };
@@ -74,7 +77,7 @@ const UpsertCardProductForm: FC<Props> = ({ onSubmit, loading, isComplete, ...mo
 
     submitForm(async (cardProductFormData: CardProductFormData) => {
       setStep(steps.length);
-      onSubmit(cardProductFormData);
+      await onSubmit(cardProductFormData);
     })();
   };
 

@@ -93,7 +93,7 @@ const UpsertCardForm: FC<Props> = ({ onSubmit, loading, isComplete, ...moreProps
 
     submitForm(async (cardFormData: CardFormData) => {
       setStep(steps.length);
-      onSubmit(cardFormData);
+      await onSubmit(cardFormData);
     })();
   };
 
