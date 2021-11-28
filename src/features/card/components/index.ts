@@ -1,5 +1,5 @@
 export * from './card-detail.component';
-export * from './card-list.component';
+export * from './card-filters.component';
 export * from './mini-card-item.component';
 export * from './upsert-card-form.component';
 export * from './upsert-card-product-form.component';

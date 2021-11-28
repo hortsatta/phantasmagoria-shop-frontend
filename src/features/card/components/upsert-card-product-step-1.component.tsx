@@ -1,36 +1,39 @@
-import { FC, useContext, useEffect, useMemo, useState } from 'react';
+import { FC, ComponentProps, useContext, useEffect, useMemo, useState } from 'react';
 import { useLazyQuery, useReactiveVar } from '@apollo/client';
 import { Controller, useFormContext } from 'react-hook-form';
-import {
-  Box,
-  Button,
-  HStack,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalOverlay,
-  Stack,
-  Text,
-  useDisclosure
-} from '@chakra-ui/react';
+import { Box, Button, HStack, Stack, Text, useDisclosure } from '@chakra-ui/react';
+import { Funnel } from 'phosphor-react';
 
 import { appModulesVar } from 'config';
 import { Card } from 'models';
 import { GET_CARDS } from 'services/graphql';
 import { PageContext } from 'features/core/contexts';
 import { useDebounceValue } from 'features/core/hooks';
-import { FormSectionHeading, Input, Surface } from 'features/core/components';
+import {
+  FormSectionHeading,
+  Icon,
+  IconButton,
+  Input,
+  Modal,
+  Surface
+} from 'features/core/components';
 import { CardProductFormData } from './upsert-card-product-form.component';
 import { CardDetail } from './card-detail.component';
+import { CardFilters } from './card-filters.component';
 import { CardList } from './card-list.component';
 
 import variables from 'assets/styles/_variables.module.scss';
 
-type CardModalProps = {
-  onClose: () => void;
-  isOpen: boolean;
+type ModalProps = Omit<ComponentProps<typeof Modal>, 'children'>;
+
+type CardModalProps = ModalProps & {
   card: Card | null;
+};
+
+type FilterModalProps = ModalProps & {
+  filters: any;
+  loading: boolean;
+  onFiltersChange: any;
 };
 
 const LABEL_WIDTH = '117px';
@@ -41,15 +44,23 @@ const cardListStyle = {
   borderRadius: '4px'
 };
 
-const CardModal: FC<CardModalProps> = ({ onClose, isOpen, card }) => (
-  <Modal onClose={onClose} isOpen={isOpen} isCentered>
-    <ModalOverlay />
-    <ModalContent bg='rgba(0,0,0,0)' maxW='2xl'>
-      <ModalCloseButton _focus={{ boxShadow: 0 }} />
-      <ModalBody p={0}>
-        <Surface p={6}>{card && <CardDetail id={card.id} />}</Surface>
-      </ModalBody>
-    </ModalContent>
+const CardModal: FC<CardModalProps> = ({ card, isOpen, onClose }) => (
+  <Modal onClose={onClose} isOpen={isOpen} modalContentProps={{ maxW: '2xl' }} isCentered>
+    <Surface p={6}>{card && <CardDetail id={card.id} />}</Surface>
+  </Modal>
+);
+
+const FilterModal: FC<FilterModalProps> = ({
+  filters,
+  isOpen,
+  loading,
+  onClose,
+  onFiltersChange
+}) => (
+  <Modal onClose={onClose} isOpen={isOpen} modalContentProps={{ maxW: '2xl' }} isCentered>
+    <Surface p={6}>
+      <CardFilters value={filters} loading={loading} onChange={onFiltersChange} />
+    </Surface>
   </Modal>
 );
 
@@ -60,20 +71,39 @@ export const UpsertCardProductStep1: FC = () => {
   const { control, watch } = useFormContext<CardProductFormData>();
   const selectedCards = watch('cards', []);
   // View card detail modal
-  const { isOpen: modalIsOpen, onOpen: modalOnOpen, onClose: modalOnClose } = useDisclosure();
+  const {
+    isOpen: cardModalIsOpen,
+    onOpen: cardModalOnOpen,
+    onClose: cardModalOnClose
+  } = useDisclosure();
+  // View card filter modal
+  const {
+    isOpen: filterModalIsOpen,
+    onOpen: filterModalOnOpen,
+    onClose: filterModalOnClose
+  } = useDisclosure();
   const [currentCardDetail, setCurrentCardDetail] = useState<Card | null>(null);
+  const [cardFilters, setCardFilters] = useState<any>({
+    rarities: [],
+    categories: [],
+    types: []
+  });
   // Cards query search and parameters
   const [cards, { data, loading }] = useLazyQuery(GET_CARDS);
   const [keyword, setKeyword] = useState('');
   const { debouncedValue: debounceKeyword, loading: debounceLoading } = useDebounceValue(keyword);
-  const cardVariables = useMemo(
-    () => ({
+  const cardVariables = useMemo(() => {
+    const { rarities, categories, types } = cardFilters;
+
+    return {
       where: {
-        name_contains: debounceKeyword.trim()
+        name_contains: debounceKeyword.trim(),
+        ...(rarities.length && { rarity: { id_in: rarities } }),
+        ...(categories.length && { category: { id_in: categories } }),
+        ...(types.length && { types: { id_in: types } })
       }
-    }),
-    [debounceKeyword]
-  );
+    };
+  }, [debounceKeyword, cardFilters]);
   // Filter card results from api
   const filteredCards = useMemo(
     () => data?.cards.filter((c1: Card) => !selectedCards.some(c2 => c2.id === c1.id)) || [],
@@ -94,13 +124,18 @@ export const UpsertCardProductStep1: FC = () => {
       return;
     }
 
-    modalOnOpen();
+    cardModalOnOpen();
     setCurrentCardDetail(card);
   };
 
   const handleCardModalClose = () => {
-    modalOnClose();
+    cardModalOnClose();
     setCurrentCardDetail(null);
+  };
+
+  const handleCardFiltersChange = (filters: any) => {
+    filterModalOnClose();
+    setCardFilters(filters);
   };
 
   return (
@@ -113,7 +148,18 @@ export const UpsertCardProductStep1: FC = () => {
         />
         <HStack flex={1} alignItems='flex-start' spacing={4}>
           <Box flex={1}>
-            <FormSectionHeading>Cards</FormSectionHeading>
+            <FormSectionHeading
+              rightComponent={
+                <IconButton
+                  aria-label='View Card Detail'
+                  pos='relative'
+                  icon={<Icon w={6} boxSizing='content-box' as={Funnel} />}
+                  onClick={filterModalOnOpen}
+                />
+              }
+            >
+              Cards
+            </FormSectionHeading>
             <Controller
               name='cards'
               control={control}
@@ -129,7 +175,7 @@ export const UpsertCardProductStep1: FC = () => {
             />
           </Box>
           <Box flex={1}>
-            <FormSectionHeading>Selected Cards</FormSectionHeading>
+            <FormSectionHeading flexProps={{ h: '40px' }}>Selected Cards</FormSectionHeading>
             <Controller
               name='cards'
               control={control}
@@ -142,6 +188,7 @@ export const UpsertCardProductStep1: FC = () => {
                     onCardClick={card =>
                       card && onChange(selectedCards.filter(c => c.id !== card.id))
                     }
+                    onCardDetailClick={handleCardDetailClick}
                   />
                 </Box>
               )}
@@ -161,7 +208,14 @@ export const UpsertCardProductStep1: FC = () => {
           </Button>
         </Text>
       </Stack>
-      <CardModal onClose={handleCardModalClose} isOpen={modalIsOpen} card={currentCardDetail} />
+      <CardModal onClose={handleCardModalClose} isOpen={cardModalIsOpen} card={currentCardDetail} />
+      <FilterModal
+        onClose={filterModalOnClose}
+        isOpen={filterModalIsOpen}
+        filters={cardFilters}
+        loading={loading || debounceLoading}
+        onFiltersChange={handleCardFiltersChange}
+      />
     </>
   );
 };
