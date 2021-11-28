@@ -22,7 +22,7 @@ type Props = Omit<BoxProps, 'onSubmit'> & {
 
 const schema = z.object({
   id: z.string(),
-  name: z.string(),
+  name: z.string().min(1),
   description: z.string().optional(),
   price: z.number().nonnegative('Cost cannot be negative'),
   cards: z.array(z.object({})).min(1, 'Must select at least 1 card'),
@@ -57,6 +57,7 @@ const UpsertCardProductForm: FC<Props> = ({ onSubmit, loading, isComplete, ...mo
   const {
     formState: { isDirty },
     handleSubmit: submitForm,
+    getValues,
     reset
   } = methods;
 
@@ -75,9 +76,10 @@ const UpsertCardProductForm: FC<Props> = ({ onSubmit, loading, isComplete, ...mo
       return;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     submitForm(async (cardProductFormData: CardProductFormData) => {
       setStep(steps.length);
-      await onSubmit(cardProductFormData);
+      await onSubmit(getValues());
     })();
   };
 

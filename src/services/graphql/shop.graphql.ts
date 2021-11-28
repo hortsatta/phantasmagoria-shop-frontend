@@ -1,5 +1,36 @@
 import { gql } from '@apollo/client';
 
+const GET_CARD_PRODUCTS = gql`
+  query GetCardProducts(
+    $where: JSON
+    $limit: Int
+    $start: Int
+    $sort: String = "name:asc"
+    $publicationState: PublicationState = LIVE
+  ) {
+    cardProducts(
+      where: $where
+      limit: $limit
+      start: $start
+      sort: $sort
+      publicationState: $publicationState
+    ) {
+      id
+      name
+      description
+      cards {
+        id
+        name
+        coverImage {
+          id
+          name
+          url
+        }
+      }
+    }
+  }
+`;
+
 const CREATE_CARD_PRODUCT = gql`
   mutation CreateCardProduct($cardProduct: CardProductInput) {
     createCardProduct(input: { data: $cardProduct }) {
@@ -24,4 +55,4 @@ const UPDATE_CARD_PRODUCT = gql`
   }
 `;
 
-export { CREATE_CARD_PRODUCT, UPDATE_CARD_PRODUCT };
+export { GET_CARD_PRODUCTS, CREATE_CARD_PRODUCT, UPDATE_CARD_PRODUCT };

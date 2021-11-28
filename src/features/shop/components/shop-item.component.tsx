@@ -13,7 +13,7 @@ type Props = {
 
 export const ShopItem: FC<Props> = ({ item }) => {
   const { id, name, image, cards } = item;
-  const itemImage = useMemo(() => image || cards[0].coverImage, [item]);
+  const itemImage = useMemo(() => image?.url || cards[0].coverImage.url, [item]);
 
   return (
     <Surface
@@ -34,6 +34,7 @@ export const ShopItem: FC<Props> = ({ item }) => {
         <Button
           variant='link'
           _hover={{ color: variables.primaryColor }}
+          _focus={{ boxShadow: 'none' }}
           w='100%'
           color={variables.textColor}
         >

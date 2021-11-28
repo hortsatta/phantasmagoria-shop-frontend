@@ -1,11 +1,12 @@
-import { FC, useMemo } from 'react';
+import { FC, useEffect, useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useReactiveVar } from '@apollo/client';
+import { useLazyQuery, useReactiveVar } from '@apollo/client';
 import { Box, Button, ButtonGroup, Container, Divider, Flex } from '@chakra-ui/react';
 import { PlusCircle, StackSimple } from 'phosphor-react';
 
-import { CardProduct } from 'models';
 import { appModulesVar } from 'config';
+import { CardProduct } from 'models';
+import { GET_CARD_PRODUCTS } from 'services/graphql';
 import { Icon, PageBox } from 'features/core/components';
 import { ShopItem } from '../components';
 
@@ -14,6 +15,12 @@ import tempData from '../data-temp.json';
 export const ShopListPage: FC = () => {
   const history = useHistory();
   const appModules: any = useReactiveVar(appModulesVar);
+  // Cards query search and parameters
+  const [cardProducts, { data, loading }] = useLazyQuery(GET_CARD_PRODUCTS);
+
+  useEffect(() => {
+    cardProducts();
+  }, []);
 
   const addCardPath = useMemo(
     () => `${appModules.card.path}${appModules.card.children?.add.path}`,
@@ -49,7 +56,7 @@ export const ShopListPage: FC = () => {
             </ButtonGroup>
           </Flex>
           <Flex flex={1} alignItems='flex-start' justifyContent='center' flexWrap='wrap'>
-            {tempData.map((item: CardProduct) => (
+            {data?.cardProducts.map((item: CardProduct) => (
               <ShopItem key={item.id} item={item} />
             ))}
           </Flex>
