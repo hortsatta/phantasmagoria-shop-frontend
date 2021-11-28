@@ -46,7 +46,7 @@ const styles: StylesConfig = {
   control: (provided, state) => ({
     ...provided,
     padding: 0,
-    height: '40px',
+    minHeight: '40px',
     backgroundColor: state.isFocused ? variables.inputBgFocusColor : variables.inputBgColor,
     boxShadow: 'none',
     borderWidth: 0,
@@ -104,6 +104,7 @@ export const Select: FC<Props> = ({ leftComponent, inputLeftAddonProps, error, .
     <InputGroup>
       <InputLeftAddon
         px={0}
+        h='100%'
         cursor='text'
         error={error}
         onClick={() => ref.current?.focus()}
