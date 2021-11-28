@@ -39,7 +39,7 @@ const createCoverImageBlob = async (
   const buffer = await optimizeImage(targetImage);
   // eslint-disable-next-line no-undef
   const imageBlob: any = new Blob([buffer], { type: 'image/jpg' });
-  imageBlob.name = `${cardId}_${cardSlug}_card-image`;
+  imageBlob.name = `${cardId}_${cardSlug}_card-cover-image`;
 
   return imageBlob;
 };

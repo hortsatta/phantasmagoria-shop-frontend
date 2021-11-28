@@ -46,7 +46,7 @@ export const NumberInput: FC<Props> = ({
         </Tooltip>
       </InputLeftAddon>
       <ChakraNumberInput flex={1} {...moreProps}>
-        <NumberInputField ref={ref} />
+        <NumberInputField ref={ref} step='any' />
         <NumberInputStepper>
           <NumberIncrementStepper
             color='rgba(255,255,255,0.6)'

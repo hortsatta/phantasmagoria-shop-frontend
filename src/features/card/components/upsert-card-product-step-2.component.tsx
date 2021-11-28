@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useCallback } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { Box, Stack } from '@chakra-ui/react';
 
@@ -8,7 +8,16 @@ import { CardProductFormData } from './upsert-card-product-form.component';
 const LABEL_WIDTH = '117px';
 
 export const UpsertCardProductStep2: FC = () => {
-  const { control } = useFormContext<CardProductFormData>();
+  const { control, setValue, watch } = useFormContext<CardProductFormData>();
+  const price = watch('price');
+
+  const handlePriceBlur = useCallback(
+    (onBlur: any) => {
+      onBlur();
+      setValue('price', parseFloat(price.toString()));
+    },
+    [price]
+  );
 
   return (
     <Stack flex={1} spacing={4}>
@@ -43,12 +52,13 @@ export const UpsertCardProductStep2: FC = () => {
           name='price'
           control={control}
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          render={({ field: { ref, onChange, ...moreFields }, formState: { errors } }) => (
+          render={({ field: { ref, onChange, onBlur, ...moreFields }, formState: { errors } }) => (
             <NumberInput
               inputLeftAddonProps={{ w: LABEL_WIDTH }}
               leftComponent='Unit Price'
               error={errors && errors.price?.message}
-              onChange={val => onChange(!val.trim() ? 0 : parseInt(val, 10))}
+              onChange={onChange}
+              onBlur={() => handlePriceBlur(onBlur)}
               {...moreFields}
             />
           )}
