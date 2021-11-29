@@ -58,7 +58,10 @@ const FilterModal: FC<FilterModalProps> = ({
   onFiltersChange
 }) => (
   <Modal onClose={onClose} isOpen={isOpen} modalContentProps={{ maxW: '2xl' }} isCentered>
-    <Surface p={6}>
+    <Surface flexDir='column' p={6}>
+      <FormSectionHeading pt={0} w='100%'>
+        Filters
+      </FormSectionHeading>
       <CardFilters value={filters} loading={loading} onChange={onFiltersChange} />
     </Surface>
   </Modal>
@@ -89,7 +92,7 @@ export const UpsertCardProductStep1: FC = () => {
     types: []
   });
   // Cards query search and parameters
-  const [cards, { data, loading }] = useLazyQuery(GET_CARDS);
+  const [getCards, { data: { cards = [] } = {}, loading }] = useLazyQuery(GET_CARDS);
   const [keyword, setKeyword] = useState('');
   const { debouncedValue: debounceKeyword, loading: debounceLoading } = useDebounceValue(keyword);
   const cardVariables = useMemo(() => {
@@ -106,12 +109,12 @@ export const UpsertCardProductStep1: FC = () => {
   }, [debounceKeyword, cardFilters]);
   // Filter card results from api
   const filteredCards = useMemo(
-    () => data?.cards.filter((c1: Card) => !selectedCards.some(c2 => c2.id === c1.id)) || [],
-    [data, selectedCards]
+    () => cards.filter((c1: Card) => !selectedCards.some(c2 => c2.id === c1.id)) || [],
+    [cards, selectedCards]
   );
 
   useEffect(() => {
-    cards({ variables: cardVariables });
+    getCards({ variables: cardVariables });
   }, [cardVariables]);
 
   const handleNavigateToAddCard = () => {

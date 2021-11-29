@@ -59,7 +59,11 @@ const steps = [
 ];
 
 const UpsertCardForm: FC<Props> = ({ onSubmit, loading, isComplete, ...moreProps }) => {
-  const methods = useForm<CardFormData>({ defaultValues, resolver: zodResolver(schema) });
+  const methods = useForm<CardFormData>({
+    shouldFocusError: false,
+    defaultValues,
+    resolver: zodResolver(schema)
+  });
   const [hasReachedLast, setHasReachedLast] = useState(false);
 
   const {

@@ -27,8 +27,10 @@ const Heading: FC = ({ children }) => (
 );
 
 export const CardDetail: FC<Props> = ({ id }) => {
-  const { data, loading } = useQuery(GET_CARDS_DETAIL, { variables: { where: { id } } });
-  const { name, description, attr, rarity, category, types, image } = data?.cards[0] || {};
+  const { data: { cards = [] } = {}, loading } = useQuery(GET_CARDS_DETAIL, {
+    variables: { where: { id } }
+  });
+  const { name, description, attr, rarity, category, types, image } = cards[0] || {};
 
   return (
     <Box minW='xs' minH='xs'>
@@ -37,7 +39,7 @@ export const CardDetail: FC<Props> = ({ id }) => {
           <Spinner size='xl' />
         </Center>
       )}
-      {data?.cards.length && (
+      {cards.length && (
         <HStack spacing={4} alignItems='flex-start'>
           <Box
             w='359px'
