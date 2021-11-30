@@ -15,6 +15,7 @@ export * from './radio.component';
 export * from './scrollbars.component';
 export * from './search-input.component';
 export * from './select.component';
+export * from './skeleton.component';
 export * from './sub-heading.component';
 export * from './steps-control.component';
 export * from './surface.component';
