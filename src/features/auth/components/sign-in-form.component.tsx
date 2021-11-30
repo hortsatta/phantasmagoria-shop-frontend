@@ -30,6 +30,7 @@ const defaultValues: FormData = {
 export const SignInForm: FC<Props> = ({ loading, onSubmit, ...moreProps }) => {
   const [showPassword, setShowPassword] = useState(false);
   const { handleSubmit: submitForm, control } = useForm<FormData>({
+    shouldFocusError: false,
     defaultValues,
     resolver: zodResolver(schema)
   });
