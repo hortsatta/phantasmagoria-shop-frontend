@@ -42,17 +42,24 @@ export const ShopListPage: FC = () => {
   const itemVariables = useMemo(() => {
     const { rarities, categories, types } = itemFilters || {};
 
+    const cards = {
+      ...(rarities?.length && { rarity: { id_in: rarities } }),
+      ...(categories?.length && { category: { id_in: categories } }),
+      ...(types?.length && { types: { id_in: types } })
+    };
+
     return {
       ...(itemSort && { sort: itemSort }),
       where: {
         _or: [
-          { name_contains: debounceSearchKeyword.trim() },
+          {
+            name_contains: debounceSearchKeyword.trim(),
+            cards
+          },
           {
             cards: {
-              name_contains: debounceSearchKeyword.trim(),
-              ...(rarities?.length && { rarity: { id_in: rarities } }),
-              ...(categories?.length && { category: { id_in: categories } }),
-              ...(types?.length && { types: { id_in: types } })
+              ...cards,
+              name_contains: debounceSearchKeyword.trim()
             }
           }
         ]
