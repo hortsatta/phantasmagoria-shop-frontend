@@ -82,7 +82,7 @@ export const AddShopItemPage: FC = () => {
     <PageBox pt={8}>
       <Center mb={6}>
         <Heading as='h2' fontSize='4xl'>
-          Add New Item
+          Conjure New Item
         </Heading>
       </Center>
       <UpsertCardProductForm

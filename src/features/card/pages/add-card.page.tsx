@@ -90,7 +90,7 @@ export const AddCardPage: FC = () => {
     <PageBox pt={8}>
       <Center mb={6}>
         <Heading as='h2' fontSize='4xl'>
-          Add New Card
+          Conjure New Card
         </Heading>
       </Center>
       <UpsertCardForm
