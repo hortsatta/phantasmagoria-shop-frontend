@@ -5,7 +5,7 @@ const GET_CARD_PRODUCTS = gql`
     $where: JSON
     $limit: Int
     $start: Int
-    $sort: String = "name:asc"
+    $sort: String = "published_at:desc"
     $publicationState: PublicationState = LIVE
   ) {
     cardProducts(
