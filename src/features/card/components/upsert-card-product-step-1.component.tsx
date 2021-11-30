@@ -93,20 +93,20 @@ export const UpsertCardProductStep1: FC = () => {
   });
   // Cards query search and parameters
   const [getCards, { data: { cards = [] } = {}, loading }] = useLazyQuery(GET_CARDS);
-  const [keyword, setKeyword] = useState('');
-  const { debouncedValue: debounceKeyword, loading: debounceLoading } = useDebounceValue(keyword);
+  const [searchKeyword, setSearchKeyword] = useState('');
+  const { debouncedValue: debounceSearchKeyword, loading: debounceSearchLoading } =
+    useDebounceValue(searchKeyword);
   const cardVariables = useMemo(() => {
     const { rarities, categories, types } = cardFilters;
-
     return {
       where: {
-        name_contains: debounceKeyword.trim(),
+        name_contains: debounceSearchKeyword.trim(),
         ...(rarities.length && { rarity: { id_in: rarities } }),
         ...(categories.length && { category: { id_in: categories } }),
         ...(types.length && { types: { id_in: types } })
       }
     };
-  }, [debounceKeyword, cardFilters]);
+  }, [debounceSearchKeyword, cardFilters]);
   // Filter card results from api
   const filteredCards = useMemo(
     () => cards.filter((c1: Card) => !selectedCards.some(c2 => c2.id === c1.id)) || [],
@@ -147,7 +147,7 @@ export const UpsertCardProductStep1: FC = () => {
         <Input
           inputLeftAddonProps={{ w: LABEL_WIDTH }}
           leftComponent='Find Card'
-          onChange={(e: any) => setKeyword(e.target.value)}
+          onChange={(e: any) => setSearchKeyword(e.target.value)}
         />
         <HStack flex={1} alignItems='flex-start' spacing={4}>
           <Box flex={1}>
@@ -170,7 +170,7 @@ export const UpsertCardProductStep1: FC = () => {
                 <CardList
                   style={cardListStyle}
                   cards={filteredCards}
-                  loading={loading || debounceLoading}
+                  loading={loading || debounceSearchLoading}
                   onCardClick={card => card && onChange([...selectedCards, card])}
                   onCardDetailClick={handleCardDetailClick}
                 />
@@ -187,7 +187,7 @@ export const UpsertCardProductStep1: FC = () => {
                   <CardList
                     style={cardListStyle}
                     cards={selectedCards}
-                    loading={loading || debounceLoading}
+                    loading={loading || debounceSearchLoading}
                     onCardClick={card =>
                       card && onChange(selectedCards.filter(c => c.id !== card.id))
                     }
@@ -216,7 +216,7 @@ export const UpsertCardProductStep1: FC = () => {
         onClose={filterModalOnClose}
         isOpen={filterModalIsOpen}
         filters={cardFilters}
-        loading={loading || debounceLoading}
+        loading={loading || debounceSearchLoading}
         onFiltersChange={handleCardFiltersChange}
       />
     </>

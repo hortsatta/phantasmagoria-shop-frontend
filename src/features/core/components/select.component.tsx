@@ -1,6 +1,6 @@
 import { FC, ReactNode, useRef } from 'react';
 import RSelect, { Props as SelectProps, StylesConfig } from 'react-select';
-import { Flex, InputAddonProps, InputGroup, Tooltip } from '@chakra-ui/react';
+import { Flex, InputAddonProps, InputGroup, InputGroupProps, Tooltip } from '@chakra-ui/react';
 
 import { InputLeftAddon } from './input-left-addon.component';
 
@@ -93,25 +93,35 @@ const styles: StylesConfig = {
 
 type Props = SelectProps & {
   leftComponent?: ReactNode | string;
+  inputGroupProps?: InputGroupProps;
   inputLeftAddonProps?: InputAddonProps;
+  inputLeftAddonWrapperProps?: InputAddonProps;
   error?: string;
 };
 
-export const Select: FC<Props> = ({ leftComponent, inputLeftAddonProps, error, ...moreProps }) => {
+export const Select: FC<Props> = ({
+  leftComponent,
+  inputGroupProps,
+  inputLeftAddonProps,
+  inputLeftAddonWrapperProps,
+  error,
+  ...moreProps
+}) => {
   const ref = useRef<any>(null);
 
   return (
-    <InputGroup>
+    <InputGroup {...inputGroupProps}>
       <InputLeftAddon
         px={0}
         h='100%'
+        minH='40px'
         cursor='text'
         error={error}
         onClick={() => ref.current?.focus()}
         {...inputLeftAddonProps}
       >
         <Tooltip label={error}>
-          <Flex alignItems='center' px={4} w='100%' h='100%'>
+          <Flex alignItems='center' px={4} w='100%' h='100%' {...inputLeftAddonWrapperProps}>
             {leftComponent}
           </Flex>
         </Tooltip>
@@ -123,6 +133,8 @@ export const Select: FC<Props> = ({ leftComponent, inputLeftAddonProps, error, .
 
 Select.defaultProps = {
   leftComponent: undefined,
+  inputGroupProps: undefined,
   inputLeftAddonProps: undefined,
+  inputLeftAddonWrapperProps: undefined,
   error: undefined
 };

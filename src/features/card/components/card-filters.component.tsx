@@ -5,7 +5,7 @@ import { Eraser } from 'phosphor-react';
 
 import { cardCategoriesVar, cardRaritiesVar, cardTypesVar } from 'config';
 import { CardCategory, CardRarity, CardType } from 'models';
-import { FormSectionHeading, Icon, Select } from 'features/core/components';
+import { Icon, Select } from 'features/core/components';
 
 type Props = {
   value?: any;
@@ -64,9 +64,6 @@ export const CardFilters: FC<Props> = ({ value, loading, onChange }) => {
 
   return (
     <VStack flex={1} spacing={4}>
-      <FormSectionHeading p={0} w='100%'>
-        Filters
-      </FormSectionHeading>
       <Select
         inputLeftAddonProps={{ w: LABEL_WIDTH }}
         leftComponent='Rarities'
