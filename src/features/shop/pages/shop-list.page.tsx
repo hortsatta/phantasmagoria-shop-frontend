@@ -1,6 +1,14 @@
 import { CSSProperties, FC, useEffect, useMemo, useState } from 'react';
 import { useLazyQuery } from '@apollo/client';
-import { Box, Divider, Flex, StackDivider, StackProps, VStack } from '@chakra-ui/react';
+import {
+  Box,
+  Divider,
+  Flex,
+  InputRightElement,
+  StackDivider,
+  StackProps,
+  VStack
+} from '@chakra-ui/react';
 import { X as XSvg } from 'phosphor-react';
 
 import { GET_CARD_PRODUCTS } from 'services/graphql';
@@ -112,13 +120,15 @@ export const ShopListPage: FC = () => {
               onChange={handleSearchChange}
               {...(searchKeyword && {
                 rightComponent: (
-                  <IconButton
-                    pr={2}
-                    cursor='pointer'
-                    aria-label='clear search'
-                    icon={<Icon as={XSvg} w={4} />}
-                    onClick={() => setSearchKeyword('')}
-                  />
+                  <InputRightElement>
+                    <IconButton
+                      pr={2}
+                      cursor='pointer'
+                      aria-label='clear search'
+                      icon={<Icon as={XSvg} w={4} />}
+                      onClick={() => setSearchKeyword('')}
+                    />
+                  </InputRightElement>
                 )
               })}
             />

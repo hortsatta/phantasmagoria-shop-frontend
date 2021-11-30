@@ -1,5 +1,5 @@
 import { ComponentProps, FC } from 'react';
-import { Box, Center, Divider, Flex, Spinner, Stack } from '@chakra-ui/react';
+import { Box, Center, Divider, Flex, Spinner, VStack } from '@chakra-ui/react';
 import { Brain } from 'phosphor-react';
 
 import { Card } from 'models';
@@ -58,7 +58,7 @@ export const CardList: FC<Props> = ({
               <Spinner size='xl' />
             </Center>
           )}
-          <Stack spacing={2} direction='column'>
+          <VStack alignItems='flex-start' spacing={2}>
             {cards.map((card: Card) => (
               <MiniCardItem
                 {...(onCardClick && {
@@ -73,7 +73,7 @@ export const CardList: FC<Props> = ({
                 }
               />
             ))}
-          </Stack>
+          </VStack>
         </Box>
       </Box>
     </Scrollbars>

@@ -1,11 +1,5 @@
 import { FC, ReactNode } from 'react';
-import {
-  Input,
-  InputGroup,
-  InputLeftElement,
-  InputProps,
-  InputRightElement
-} from '@chakra-ui/react';
+import { Input, InputGroup, InputLeftElement, InputProps } from '@chakra-ui/react';
 import { Planet } from 'phosphor-react';
 
 import { Icon } from './icon.component';
@@ -20,7 +14,7 @@ export const SearchInput: FC<Props> = ({ rightComponent, ...moreProps }) => (
       <Icon as={Planet} w={6} opacity={0.7} />
     </InputLeftElement>
     <Input pl={14} h='44px' placeholder='Find an entity...' {...moreProps} />
-    {rightComponent && <InputRightElement>{rightComponent}</InputRightElement>}
+    {rightComponent}
   </InputGroup>
 );
 

@@ -1,8 +1,16 @@
 import { FC, ComponentProps, useContext, useEffect, useMemo, useState } from 'react';
 import { useLazyQuery, useReactiveVar } from '@apollo/client';
 import { Controller, useFormContext } from 'react-hook-form';
-import { Box, Button, HStack, Stack, Text, useDisclosure } from '@chakra-ui/react';
-import { Funnel } from 'phosphor-react';
+import {
+  Box,
+  Button,
+  HStack,
+  InputRightElement,
+  Stack,
+  Text,
+  useDisclosure
+} from '@chakra-ui/react';
+import { Funnel, X as XSvg } from 'phosphor-react';
 
 import { appModulesVar } from 'config';
 import { Card } from 'models';
@@ -145,9 +153,23 @@ export const UpsertCardProductStep1: FC = () => {
     <>
       <Stack flex={1} spacing={4}>
         <Input
+          value={searchKeyword}
           inputLeftAddonProps={{ w: LABEL_WIDTH }}
           leftComponent='Find Card'
           onChange={(e: any) => setSearchKeyword(e.target.value)}
+          {...(searchKeyword && {
+            rightComponent: (
+              <InputRightElement>
+                <IconButton
+                  pr={2}
+                  cursor='pointer'
+                  aria-label='clear search'
+                  icon={<Icon as={XSvg} w={4} />}
+                  onClick={() => setSearchKeyword('')}
+                />
+              </InputRightElement>
+            )
+          })}
         />
         <HStack flex={1} alignItems='flex-start' spacing={4}>
           <Box flex={1}>

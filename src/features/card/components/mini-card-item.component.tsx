@@ -23,14 +23,13 @@ export const MiniCardItem: FC<Props> = ({ card, rightComponent, ...moreProps }) 
     <MotionSurface
       justifyContent='flex-start'
       alignItems='center'
+      w='100%'
       h='60px'
       bgColor={variables.inputBgFocusColor}
       borderRadius={4}
       overflow='hidden'
       initial={{ opacity: 0, transform: 'translateX(-32px)' }}
       animate={{ opacity: 1, transform: 'translateX(0px)' }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.2, type: 'tween' } as any}
       layout
       {...moreProps}
     >
