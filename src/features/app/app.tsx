@@ -1,5 +1,5 @@
 import { FC, Suspense } from 'react';
-import { ChakraProvider } from '@chakra-ui/react';
+import { ChakraProvider, extendTheme } from '@chakra-ui/react';
 
 import { theme } from 'config';
 import { Header, Scrollbars } from '../core/components';
@@ -9,7 +9,7 @@ import { AppRoutes } from './routes';
 
 const Component: FC = () => (
   <PageContextProvider>
-    <ChakraProvider theme={theme}>
+    <ChakraProvider theme={extendTheme(theme)}>
       <Scrollbars
         className='scrollbar'
         style={{ height: '100vh', width: '100%', zIndex: 999 }}

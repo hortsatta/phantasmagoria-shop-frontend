@@ -1,6 +1,4 @@
-import { extendTheme } from '@chakra-ui/react';
 import { StepsStyleConfig } from 'chakra-ui-steps';
-
 import variables from 'assets/styles/_variables.module.scss';
 
 const styles = {
@@ -146,7 +144,7 @@ const Steps = {
   }
 };
 
-export const theme = extendTheme({
+export const theme = {
   config: {
     initialColorMode: 'dark',
     useSystemColorMode: false
@@ -165,4 +163,4 @@ export const theme = extendTheme({
     Spinner,
     Steps
   }
-});
+};
