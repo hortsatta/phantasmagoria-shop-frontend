@@ -54,7 +54,9 @@ const cardListStyle = {
 
 const CardModal: FC<CardModalProps> = ({ card, isOpen, onClose }) => (
   <Modal onClose={onClose} isOpen={isOpen} modalContentProps={{ maxW: '2xl' }} isCentered>
-    <Surface p={6}>{card && <CardDetail id={card.id} />}</Surface>
+    <Surface p={6} minW='xs' minH='xs'>
+      {card && <CardDetail id={card.id} />}
+    </Surface>
   </Modal>
 );
 
@@ -109,9 +111,9 @@ export const UpsertCardProductStep1: FC = () => {
     return {
       where: {
         name_contains: debounceSearchKeyword.trim(),
-        ...(rarities.length && { rarity: { id_in: rarities } }),
-        ...(categories.length && { category: { id_in: categories } }),
-        ...(types.length && { types: { id_in: types } })
+        ...(!!rarities.length && { rarity: { id_in: rarities } }),
+        ...(!!categories.length && { category: { id_in: categories } }),
+        ...(!!types.length && { types: { id_in: types } })
       }
     };
   }, [debounceSearchKeyword, cardFilters]);
