@@ -18,9 +18,47 @@ const GET_CARD_PRODUCTS = gql`
       id
       name
       description
+      price
       cards {
         id
         name
+        coverImage {
+          id
+          name
+          url
+        }
+      }
+    }
+  }
+`;
+
+const GET_CARD_PRODUCTS_DETAIL = gql`
+  query GetCardProducts(
+    $where: JSON
+    $limit: Int
+    $start: Int
+    $sort: String = "published_at:desc"
+    $publicationState: PublicationState = LIVE
+  ) {
+    cardProducts(
+      where: $where
+      limit: $limit
+      start: $start
+      sort: $sort
+      publicationState: $publicationState
+    ) {
+      id
+      name
+      description
+      price
+      cards {
+        id
+        name
+        image {
+          id
+          name
+          url
+        }
         coverImage {
           id
           name
@@ -55,4 +93,4 @@ const UPDATE_CARD_PRODUCT = gql`
   }
 `;
 
-export { GET_CARD_PRODUCTS, CREATE_CARD_PRODUCT, UPDATE_CARD_PRODUCT };
+export { GET_CARD_PRODUCTS, GET_CARD_PRODUCTS_DETAIL, CREATE_CARD_PRODUCT, UPDATE_CARD_PRODUCT };

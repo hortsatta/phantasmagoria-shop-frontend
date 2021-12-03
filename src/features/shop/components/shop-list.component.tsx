@@ -9,6 +9,9 @@ import variables from 'assets/styles/_variables.module.scss';
 type Props = {
   items: CardProduct[];
   loading?: boolean;
+  onCartClick?: (item: CardProduct) => void;
+  onDetailClick?: (item: CardProduct) => void;
+  onFavoriteClick?: (item: CardProduct) => void;
 };
 
 type LoadingOverlayProps = {
@@ -27,7 +30,13 @@ const LoadingOverlay: FC<LoadingOverlayProps> = ({ loading, children }) => (
   </>
 );
 
-export const ShopList: FC<Props> = ({ items, loading }) => (
+export const ShopList: FC<Props> = ({
+  items,
+  loading,
+  onCartClick,
+  onDetailClick,
+  onFavoriteClick
+}) => (
   <Flex pos='relative' flexDir='column' w='100%'>
     <LoadingOverlay loading={loading}>
       <Flex
@@ -40,7 +49,13 @@ export const ShopList: FC<Props> = ({ items, loading }) => (
         transition='opacity 0.2s ease'
       >
         {items.map((item: CardProduct) => (
-          <ShopItem key={item.id} item={item} />
+          <ShopItem
+            key={item.id}
+            item={item}
+            {...(onCartClick && { onCartClick })}
+            {...(onDetailClick && { onDetailClick })}
+            {...(onFavoriteClick && { onFavoriteClick })}
+          />
         ))}
         {!items.length && !loading && (
           <Text
@@ -59,7 +74,10 @@ export const ShopList: FC<Props> = ({ items, loading }) => (
 );
 
 ShopList.defaultProps = {
-  loading: false
+  loading: false,
+  onCartClick: undefined,
+  onDetailClick: undefined,
+  onFavoriteClick: undefined
 };
 
 LoadingOverlay.defaultProps = {

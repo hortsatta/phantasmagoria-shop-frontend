@@ -10,7 +10,9 @@ import {
   VStack
 } from '@chakra-ui/react';
 import { X as XSvg } from 'phosphor-react';
+import { AnimatePresence } from 'framer-motion';
 
+import { CardProduct } from 'models';
 import { GET_CARD_PRODUCTS } from 'services/graphql';
 import { useDebounceValue } from 'features/core/hooks';
 import {
@@ -21,16 +23,22 @@ import {
   SearchInput,
   SubHeading
 } from 'features/core/components';
-import { ShopAdminControl, ShopItemFilters, ShopItemSorter, ShopList } from '../components';
+import {
+  ShopAdminControl,
+  ShopItemDetail,
+  ShopItemFilters,
+  ShopItemSorter,
+  ShopList
+} from '../components';
 
 const scrollbarStyles: CSSProperties = {
-  position: 'sticky',
-  top: 0,
+  position: 'fixed',
   flex: 1,
+  width: '320px',
   height: '100%'
 };
 
-const leftSectionStyles: StackProps = {
+const sideSectionStyles: StackProps = {
   flexDir: 'column',
   p: 6,
   spacing: 4,
@@ -41,6 +49,7 @@ export const ShopListPage: FC = () => {
   // Card products query search with product or card name as keyword
   const [getCardProducts, { data: { cardProducts = [] } = {}, loading }] =
     useLazyQuery(GET_CARD_PRODUCTS);
+  const [currentItemDetail, setCurrentItemDetail] = useState<CardProduct | null>(null);
   const [itemFilters, setItemFilters] = useState<any>(null);
   const [itemSort, setItemSort] = useState<string | null>(null);
   const [searchKeyword, setSearchKeyword] = useState('');
@@ -51,9 +60,9 @@ export const ShopListPage: FC = () => {
     const { rarities, categories, types } = itemFilters || {};
 
     const cards = {
-      ...(rarities?.length && { rarity: { id_in: rarities } }),
-      ...(categories?.length && { category: { id_in: categories } }),
-      ...(types?.length && { types: { id_in: types } })
+      ...(!!rarities?.length && { rarity: { id_in: rarities } }),
+      ...(!!categories?.length && { category: { id_in: categories } }),
+      ...(!!types?.length && { types: { id_in: types } })
     };
 
     return {
@@ -85,9 +94,13 @@ export const ShopListPage: FC = () => {
   };
 
   return (
-    <PageBox d='flex' alignItems='flex-start' pb={0} h='100%' flex={1}>
-      <Scrollbars className='scrollbar' style={scrollbarStyles} hideHorizontalScroll>
-        <VStack {...leftSectionStyles}>
+    <PageBox d='flex' alignItems='flex-start' justifyContent='center' pb={0} h='100%' flex={1}>
+      <Scrollbars
+        className='scrollbar'
+        style={{ ...scrollbarStyles, left: 0 }}
+        hideHorizontalScroll
+      >
+        <VStack {...sideSectionStyles}>
           <Box w='100%'>
             <SubHeading pb={4} fontSize='3xl'>
               admin section
@@ -133,12 +146,33 @@ export const ShopListPage: FC = () => {
               })}
             />
           </Box>
-          <ShopList items={cardProducts} loading={loading || debounceSearchLoading} />
+          <ShopList
+            items={cardProducts}
+            loading={loading || debounceSearchLoading}
+            onDetailClick={(item: CardProduct) => setCurrentItemDetail(item)}
+          />
         </Flex>
         <Divider pos='absolute' right='0px' h='100%' orientation='vertical' />
       </Flex>
-      <Scrollbars className='scrollbar' style={scrollbarStyles} hideHorizontalScroll>
-        <Flex {...leftSectionStyles} />
+      <Scrollbars
+        className='scrollbar'
+        style={{ ...scrollbarStyles, right: 0 }}
+        hideHorizontalScroll
+      >
+        <Flex {...sideSectionStyles} pt={2}>
+          <AnimatePresence>
+            {currentItemDetail && (
+              <ShopItemDetail
+                id={currentItemDetail.id}
+                initial={{ opacity: 0, transform: 'translateX(-32px)' }}
+                animate={{ opacity: 1, transform: 'translateX(0px)' }}
+                exit={{ opacity: 0, transform: 'translateX(32px)' }}
+                transition={{ type: 'tween', duration: 0.2 }}
+                onClose={() => setCurrentItemDetail(null)}
+              />
+            )}
+          </AnimatePresence>
+        </Flex>
       </Scrollbars>
     </PageBox>
   );
