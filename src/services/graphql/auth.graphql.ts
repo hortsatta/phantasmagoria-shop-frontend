@@ -15,6 +15,21 @@ const SIGN_IN = gql`
   }
 `;
 
+const SIGN_UP = gql`
+  mutation SignUp($username: String!, $email: String!, $password: String!) {
+    register(input: { username: $username, email: $email, password: $password }) {
+      jwt
+      user {
+        id
+        email
+        role {
+          id
+        }
+      }
+    }
+  }
+`;
+
 const CHECK_SESSION = gql`
   query CheckSession {
     me {
@@ -27,4 +42,4 @@ const CHECK_SESSION = gql`
   }
 `;
 
-export { SIGN_IN, CHECK_SESSION };
+export { SIGN_IN, SIGN_UP, CHECK_SESSION };
