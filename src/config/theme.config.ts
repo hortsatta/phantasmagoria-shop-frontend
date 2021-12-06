@@ -55,7 +55,7 @@ const Button = {
 
 const Divider = {
   baseStyle: {
-    opacity: 0.2
+    opacity: 0.3
   }
 };
 
