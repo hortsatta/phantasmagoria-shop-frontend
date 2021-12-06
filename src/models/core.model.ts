@@ -20,4 +20,13 @@ type AuditTrail = {
   publishedAt?: Date;
 };
 
-export type { AppModule, AuditTrail, UpdatedBy };
+type PhRegion = {
+  code: string;
+  name: string;
+};
+
+type PhProvince = PhRegion;
+type PhCity = PhRegion;
+type PhBarangay = PhRegion;
+
+export type { AppModule, AuditTrail, PhRegion, PhProvince, PhCity, PhBarangay, UpdatedBy };
