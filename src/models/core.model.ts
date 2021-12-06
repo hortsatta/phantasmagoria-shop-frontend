@@ -1,3 +1,5 @@
+import { User } from 'models';
+
 type AppModule = {
   key: string;
   path: string;
@@ -7,10 +9,15 @@ type AppModule = {
   children?: { [x: string]: AppModule };
 };
 
+type UpdatedBy = {
+  user: User;
+  date: Date;
+};
+
 type AuditTrail = {
   createdAt?: Date;
-  updatedAt?: Date;
+  updatedAt?: UpdatedBy[];
   publishedAt?: Date;
 };
 
-export type { AppModule, AuditTrail };
+export type { AppModule, AuditTrail, UpdatedBy };
