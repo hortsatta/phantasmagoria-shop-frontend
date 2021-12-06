@@ -43,7 +43,13 @@ export const AuthPage: FC = () => {
 
   return (
     <PageBox>
-      <Surface flexDir='column' alignItems='flex-start' m='6rem auto 0 auto' w='xl'>
+      <Surface
+        flexDir='column'
+        alignItems='flex-start'
+        m='6rem auto 0 auto'
+        w='xl'
+        overflow='hidden'
+      >
         <Flex d='flex' flexDir='column' alignItems='center' py={8} px={8} w='100%'>
           <Center flexDir='column' flex={1} mb={12}>
             <Heading as='h2' fontSize='4xl'>

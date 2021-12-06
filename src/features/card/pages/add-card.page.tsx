@@ -25,8 +25,13 @@ export const AddCardPage: FC = () => {
       return;
     }
 
-    const shopListNav = appModules.shop.children?.list;
-    changePage(shopListNav?.key, shopListNav?.path);
+    const delay = setTimeout(() => {
+      const shopListNav = appModules.shop.children?.list;
+      changePage(shopListNav?.key, shopListNav?.path);
+    }, 1800);
+
+    // eslint-disable-next-line consistent-return
+    return () => clearTimeout(delay);
   }, [isComplete]);
 
   const handleSubmit = async (cardFormData: CardFormData) => {

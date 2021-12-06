@@ -35,21 +35,19 @@ const LottieSpoopy: FC = () => {
   );
 };
 
-export const UpsertCardStepDone: FC<Props> = ({ isComplete }) => {
-  return (
-    <Surface flexDir='column' justifyContent='center' alignItems='center' p={12}>
-      {isComplete ? (
-        <Lottie style={LOTTIE_STYLES} animationData={lottieDone} loop={false} />
-      ) : (
-        <LottieSpoopy />
-      )}
-      <SubHeading w='70%' textAlign='center' lineHeight={1.2}>
-        You&apos;re almost done, given you&apos;ve populated the required fields. Just tap the save
-        button to complete the procedure.
-      </SubHeading>
-    </Surface>
-  );
-};
+export const UpsertCardStepDone: FC<Props> = ({ isComplete }) => (
+  <Surface flexDir='column' justifyContent='center' alignItems='center' p={12}>
+    {isComplete ? (
+      <Lottie style={LOTTIE_STYLES} animationData={lottieDone} loop={false} />
+    ) : (
+      <LottieSpoopy />
+    )}
+    <SubHeading w='70%' textAlign='center' lineHeight={1.2}>
+      You&apos;re almost done, given you&apos;ve populated the required fields. Just tap the save
+      button to complete the procedure.
+    </SubHeading>
+  </Surface>
+);
 
 UpsertCardStepDone.defaultProps = {
   isComplete: false
