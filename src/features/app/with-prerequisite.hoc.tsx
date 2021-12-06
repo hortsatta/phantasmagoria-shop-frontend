@@ -6,14 +6,16 @@ import {
   cardCategoriesVar,
   cardRaritiesVar,
   cardTypesVar,
-  currentUserVar
+  currentUserVar,
+  phRegionsVar
 } from 'config';
 import {
   CHECK_SESSION,
   GET_ALL_CATEGORIES,
   GET_ALL_RARITIES,
   GET_ALL_TYPES,
-  GET_APP_MODULES
+  GET_APP_MODULES,
+  GET_PH_REGIONS
 } from 'services/graphql';
 
 export const withPrerequisite = <T,>(Component: ComponentType<T>) => {
@@ -23,11 +25,13 @@ export const withPrerequisite = <T,>(Component: ComponentType<T>) => {
     const { data: raritiesData } = useQuery(GET_ALL_RARITIES);
     const { data: categoriesData } = useQuery(GET_ALL_CATEGORIES);
     const { data: typesData } = useQuery(GET_ALL_TYPES);
+    const { data: phRegionsData } = useQuery(GET_PH_REGIONS);
     const appModules = useReactiveVar(appModulesVar);
     const currentUser = useReactiveVar(currentUserVar);
     const cardRarities = useReactiveVar(cardRaritiesVar);
     const cardCategories = useReactiveVar(cardCategoriesVar);
     const cardTypes = useReactiveVar(cardTypesVar);
+    // const phRegions = useReactiveVar(phRegionsVar);
     const [isFetching, setIsFetching] = useState(true);
 
     useEffect(() => {
@@ -50,6 +54,10 @@ export const withPrerequisite = <T,>(Component: ComponentType<T>) => {
     useEffect(() => {
       cardTypesVar(typesData?.types || null);
     }, [typesData]);
+
+    useEffect(() => {
+      phRegionsVar(phRegionsData?.phLocRegions || null);
+    }, [phRegionsData]);
 
     useEffect(() => {
       if (
