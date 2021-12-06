@@ -1,5 +1,5 @@
 import { FC, useMemo } from 'react';
-import { Box, Button, Divider, Flex, Heading, Image } from '@chakra-ui/react';
+import { Box, Button, Divider, Flex, Heading, Image, Text } from '@chakra-ui/react';
 import { Brain, Knife, Tray } from 'phosphor-react';
 
 import { CardProduct } from 'models';
@@ -15,7 +15,7 @@ type Props = {
 };
 
 export const ShopItem: FC<Props> = ({ item, onCartClick, onDetailClick, onFavoriteClick }) => {
-  const { name, image, cards } = item;
+  const { name, price, image, cards } = item;
   const itemImage = useMemo(() => image?.url || cards[0].coverImage.url, [item]);
 
   return (
@@ -33,7 +33,23 @@ export const ShopItem: FC<Props> = ({ item, onCartClick, onDetailClick, onFavori
       animate={{ opacity: 1, transform: 'translateY(0px)' }}
       layout
     >
-      <Box w='100%' h='212px' overflow='hidden'>
+      <Box pos='relative' w='100%' h='212px' overflow='hidden'>
+        <Text
+          pos='absolute'
+          top={0}
+          left={0}
+          py='2px'
+          mt='8px'
+          ml='8px'
+          w='70px'
+          bgColor={variables.accentColor}
+          fontSize='sm'
+          textAlign='center'
+          borderRadius='999px'
+          overflow='hidden'
+        >
+          {price && `\u20B1${price}`}
+        </Text>
         <Image src={itemImage} bgColor='rgba(0,0,0,0.3)' objectFit='contain' />
       </Box>
       <Flex w='100%' flexDir='column' alignItems='center'>
