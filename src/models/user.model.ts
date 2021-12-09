@@ -25,4 +25,13 @@ type UserAccount = AuditTrail & {
   addresses?: Address[];
 };
 
-export type { User, UserAccount, Address };
+type PhRegion = {
+  code: string;
+  name: string;
+};
+
+type PhProvince = PhRegion;
+type PhCity = PhRegion;
+type PhBarangay = PhRegion;
+
+export type { User, UserAccount, Address, PhRegion, PhProvince, PhCity, PhBarangay };
