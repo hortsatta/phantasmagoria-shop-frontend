@@ -47,7 +47,6 @@ export const CardDetail: FC<Props> = ({ id, ...moreProps }) => {
             flexShrink={0}
             maxW='359px'
             w='100%'
-            h='500px'
             bgColor={variables.inputBgColor}
             borderColor='rgba(255,255,255,0.06)'
             borderWidth='1px'

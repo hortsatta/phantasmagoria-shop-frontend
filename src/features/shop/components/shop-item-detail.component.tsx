@@ -62,15 +62,18 @@ export const ShopItemDetail: FC<Props> = ({
             icon={<Icon w={6} boxSizing='content-box' as={XSvg} />}
             {...(onClose && { onClick: onClose })}
           />
-          <VStack alignItems='flex-start' spacing={2}>
-            <Heading fontSize='3xl' as='h4'>
-              {name}
-            </Heading>
-            <Divider width='90%' />
+          <VStack spacing={2}>
             <Flex w='100%' alignItems='center' justifyContent='space-between'>
-              <Text fontSize='xl'>
-                {price && '$'}
-                {price}
+              <Text
+                py='2px'
+                w='80px'
+                bgColor={variables.accentColor}
+                textAlign='center'
+                fontSize='md'
+                borderRadius='999px'
+                overflow='hidden'
+              >
+                {price && `\u20B1${price}`}
               </Text>
               <HStack spacing={2}>
                 <IconButton
@@ -90,19 +93,23 @@ export const ShopItemDetail: FC<Props> = ({
               </HStack>
             </Flex>
             <Divider width='90%' />
+            <Heading fontSize='3xl' as='h4'>
+              {name}
+            </Heading>
+            <Divider width='90%' />
             {isCardsMultiple && (
               <>
-                <Text>{description}</Text>
+                <Text pb={2} textAlign='justify'>
+                  {description}
+                </Text>
                 <Divider width='90%' />
               </>
             )}
             {!!cards?.length && (
-              <VStack spacing={4}>
-                <SubHeading w='100%' fontSize='3xl'>
-                  {`card ${isCardsMultiple ? ' images' : 'image'}`}
-                </SubHeading>
+              <VStack pt={2} spacing={4}>
                 {cards.map((card: Card) => (
                   <Box
+                    key={card.id}
                     w='100%'
                     bgColor={variables.surfaceColor}
                     borderColor='rgba(255,255,255,0.12)'
