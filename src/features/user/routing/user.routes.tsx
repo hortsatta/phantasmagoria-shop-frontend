@@ -10,6 +10,12 @@ const AuthPage = lazy(() =>
   }))
 );
 
+const RegistrationPage = lazy(() =>
+  import('../pages/registration.page').then((module: any) => ({
+    default: module.RegistrationPage
+  }))
+);
+
 const UserAccountPage = lazy(() =>
   import('../pages/user-account.page').then((module: any) => ({
     default: module.UserAccountPage
@@ -22,11 +28,16 @@ export const UserRoutes: FC<RouteComponentProps> = ({ match }) => {
     () => `${appModules.user.path}${appModules.user.children?.signIn.path}`,
     [appModules]
   );
+  const registrationPath = useMemo(
+    () => `${appModules.user.path}${appModules.user.children?.signUp.path}`,
+    [appModules]
+  );
 
   return (
     <>
       <Route exact path={match.path} component={UserAccountPage} />
       <Route path={authPath} component={AuthPage} />
+      <Route path={registrationPath} component={RegistrationPage} />
     </>
   );
 };
