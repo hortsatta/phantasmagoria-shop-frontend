@@ -1,12 +1,12 @@
-import { FC, FormEvent } from 'react';
+import { FC, FormEvent, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Box, BoxProps, Button, Flex, VStack } from '@chakra-ui/react';
-import { RocketLaunch } from 'phosphor-react';
+import { Box, BoxProps, Button, Flex, InputRightElement, VStack } from '@chakra-ui/react';
+import { Eye, EyeClosed, RocketLaunch } from 'phosphor-react';
 
 import { AuthCredentials } from 'models';
-import { Icon, Input, Surface } from 'features/core/components';
+import { Icon, IconButton, Input, SubHeading, Surface } from 'features/core/components';
 
 const LABEL_WIDTH = '165px';
 
@@ -41,6 +41,7 @@ const SignUpForm: FC<Props> = ({ loading, onSubmit, ...moreProps }) => {
     defaultValues,
     resolver: zodResolver(schema)
   });
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
@@ -54,6 +55,10 @@ const SignUpForm: FC<Props> = ({ loading, onSubmit, ...moreProps }) => {
     <Box {...moreProps}>
       <Surface p={12} w='100%'>
         <VStack as='form' flex={1} spacing={4} onSubmit={handleSubmit}>
+          <SubHeading pb={4}>
+            Create an account using a valid email and set your password with a minimum of 6
+            characters.
+          </SubHeading>
           <Controller
             name='email'
             control={control}
@@ -77,7 +82,18 @@ const SignUpForm: FC<Props> = ({ loading, onSubmit, ...moreProps }) => {
                 inputLeftAddonProps={{ w: LABEL_WIDTH }}
                 leftComponent='Password'
                 error={errors && errors.password?.message}
-                type='password'
+                type={showPassword ? 'default' : 'password'}
+                rightComponent={
+                  <InputRightElement pr={4}>
+                    <IconButton
+                      aria-label='Show/Hide Password'
+                      icon={
+                        <Icon w={6} boxSizing='content-box' as={showPassword ? Eye : EyeClosed} />
+                      }
+                      onClick={() => setShowPassword(!showPassword)}
+                    />
+                  </InputRightElement>
+                }
                 {...moreFields}
               />
             )}
@@ -91,7 +107,7 @@ const SignUpForm: FC<Props> = ({ loading, onSubmit, ...moreProps }) => {
                 inputLeftAddonProps={{ w: LABEL_WIDTH }}
                 leftComponent='Confirm Password'
                 error={errors && errors.confirmPassword?.message}
-                type='password'
+                type={showPassword ? 'default' : 'password'}
                 {...moreFields}
               />
             )}

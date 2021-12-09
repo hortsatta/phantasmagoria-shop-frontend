@@ -82,9 +82,9 @@ const SignUpOptionalForm: FC<Props> = ({ loading, onSkip, onSubmit, ...moreProps
   const cityCode = watch('city');
 
   const { phRegionOptions } = usePhLocationRegion();
-  const { phProvinceOptions } = usePhLocationProvince(regionCode);
-  const { phCityOptions } = usePhLocationCity(provinceCode);
-  const { phBarangayOptions } = usePhLocationBarangay(cityCode);
+  const { phProvinceOptions, loading: phProvinceLoading } = usePhLocationProvince(regionCode);
+  const { phCityOptions, loading: phCityLoading } = usePhLocationCity(provinceCode);
+  const { phBarangayOptions, loading: phBarangayLoading } = usePhLocationBarangay(cityCode);
 
   // Clear current ph location values when code changes
   useEffect(() => {
@@ -189,6 +189,7 @@ const SignUpOptionalForm: FC<Props> = ({ loading, onSkip, onSubmit, ...moreProps
                 }
                 error={errors && errors.province?.message}
                 onChange={(val: any) => onChange(val.value)}
+                isLoading={phProvinceLoading}
                 {...moreFields}
               />
             )}
@@ -207,6 +208,7 @@ const SignUpOptionalForm: FC<Props> = ({ loading, onSkip, onSubmit, ...moreProps
                 }
                 error={errors && errors.city?.message}
                 onChange={(val: any) => onChange(val.value)}
+                isLoading={phCityLoading}
                 {...moreFields}
               />
             )}
@@ -227,6 +229,7 @@ const SignUpOptionalForm: FC<Props> = ({ loading, onSkip, onSubmit, ...moreProps
                 }
                 error={errors && errors.barangay?.message}
                 onChange={(val: any) => onChange(val.value)}
+                isLoading={phBarangayLoading}
                 {...moreFields}
               />
             )}
