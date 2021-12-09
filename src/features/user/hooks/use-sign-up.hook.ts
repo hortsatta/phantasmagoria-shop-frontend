@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react';
+import { MutableRefObject, useCallback, useRef, useState } from 'react';
 import { useMutation } from '@apollo/client';
 
 import { CREATE_USER_ACCOUNT, SIGN_UP } from 'services/graphql';
@@ -10,14 +10,14 @@ type Result = {
   isSignUpComplete: boolean;
   isOptionalDetailComplete: boolean;
   setIsOptionalDetailComplete: any;
+  currentUser: MutableRefObject<any>;
   signUp: (user: UserFormData) => void;
   addOptionalData: (data: UserOptionalFormData) => void;
-  error: any;
 };
 
 export const useSignUp = (): Result => {
   const { debounce, loading: debounceLoading } = useDebounce();
-  const [register, { loading: registerLoading, error }] = useMutation(SIGN_UP);
+  const [register, { loading: registerLoading }] = useMutation(SIGN_UP);
   const [createUserAccount, { loading: createUserAccountLoading }] =
     useMutation(CREATE_USER_ACCOUNT);
   const [isSignUpComplete, setIsSignUpComplete] = useState(false);
@@ -61,9 +61,9 @@ export const useSignUp = (): Result => {
     loading: debounceLoading || registerLoading || createUserAccountLoading,
     isSignUpComplete,
     isOptionalDetailComplete,
+    currentUser,
     setIsOptionalDetailComplete,
     signUp,
-    addOptionalData,
-    error
+    addOptionalData
   };
 };
