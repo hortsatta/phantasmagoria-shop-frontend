@@ -4,6 +4,7 @@ import {
   Box,
   Divider,
   Flex,
+  Heading,
   InputRightElement,
   StackDivider,
   StackProps,
@@ -15,14 +16,7 @@ import { AnimatePresence } from 'framer-motion';
 import { CardProduct } from 'models';
 import { GET_CARD_PRODUCTS } from 'services/graphql';
 import { useDebounceValue } from 'features/core/hooks';
-import {
-  Icon,
-  IconButton,
-  PageBox,
-  Scrollbars,
-  SearchInput,
-  SubHeading
-} from 'features/core/components';
+import { Icon, IconButton, PageBox, Scrollbars, SearchInput } from 'features/core/components';
 import {
   ShopAdminControl,
   ShopItemDetail,
@@ -102,21 +96,21 @@ export const ShopListPage: FC = () => {
       >
         <VStack {...sideSectionStyles}>
           <Box w='100%'>
-            <SubHeading pb={4} fontSize='3xl'>
+            <Heading pb={4} fontSize='xl' as='h4'>
               admin section
-            </SubHeading>
+            </Heading>
             <ShopAdminControl />
           </Box>
           <Box w='100%'>
-            <SubHeading pb={4} fontSize='3xl'>
+            <Heading pb={4} fontSize='xl' as='h4'>
               sort cards
-            </SubHeading>
+            </Heading>
             <ShopItemSorter value={itemSort} onChange={setItemSort} />
           </Box>
           <Box w='100%'>
-            <SubHeading pb={4} fontSize='3xl'>
+            <Heading pb={4} fontSize='xl' as='h4'>
               filter cards
-            </SubHeading>
+            </Heading>
             <ShopItemFilters
               value={itemFilters}
               onChange={(filters: any) => setItemFilters(filters)}
