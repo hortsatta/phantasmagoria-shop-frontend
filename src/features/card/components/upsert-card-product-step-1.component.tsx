@@ -1,5 +1,5 @@
-import { FC, ComponentProps, useContext, useEffect, useMemo, useState } from 'react';
-import { useLazyQuery, useReactiveVar } from '@apollo/client';
+import { FC, ComponentProps, useContext, useMemo, useState } from 'react';
+import { useReactiveVar } from '@apollo/client';
 import { Controller, useFormContext } from 'react-hook-form';
 import {
   Box,
@@ -14,9 +14,7 @@ import { Funnel, X as XSvg } from 'phosphor-react';
 
 import { appModulesVar } from 'config';
 import { Card } from 'models';
-import { GET_CARDS } from 'services/graphql';
 import { PageContext } from 'features/core/contexts';
-import { useDebounceValue } from 'features/core/hooks';
 import {
   FormSectionHeading,
   Icon,
@@ -25,6 +23,7 @@ import {
   Modal,
   Surface
 } from 'features/core/components';
+import { useGetCardsByFilters } from '../hooks';
 import { CardProductFormData } from './upsert-card-product-form.component';
 import { CardDetail } from './card-detail.component';
 import { CardFilters } from './card-filters.component';
@@ -83,6 +82,9 @@ export const UpsertCardProductStep1: FC = () => {
   // Form controls
   const { control, watch } = useFormContext<CardProductFormData>();
   const selectedCards = watch('cards', []);
+  // Query cards with filter
+  const { cards, searchKeyword, cardFilters, loading, setSearchKeyword, setCardFilters } =
+    useGetCardsByFilters();
   // View card detail modal
   const {
     isOpen: cardModalIsOpen,
@@ -96,36 +98,11 @@ export const UpsertCardProductStep1: FC = () => {
     onClose: filterModalOnClose
   } = useDisclosure();
   const [currentCardDetail, setCurrentCardDetail] = useState<Card | null>(null);
-  const [cardFilters, setCardFilters] = useState<any>({
-    rarities: [],
-    categories: [],
-    types: []
-  });
-  // Cards query search and parameters
-  const [getCards, { data: { cards = [] } = {}, loading }] = useLazyQuery(GET_CARDS);
-  const [searchKeyword, setSearchKeyword] = useState('');
-  const { debouncedValue: debounceSearchKeyword, loading: debounceSearchLoading } =
-    useDebounceValue(searchKeyword);
-  const cardVariables = useMemo(() => {
-    const { rarities, categories, types } = cardFilters;
-    return {
-      where: {
-        name_contains: debounceSearchKeyword.trim(),
-        ...(!!rarities.length && { rarity: { id_in: rarities } }),
-        ...(!!categories.length && { category: { id_in: categories } }),
-        ...(!!types.length && { types: { id_in: types } })
-      }
-    };
-  }, [debounceSearchKeyword, cardFilters]);
   // Filter card results from api
   const filteredCards = useMemo(
     () => cards.filter((c1: Card) => !selectedCards.some(c2 => c2.id === c1.id)) || [],
     [cards, selectedCards]
   );
-
-  useEffect(() => {
-    getCards({ variables: cardVariables });
-  }, [cardVariables]);
 
   const handleNavigateToAddCard = () => {
     const addCardNav = appModules.card.children?.add;
@@ -194,7 +171,7 @@ export const UpsertCardProductStep1: FC = () => {
                 <CardList
                   style={cardListStyle}
                   cards={filteredCards}
-                  loading={loading || debounceSearchLoading}
+                  loading={loading}
                   onCardClick={card => card && onChange([...selectedCards, card])}
                   onCardDetailClick={handleCardDetailClick}
                 />
@@ -211,7 +188,7 @@ export const UpsertCardProductStep1: FC = () => {
                   <CardList
                     style={cardListStyle}
                     cards={selectedCards}
-                    loading={loading || debounceSearchLoading}
+                    loading={loading}
                     onCardClick={card =>
                       card && onChange(selectedCards.filter(c => c.id !== card.id))
                     }
@@ -240,7 +217,7 @@ export const UpsertCardProductStep1: FC = () => {
         onClose={filterModalOnClose}
         isOpen={filterModalIsOpen}
         filters={cardFilters}
-        loading={loading || debounceSearchLoading}
+        loading={loading}
         onFiltersChange={handleCardFiltersChange}
       />
     </>

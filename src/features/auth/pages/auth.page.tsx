@@ -1,45 +1,30 @@
 import { FC, useContext, useEffect } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { Center, Flex, Heading, Image, Link } from '@chakra-ui/react';
-import { useMutation, useReactiveVar } from '@apollo/client';
+import { useReactiveVar } from '@apollo/client';
 
 import { appModulesVar, currentUserVar } from 'config';
-import { signIn } from 'services';
-import { SIGN_IN } from 'services/graphql';
 import { PageContext } from 'features/core/contexts';
-import { useDebounce } from 'features/core/hooks';
 import { PageBox, SubHeading, Surface } from 'features/core/components';
+import { useAuth } from '../hooks';
 import { SignInForm } from '../components';
 
 import signInCover from 'assets/images/sign-in-cover.jpg';
 
 export const AuthPage: FC = () => {
-  const { debounce, loading: debounceLoading } = useDebounce();
   const { changePage } = useContext(PageContext);
-  const [login, { loading }] = useMutation(SIGN_IN);
+  const { signIn, loading } = useAuth();
   const currentUser = useReactiveVar(currentUserVar);
   const appModules: any = useReactiveVar(appModulesVar);
 
   useEffect(() => {
-    if (debounceLoading || loading || !currentUser) {
+    if (loading || !currentUser) {
       return;
     }
 
     const shopListNav = appModules.shop.children?.list;
     changePage(shopListNav?.key, shopListNav?.path);
-  }, [currentUser, debounceLoading, loading]);
-
-  const handleSubmit = async (identifier: string, password: string) => {
-    try {
-      debounce();
-      const { data } = await login({ variables: { identifier, password } });
-      const { jwt, user } = data.login;
-      signIn(jwt, user);
-    } catch (err) {
-      // TODO
-      console.log('err', err);
-    }
-  };
+  }, [currentUser, loading]);
 
   return (
     <PageBox>
@@ -57,12 +42,7 @@ export const AuthPage: FC = () => {
             </Heading>
             <SubHeading>Enter your details below to continue.</SubHeading>
           </Center>
-          <SignInForm
-            mb={2}
-            w='100%'
-            loading={loading || debounceLoading}
-            onSubmit={handleSubmit}
-          />
+          <SignInForm mb={2} w='100%' loading={loading} onSubmit={signIn} />
           <Link
             fontSize={14}
             opacity={0.8}

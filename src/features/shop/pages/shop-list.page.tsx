@@ -1,12 +1,10 @@
-import { CSSProperties, FC, useEffect, useMemo, useState } from 'react';
-import { useLazyQuery } from '@apollo/client';
+import { CSSProperties, FC, useState } from 'react';
 import {
   Box,
   Divider,
   Flex,
   Heading,
   InputRightElement,
-  StackDivider,
   StackProps,
   VStack
 } from '@chakra-ui/react';
@@ -14,9 +12,8 @@ import { X as XSvg } from 'phosphor-react';
 import { AnimatePresence } from 'framer-motion';
 
 import { CardProduct } from 'models';
-import { GET_CARD_PRODUCTS } from 'services/graphql';
-import { useDebounceValue } from 'features/core/hooks';
 import { Icon, IconButton, PageBox, Scrollbars, SearchInput } from 'features/core/components';
+import { useGetShopItemsByFilters } from '../hooks';
 import {
   ShopAdminControl,
   ShopItemDetail,
@@ -35,52 +32,21 @@ const scrollbarStyles: CSSProperties = {
 const sideSectionStyles: StackProps = {
   flexDir: 'column',
   p: 6,
-  spacing: 4,
-  divider: <StackDivider borderColor='rgba(255,255,255,0.06)' />
+  spacing: 4
 };
 
 export const ShopListPage: FC = () => {
-  // Card products query search with product or card name as keyword
-  const [getCardProducts, { data: { cardProducts = [] } = {}, loading }] =
-    useLazyQuery(GET_CARD_PRODUCTS);
+  const {
+    items,
+    searchKeyword,
+    itemSort,
+    itemFilters,
+    loading,
+    setSearchKeyword,
+    setItemSort,
+    setItemFilters
+  } = useGetShopItemsByFilters();
   const [currentItemDetail, setCurrentItemDetail] = useState<CardProduct | null>(null);
-  const [itemFilters, setItemFilters] = useState<any>(null);
-  const [itemSort, setItemSort] = useState<string | null>(null);
-  const [searchKeyword, setSearchKeyword] = useState('');
-  const { debouncedValue: debounceSearchKeyword, loading: debounceSearchLoading } =
-    useDebounceValue(searchKeyword);
-
-  const itemVariables = useMemo(() => {
-    const { rarities, categories, types } = itemFilters || {};
-
-    const cards = {
-      ...(!!rarities?.length && { rarity: { id_in: rarities } }),
-      ...(!!categories?.length && { category: { id_in: categories } }),
-      ...(!!types?.length && { types: { id_in: types } })
-    };
-
-    return {
-      ...(itemSort && { sort: itemSort }),
-      where: {
-        _or: [
-          {
-            name_contains: debounceSearchKeyword.trim(),
-            cards
-          },
-          {
-            cards: {
-              ...cards,
-              name_contains: debounceSearchKeyword.trim()
-            }
-          }
-        ]
-      }
-    };
-  }, [debounceSearchKeyword, itemFilters, itemSort]);
-
-  useEffect(() => {
-    getCardProducts({ variables: itemVariables });
-  }, [itemVariables]);
 
   const handleSearchChange = (e: any) => {
     const { value } = e.target;
@@ -96,21 +62,30 @@ export const ShopListPage: FC = () => {
       >
         <VStack {...sideSectionStyles}>
           <Box w='100%'>
-            <Heading pb={4} fontSize='xl' as='h4'>
-              admin section
-            </Heading>
+            <Box pb={4}>
+              <Heading pb={2} fontSize='xl' as='h4'>
+                admin section
+              </Heading>
+              <Divider borderColor='rgba(255,255,255,0.12)' />
+            </Box>
             <ShopAdminControl />
           </Box>
           <Box w='100%'>
-            <Heading pb={4} fontSize='xl' as='h4'>
-              sort cards
-            </Heading>
+            <Box py={4}>
+              <Heading pb={2} fontSize='xl' as='h4'>
+                sort cards
+              </Heading>
+              <Divider borderColor='rgba(255,255,255,0.12)' />
+            </Box>
             <ShopItemSorter value={itemSort} onChange={setItemSort} />
           </Box>
           <Box w='100%'>
-            <Heading pb={4} fontSize='xl' as='h4'>
-              filter cards
-            </Heading>
+            <Box py={4}>
+              <Heading pb={2} fontSize='xl' as='h4'>
+                filter cards
+              </Heading>
+              <Divider borderColor='rgba(255,255,255,0.12)' />
+            </Box>
             <ShopItemFilters
               value={itemFilters}
               onChange={(filters: any) => setItemFilters(filters)}
@@ -141,8 +116,8 @@ export const ShopListPage: FC = () => {
             />
           </Box>
           <ShopList
-            items={cardProducts}
-            loading={loading || debounceSearchLoading}
+            items={items}
+            loading={loading}
             onDetailClick={(item: CardProduct) => setCurrentItemDetail(item)}
           />
         </Flex>
