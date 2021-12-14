@@ -1,8 +1,14 @@
 import { FC, useState } from 'react';
-import { Button, Text, useRadioGroup, VStack } from '@chakra-ui/react';
+import { Button, Text, TextProps, useRadioGroup, VStack } from '@chakra-ui/react';
 import { MagicWand } from 'phosphor-react';
 
 import { Icon, Radio } from 'features/core/components';
+
+const sectionHeaderStyles: TextProps = {
+  color: 'rgba(255,255,255,0.7)',
+  fontSize: 13,
+  textTransform: 'uppercase'
+};
 
 type Props = {
   value?: any;
@@ -45,9 +51,7 @@ export const ShopItemSorter: FC<Props> = ({ value, loading, onChange }) => {
   return (
     <VStack alignItems='flex-start' spacing={4}>
       <VStack {...fieldGroup} alignItems='flex-start' w='100%'>
-        <Text color='rgba(255,255,255,0.7)' fontSize={13} textTransform='uppercase'>
-          By
-        </Text>
+        <Text {...sectionHeaderStyles}>By</Text>
         {fieldOptions.map(({ label, value: option }) => {
           const radio = getFieldRadioProps({ value: option });
           return (
@@ -58,9 +62,7 @@ export const ShopItemSorter: FC<Props> = ({ value, loading, onChange }) => {
         })}
       </VStack>
       <VStack {...orderGroup} alignItems='flex-start' w='100%'>
-        <Text color='rgba(255,255,255,0.7)' fontSize={13} textTransform='uppercase'>
-          Order
-        </Text>
+        <Text {...sectionHeaderStyles}>Order</Text>
         {orderOptions.map(({ label, value: option }) => {
           const radio = getOrderRadioProps({ value: option });
           return (

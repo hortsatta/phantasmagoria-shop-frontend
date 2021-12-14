@@ -26,7 +26,7 @@ const scrollbarStyles: CSSProperties = {
   position: 'fixed',
   flex: 1,
   width: '320px',
-  height: '100%'
+  height: 'calc(100% - 60px)'
 };
 
 const sideSectionStyles: StackProps = {
