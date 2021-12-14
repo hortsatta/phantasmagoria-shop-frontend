@@ -10,21 +10,25 @@ const AddCardPage = lazy(() =>
   }))
 );
 
+// const EditCardPage = lazy(() =>
+//   import('../pages/edit-card.page').then((module: any) => ({
+//     default: module.EditCardPage
+//   }))
+// );
+
 export const CardRoutes: FC<RouteComponentProps> = ({ match }) => {
   const appModules: any = useReactiveVar(appModulesVar);
 
-  const addPath = useMemo(
-    () => `${appModules.card.path}${appModules.card.children?.add.path}`,
-    [appModules]
-  );
-  const editPath = useMemo(
-    () => `${appModules.card.path}${appModules.card.children?.edit.path}`,
-    [appModules]
-  );
+  const addPath = useMemo(() => `${match.path}${appModules.card.children?.add.path}`, [appModules]);
+
+  // const editPath = useMemo(
+  //   () => `${match.path}${appModules.card.children?.edit.path}`,
+  //   [appModules]
+  // );
 
   return (
     <>
-      <Route exact path={addPath} component={AddCardPage} />
+      <Route path={addPath} component={AddCardPage} />
       {/* <Route path={editPath} component={EditCardPage} /> */}
     </>
   );

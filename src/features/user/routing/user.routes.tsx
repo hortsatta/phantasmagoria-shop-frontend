@@ -24,12 +24,14 @@ const UserAccountPage = lazy(() =>
 
 export const UserRoutes: FC<RouteComponentProps> = ({ match }) => {
   const appModules: any = useReactiveVar(appModulesVar);
+
   const authPath = useMemo(
-    () => `${appModules.user.path}${appModules.user.children?.signIn.path}`,
+    () => `${match.path}${appModules.user.children?.signIn.path}`,
     [appModules]
   );
+
   const registrationPath = useMemo(
-    () => `${appModules.user.path}${appModules.user.children?.signUp.path}`,
+    () => `${match.path}${appModules.user.children?.signUp.path}`,
     [appModules]
   );
 
