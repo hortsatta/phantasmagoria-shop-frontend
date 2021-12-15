@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { useMutation } from '@apollo/client';
 
 import { signIn as doSignIn } from 'services';
@@ -13,9 +14,9 @@ export const useAuth = (): Result => {
   const { debounce, loading: debounceLoading } = useDebounce();
   const [login, { loading: loginLoading }] = useMutation(SIGN_IN);
 
-  const signIn = async (identifier: string, password: string) => {
+  const signIn = useCallback(async (identifier: string, password: string) => {
+    debounce();
     try {
-      debounce();
       const { data } = await login({ variables: { identifier, password } });
       const { jwt, user } = data.login;
       doSignIn(jwt, user);
@@ -23,7 +24,7 @@ export const useAuth = (): Result => {
       // TODO
       console.log('err', err);
     }
-  };
+  }, []);
 
   return { signIn, loading: debounceLoading || loginLoading };
 };

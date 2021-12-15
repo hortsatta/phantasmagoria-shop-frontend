@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useMutation } from '@apollo/client';
 
 import { createCardImageBlob, createCoverImageBlob } from 'services';
@@ -19,7 +19,7 @@ export const useAddCard = (): Result => {
   const [upload, { loading: uploadLoading }] = useMutation(UPLOAD);
   const [isComplete, setIsComplete] = useState(false);
 
-  const addCard = async (cardFormData: CardFormData) => {
+  const addCard = useCallback(async (cardFormData: CardFormData) => {
     debounce();
 
     try {
@@ -74,7 +74,7 @@ export const useAddCard = (): Result => {
       // TODO
       console.error(err);
     }
-  };
+  }, []);
 
   return {
     loading: debounceLoading || createCardLoading || updateCardLoading || uploadLoading,

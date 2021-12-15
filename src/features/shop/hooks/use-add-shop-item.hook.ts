@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useMutation } from '@apollo/client';
 
 import { createCoverImageBlob } from 'services';
@@ -21,7 +21,7 @@ export const useAddShopItem = (): Return => {
   const [upload, { loading: uploadLoading }] = useMutation(UPLOAD);
   const [isComplete, setIsComplete] = useState(false);
 
-  const addShopItem = async (cardProdFormData: CardProductFormData) => {
+  const addShopItem = useCallback(async (cardProdFormData: CardProductFormData) => {
     debounce();
 
     try {
@@ -66,7 +66,7 @@ export const useAddShopItem = (): Return => {
       // TODO
       console.error(JSON.stringify(err));
     }
-  };
+  }, []);
 
   return {
     isComplete,
