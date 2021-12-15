@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, ComponentProps } from 'react';
 import {
   Modal as ChakraModal,
   ModalBody,

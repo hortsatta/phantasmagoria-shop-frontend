@@ -1,4 +1,4 @@
-import { FC, ComponentProps, useContext, useMemo, useState } from 'react';
+import { FC, useContext, useMemo, useState } from 'react';
 import { useReactiveVar } from '@apollo/client';
 import { Controller, useFormContext } from 'react-hook-form';
 import {
@@ -15,33 +15,14 @@ import { Funnel, X as XSvg } from 'phosphor-react';
 import { appModulesVar } from 'config';
 import { Card } from 'models';
 import { PageContext } from 'features/core/contexts';
-import {
-  FormSectionHeading,
-  Icon,
-  IconButton,
-  Input,
-  Modal,
-  Surface
-} from 'features/core/components';
+import { FormSectionHeading, Icon, IconButton, Input } from 'features/core/components';
 import { useGetCardsByFilters } from '../hooks';
 import { CardProductFormData } from './upsert-card-product-form.component';
-import { CardDetail } from './card-detail.component';
-import { CardFilters } from './card-filters.component';
 import { CardList } from './card-list.component';
+import { CardDetailModal } from './card-detail-modal.component';
+import { CardFiltersModal } from './card-filters-modal.component';
 
 import variables from 'assets/styles/_variables.module.scss';
-
-type ModalProps = Omit<ComponentProps<typeof Modal>, 'children'>;
-
-type CardModalProps = ModalProps & {
-  card: Card | null;
-};
-
-type FilterModalProps = ModalProps & {
-  filters: any;
-  loading: boolean;
-  onFiltersChange: any;
-};
 
 const LABEL_WIDTH = '117px';
 
@@ -50,31 +31,6 @@ const cardListStyle = {
   backgroundColor: variables.inputBgColor,
   borderRadius: '4px'
 };
-
-const CardModal: FC<CardModalProps> = ({ card, isOpen, onClose }) => (
-  <Modal onClose={onClose} isOpen={isOpen} modalContentProps={{ maxW: '2xl' }} isCentered>
-    <Surface p={6} minW='xs' minH='xs'>
-      {card && <CardDetail id={card.id} />}
-    </Surface>
-  </Modal>
-);
-
-const FilterModal: FC<FilterModalProps> = ({
-  filters,
-  isOpen,
-  loading,
-  onClose,
-  onFiltersChange
-}) => (
-  <Modal onClose={onClose} isOpen={isOpen} modalContentProps={{ maxW: '2xl' }} isCentered>
-    <Surface flexDir='column' p={6}>
-      <FormSectionHeading pt={0} w='100%'>
-        Filters
-      </FormSectionHeading>
-      <CardFilters value={filters} loading={loading} onChange={onFiltersChange} />
-    </Surface>
-  </Modal>
-);
 
 export const UpsertCardProductStep1: FC = () => {
   const { changePage } = useContext(PageContext);
@@ -113,7 +69,6 @@ export const UpsertCardProductStep1: FC = () => {
     if (!card) {
       return;
     }
-
     cardModalOnOpen();
     setCurrentCardDetail(card);
   };
@@ -155,7 +110,7 @@ export const UpsertCardProductStep1: FC = () => {
             <FormSectionHeading
               rightComponent={
                 <IconButton
-                  aria-label='View Card Detail'
+                  aria-label='View Card Filters'
                   pos='relative'
                   icon={<Icon w={6} boxSizing='content-box' as={Funnel} />}
                   onClick={filterModalOnOpen}
@@ -212,8 +167,12 @@ export const UpsertCardProductStep1: FC = () => {
           </Button>
         </Text>
       </Stack>
-      <CardModal onClose={handleCardModalClose} isOpen={cardModalIsOpen} card={currentCardDetail} />
-      <FilterModal
+      <CardDetailModal
+        onClose={handleCardModalClose}
+        isOpen={cardModalIsOpen}
+        card={currentCardDetail}
+      />
+      <CardFiltersModal
         onClose={filterModalOnClose}
         isOpen={filterModalIsOpen}
         filters={cardFilters}
