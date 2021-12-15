@@ -1,4 +1,4 @@
-import { AuditTrail } from 'models';
+import { AuditTrail } from './core.model';
 
 type CardRarity = AuditTrail & {
   id: string;
@@ -30,6 +30,7 @@ type Card = AuditTrail & {
   rarity: CardRarity;
   category: CardCategory;
   types: CardType[];
+  isActive: boolean;
   image?: any;
   coverImage?: any;
   slug?: string;

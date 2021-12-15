@@ -1,4 +1,4 @@
-import { AuditTrail } from 'models';
+import { AuditTrail } from './core.model';
 
 type User = {
   id: string;
@@ -21,6 +21,7 @@ type Address = {
 type UserAccount = AuditTrail & {
   user: User;
   fullName: string;
+  isActive: boolean;
   displayName?: string;
   addresses?: Address[];
 };
