@@ -28,6 +28,11 @@ export const ShopAdminControl: FC = () => {
     [appModules]
   );
 
+  const cardListPath = useMemo(
+    () => `${appModules.admin.path}${appModules.card.path}${appModules.card.children?.list.path}`,
+    [appModules]
+  );
+
   const addShopItemPath = useMemo(
     () => `${appModules.admin.path}${appModules.shop.path}${appModules.shop.children?.add.path}`,
     [appModules]
@@ -37,22 +42,13 @@ export const ShopAdminControl: FC = () => {
     <VStack flexDir='column' alignItems='flex-start'>
       <Box>
         <Text {...sectionHeaderStyles}>Shop Item</Text>
-        <ButtonGroup isAttached>
-          <Button
-            {...buttonStyles}
-            leftIcon={<Icon w={7} as={PlusCircle} />}
-            onClick={() => history.push(addShopItemPath)}
-          >
-            Add New
-          </Button>
-          <Button
-            {...buttonStyles}
-            leftIcon={<Icon w={7} as={StackSimple} />}
-            onClick={() => history.push(addCardPath)}
-          >
-            View Items
-          </Button>
-        </ButtonGroup>
+        <Button
+          {...buttonStyles}
+          leftIcon={<Icon w={7} as={PlusCircle} />}
+          onClick={() => history.push(addShopItemPath)}
+        >
+          Add New
+        </Button>
       </Box>
       <Box>
         <Text {...sectionHeaderStyles}>Card</Text>
@@ -67,7 +63,7 @@ export const ShopAdminControl: FC = () => {
           <Button
             {...buttonStyles}
             leftIcon={<Icon w={7} as={StackSimple} />}
-            onClick={() => history.push(addCardPath)}
+            onClick={() => history.push(cardListPath)}
           >
             View Cards
           </Button>
