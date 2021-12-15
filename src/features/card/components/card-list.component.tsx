@@ -1,6 +1,16 @@
 import { ComponentProps, FC } from 'react';
-import { Box, Center, Divider, Flex, Spinner, VStack } from '@chakra-ui/react';
-import { Brain } from 'phosphor-react';
+import {
+  Box,
+  BoxProps,
+  Center,
+  Divider,
+  Flex,
+  HStack,
+  Spinner,
+  StackDivider,
+  VStack
+} from '@chakra-ui/react';
+import { Brain, PenNib } from 'phosphor-react';
 
 import { Card } from 'models';
 import { Icon, IconButton, Scrollbars } from 'features/core/components';
@@ -11,29 +21,52 @@ import variables from 'assets/styles/_variables.module.scss';
 type Props = ComponentProps<typeof Scrollbars> & {
   cards: Card[];
   loading?: boolean;
+  wrapperProps?: BoxProps;
   onCardClick?: (card?: Card) => void;
   onCardDetailClick?: (card?: Card) => void;
+  onCardEditClick?: (card?: Card) => void;
 };
 
-const ViewDetailButton: FC<{ onClick: (e: any) => void }> = ({ onClick }) => (
+type CardControlProps = {
+  onDetailClick: (e: any) => void;
+  onEditClick?: (e: any) => void;
+};
+
+const CardControl: FC<CardControlProps> = ({ onDetailClick, onEditClick }) => (
   <Flex h='100%' alignItems='center'>
-    <Divider h='80%' orientation='vertical' />
-    <IconButton
-      aria-label='View Card Detail'
-      flex={1}
-      pos='relative'
+    <Divider h='80%' alignSelf='center' orientation='vertical' />
+    <HStack
       h='100%'
-      icon={<Icon w={6} boxSizing='content-box' as={Brain} />}
-      onClick={onClick}
-    />
+      spacing={0}
+      divider={<StackDivider h='80%' alignSelf='center' opacity={0.3} orientation='vertical' />}
+    >
+      <IconButton
+        aria-label='View Card Detail'
+        flex={1}
+        h='100%'
+        icon={<Icon px={4} w={6} boxSizing='content-box' as={Brain} />}
+        onClick={onDetailClick}
+      />
+      {onEditClick && (
+        <IconButton
+          aria-label='Edit Card'
+          flex={1}
+          h='100%'
+          icon={<Icon px={4} w={6} boxSizing='content-box' as={PenNib} />}
+          onClick={onEditClick}
+        />
+      )}
+    </HStack>
   </Flex>
 );
 
 export const CardList: FC<Props> = ({
   cards,
   loading,
+  wrapperProps,
   onCardClick,
   onCardDetailClick,
+  onCardEditClick,
   ...moreProps
 }) => {
   const handleCardDetailClick = (e: any, card: Card) => {
@@ -41,9 +74,14 @@ export const CardList: FC<Props> = ({
     onCardDetailClick && onCardDetailClick(card);
   };
 
+  const handleCardEditClick = (e: any, card: Card) => {
+    e.stopPropagation();
+    onCardEditClick && onCardEditClick(card);
+  };
+
   return (
     <Scrollbars className='scrollbar' hideHorizontalScroll {...moreProps}>
-      <Box p={4}>
+      <Box p={4} {...wrapperProps}>
         <Box overflow='hidden'>
           {loading && (
             <Center
@@ -69,7 +107,12 @@ export const CardList: FC<Props> = ({
                 key={card.id}
                 card={card}
                 rightComponent={
-                  <ViewDetailButton onClick={(e: any) => handleCardDetailClick(e, card)} />
+                  <CardControl
+                    onDetailClick={(e: any) => handleCardDetailClick(e, card)}
+                    {...(onCardEditClick && {
+                      onEditClick: (e: any) => handleCardEditClick(e, card)
+                    })}
+                  />
                 }
               />
             ))}
@@ -80,8 +123,14 @@ export const CardList: FC<Props> = ({
   );
 };
 
+CardControl.defaultProps = {
+  onEditClick: undefined
+};
+
 CardList.defaultProps = {
   loading: false,
+  wrapperProps: undefined,
   onCardClick: undefined,
-  onCardDetailClick: undefined
+  onCardDetailClick: undefined,
+  onCardEditClick: undefined
 };
