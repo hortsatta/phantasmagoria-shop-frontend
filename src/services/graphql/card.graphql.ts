@@ -110,6 +110,60 @@ const GET_CARDS_DETAIL = gql`
   }
 `;
 
+const GET_CARDS_DETAIL_EDIT = gql`
+  query GetCards(
+    $where: JSON
+    $limit: Int
+    $start: Int
+    $sort: String = "name:asc"
+    $publicationState: PublicationState = LIVE
+  ) {
+    cards(
+      where: $where
+      limit: $limit
+      start: $start
+      sort: $sort
+      publicationState: $publicationState
+    ) {
+      id
+      name
+      description
+      slug
+      attr {
+        offense
+        defense
+        cost
+      }
+      rarity {
+        id
+        name
+      }
+      category {
+        id
+        name
+      }
+      types {
+        id
+        name
+      }
+      image {
+        id
+        name
+        url
+      }
+      coverImage {
+        id
+        name
+        url
+      }
+      card_products {
+        id
+        name
+      }
+    }
+  }
+`;
+
 const CREATE_CARD = gql`
   mutation CreateCard($card: CardInput) {
     createCard(input: { data: $card }) {
@@ -140,6 +194,7 @@ export {
   GET_ALL_TYPES,
   GET_CARDS,
   GET_CARDS_DETAIL,
+  GET_CARDS_DETAIL_EDIT,
   CREATE_CARD,
   UPDATE_CARD
 };
