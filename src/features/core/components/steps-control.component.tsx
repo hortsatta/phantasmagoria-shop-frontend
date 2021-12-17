@@ -1,4 +1,4 @@
-import { FC, FormEvent } from 'react';
+import { FC, FormEvent, ReactNode } from 'react';
 import { Button, ButtonGroup, ButtonProps, Divider, Flex } from '@chakra-ui/react';
 import { CaretCircleLeft, CaretCircleRight, Rewind, RocketLaunch } from 'phosphor-react';
 
@@ -9,6 +9,7 @@ type Props = {
   onNext: () => void;
   onReset: () => void;
   onSubmit: (event: FormEvent) => void;
+  leftElement?: ReactNode;
   prevDisabled?: boolean;
   nextDisabled?: boolean;
   resetDisabled?: boolean;
@@ -23,6 +24,7 @@ export const StepsControl: FC<Props> = ({
   onNext,
   onReset,
   onSubmit,
+  leftElement,
   prevDisabled,
   nextDisabled,
   resetDisabled,
@@ -32,26 +34,32 @@ export const StepsControl: FC<Props> = ({
   loading
 }) => (
   <Flex justifyContent='space-between' mt={6} w='100%'>
-    <ButtonGroup isAttached>
+    <ButtonGroup alignItems='center' isDisabled={loading} isAttached>
+      {leftElement && (
+        <>
+          {leftElement}
+          <Divider orientation='vertical' />
+        </>
+      )}
       <Button
         variant='ghost'
         onClick={onPrev}
         leftIcon={<Icon as={CaretCircleLeft} />}
-        disabled={prevDisabled || loading}
+        disabled={prevDisabled}
       >
         Prev
       </Button>
-      <Divider opacity={0.2} orientation='vertical' />
+      <Divider orientation='vertical' />
       <Button
         variant='ghost'
         onClick={onNext}
         rightIcon={<Icon as={CaretCircleRight} />}
-        disabled={nextDisabled || loading}
+        disabled={nextDisabled}
       >
         Next
       </Button>
     </ButtonGroup>
-    <ButtonGroup>
+    <ButtonGroup alignItems='center'>
       <Button
         variant='ghost'
         onClick={onReset}
@@ -76,6 +84,7 @@ export const StepsControl: FC<Props> = ({
 );
 
 StepsControl.defaultProps = {
+  leftElement: undefined,
   prevDisabled: undefined,
   nextDisabled: undefined,
   resetDisabled: undefined,
