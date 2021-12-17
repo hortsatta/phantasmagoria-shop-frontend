@@ -1,4 +1,4 @@
-import { FC, FormEvent, useEffect, useState } from 'react';
+import { FC, FormEvent, useEffect, useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -7,7 +7,7 @@ import { Step, Steps, useSteps } from 'chakra-ui-steps';
 import { Camera, Flask } from 'phosphor-react';
 
 import { CardProduct } from 'models';
-import { StepsControl, Surface } from 'features/core/components';
+import { RemoveButton, StepsControl, Surface } from 'features/core/components';
 import { UpsertCardProductStep1 } from './upsert-card-product-step-1.component';
 import { UpsertCardProductStep2 } from './upsert-card-product-step-2.component';
 import { UpsertCardStepDone } from './upsert-card-step-done.component';
@@ -16,6 +16,8 @@ type CardProductFormData = Omit<CardProduct, 'slug'>;
 
 type Props = Omit<BoxProps, 'onSubmit'> & {
   onSubmit: (card: CardProductFormData) => void;
+  onRemove?: () => void;
+  cardProduct?: CardProduct;
   loading?: boolean;
   isComplete?: boolean;
 };
@@ -26,6 +28,7 @@ const schema = z.object({
   description: z.string().optional(),
   price: z.number().nonnegative('Cost cannot be negative'),
   cards: z.array(z.object({})).min(1, 'Must select at least 1 card'),
+  isActive: z.boolean(),
   image: z.any().optional()
 });
 
@@ -34,7 +37,8 @@ const defaultValues: CardProductFormData = {
   name: '',
   description: '',
   price: 0,
-  cards: []
+  cards: [],
+  isActive: true
 };
 
 const steps = [
@@ -42,13 +46,41 @@ const steps = [
   { label: 'Details', icon: Camera, Component: UpsertCardProductStep2 }
 ];
 
-const UpsertCardProductForm: FC<Props> = ({ onSubmit, loading, isComplete, ...moreProps }) => {
+const UpsertCardProductForm: FC<Props> = ({
+  onSubmit,
+  onRemove,
+  cardProduct,
+  loading,
+  isComplete,
+  ...moreProps
+}) => {
+  // Replace default values if card product parameter is present
+  const currentCardProduct = useMemo(() => {
+    if (!cardProduct) {
+      return defaultValues;
+    }
+
+    const { image, ...moreCardProduct } = cardProduct;
+
+    return {
+      ...moreCardProduct,
+      ...(image && { image: image.url })
+    };
+  }, [cardProduct]);
+
   const methods = useForm<CardProductFormData>({
     shouldFocusError: false,
-    defaultValues,
+    defaultValues: currentCardProduct,
     resolver: zodResolver(schema)
   });
   const [hasReachedLast, setHasReachedLast] = useState(false);
+  const submitLabel = useMemo(() => {
+    if (!hasReachedLast) {
+      return 'Proceed';
+    }
+
+    return `${cardProduct ? 'Update' : 'Create'} Shop Item`;
+  }, [cardProduct, hasReachedLast]);
 
   const {
     nextStep,
@@ -83,13 +115,14 @@ const UpsertCardProductForm: FC<Props> = ({ onSubmit, loading, isComplete, ...mo
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     submitForm(async (cardProductFormData: CardProductFormData) => {
       setStep(steps.length);
-      await onSubmit(getValues());
+      const { cards } = getValues();
+      await onSubmit({ ...cardProductFormData, cards });
     })();
   };
 
   const handleReset = () => {
     setHasReachedLast(false);
-    reset(defaultValues);
+    reset(currentCardProduct);
     resetSteps();
   };
 
@@ -107,7 +140,7 @@ const UpsertCardProductForm: FC<Props> = ({ onSubmit, loading, isComplete, ...mo
         </Steps>
         {activeStep >= steps.length && <UpsertCardStepDone isComplete={isComplete} />}
         <StepsControl
-          submitLabel={!hasReachedLast ? 'Proceed' : 'Create Shop Item'}
+          submitLabel={submitLabel}
           submitButtonProps={{ w: '220px' }}
           onPrev={prevStep}
           onNext={nextStep}
@@ -118,6 +151,7 @@ const UpsertCardProductForm: FC<Props> = ({ onSubmit, loading, isComplete, ...mo
           resetDisabled={!isDirty || isComplete}
           submitDisabled={isComplete}
           loading={loading}
+          {...(onRemove && { leftElement: <RemoveButton onRemove={onRemove} /> })}
         />
       </Box>
     </FormProvider>
@@ -125,6 +159,8 @@ const UpsertCardProductForm: FC<Props> = ({ onSubmit, loading, isComplete, ...mo
 };
 
 UpsertCardProductForm.defaultProps = {
+  onRemove: undefined,
+  cardProduct: undefined,
   loading: false,
   isComplete: false
 };

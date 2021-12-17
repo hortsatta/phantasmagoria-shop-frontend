@@ -11,7 +11,7 @@ import { UpsertCardForm } from '../components';
 export const EditCardPage: FC = () => {
   const history = useHistory();
   const { slug } = useParams<any>();
-  const { currentCard, loading, isComplete, updateCard } = useEditCard(slug || '');
+  const { currentCard, loading, isComplete, updateCard, removeCard } = useEditCard(slug || '');
   const appModules: any = useReactiveVar(appModulesVar);
   const headingText = useMemo(() => `Update ${currentCard?.name || ''} Card`, [currentCard]);
 
@@ -23,7 +23,7 @@ export const EditCardPage: FC = () => {
 
     const delay = setTimeout(() => {
       const cardListPath = `${appModules.admin.path}${appModules.card.path}`;
-      history.push(cardListPath);
+      history.push(cardListPath, { refetch: true });
     }, 1800);
 
     // eslint-disable-next-line consistent-return
@@ -43,9 +43,10 @@ export const EditCardPage: FC = () => {
           maxW='4xl'
           w='100%'
           card={currentCard}
-          onSubmit={updateCard}
           loading={loading}
           isComplete={isComplete}
+          onSubmit={updateCard}
+          onRemove={removeCard}
         />
       )}
     </PageBox>

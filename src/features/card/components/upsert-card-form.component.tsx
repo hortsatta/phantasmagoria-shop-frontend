@@ -1,4 +1,4 @@
-import { FC, FormEvent, useEffect, useState } from 'react';
+import { FC, FormEvent, useEffect, useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -6,8 +6,8 @@ import { Box, BoxProps } from '@chakra-ui/react';
 import { Step, Steps, useSteps } from 'chakra-ui-steps';
 import { Camera, Flask } from 'phosphor-react';
 
-import { Card } from 'models';
-import { StepsControl, Surface } from 'features/core/components';
+import { Card, CardType } from 'models';
+import { RemoveButton, StepsControl, Surface } from 'features/core/components';
 import { UpsertCardStep1 } from './upsert-card-step-1.component';
 import { UpsertCardStep2 } from './upsert-card-step-2.component';
 import { UpsertCardStepDone } from './upsert-card-step-done.component';
@@ -23,6 +23,8 @@ type CardFormData = Omit<Card, 'slug' | 'attr' | 'rarity' | 'category' | 'types'
 
 type Props = Omit<BoxProps, 'onSubmit'> & {
   onSubmit: (card: CardFormData) => void;
+  onRemove?: () => void;
+  card?: Card;
   loading?: boolean;
   isComplete?: boolean;
 };
@@ -37,6 +39,7 @@ const schema = z.object({
   rarity: z.number().positive(),
   category: z.number().positive(),
   types: z.array(z.number().positive('Type is Required')).min(1, 'Type is Required'),
+  isActive: z.boolean(),
   image: z.any().optional(),
   coverImage: z.any().optional()
 });
@@ -50,7 +53,8 @@ const defaultValues: CardFormData = {
   cost: 0,
   rarity: 0,
   category: 0,
-  types: [0]
+  types: [0],
+  isActive: true
 };
 
 const steps = [
@@ -58,13 +62,48 @@ const steps = [
   { label: 'Images', icon: Camera, Component: UpsertCardStep2 }
 ];
 
-const UpsertCardForm: FC<Props> = ({ onSubmit, loading, isComplete, ...moreProps }) => {
+const UpsertCardForm: FC<Props> = ({
+  onSubmit,
+  onRemove,
+  card,
+  loading,
+  isComplete,
+  ...moreProps
+}) => {
+  // Replace default values if card parameter is present
+  const currentCard = useMemo(() => {
+    if (!card) {
+      return defaultValues;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { attr, rarity, category, types, slug, image, coverImage, ...moreCard } = card;
+
+    return {
+      ...moreCard,
+      ...attr,
+      rarity: parseInt(rarity.id, 10),
+      category: parseInt(category.id, 10),
+      types: types.map((type: CardType) => parseInt(type.id, 10)),
+      ...(image && { image: image.url }),
+      ...(coverImage && { coverImage: coverImage.url })
+    };
+  }, [card]);
+
   const methods = useForm<CardFormData>({
     shouldFocusError: false,
-    defaultValues,
+    defaultValues: currentCard,
     resolver: zodResolver(schema)
   });
+
   const [hasReachedLast, setHasReachedLast] = useState(false);
+  const submitLabel = useMemo(() => {
+    if (!hasReachedLast) {
+      return 'Proceed';
+    }
+
+    return card ? 'Update Card' : 'Create Card';
+  }, [card, hasReachedLast]);
 
   const {
     nextStep,
@@ -103,7 +142,7 @@ const UpsertCardForm: FC<Props> = ({ onSubmit, loading, isComplete, ...moreProps
 
   const handleReset = () => {
     setHasReachedLast(false);
-    reset(defaultValues);
+    reset(currentCard);
     resetSteps();
   };
 
@@ -121,7 +160,7 @@ const UpsertCardForm: FC<Props> = ({ onSubmit, loading, isComplete, ...moreProps
         </Steps>
         {activeStep >= steps.length && <UpsertCardStepDone isComplete={isComplete} />}
         <StepsControl
-          submitLabel={!hasReachedLast ? 'Proceed' : 'Create Card'}
+          submitLabel={submitLabel}
           submitButtonProps={{ w: '190px' }}
           onPrev={prevStep}
           onNext={nextStep}
@@ -129,9 +168,10 @@ const UpsertCardForm: FC<Props> = ({ onSubmit, loading, isComplete, ...moreProps
           onSubmit={handleSubmit}
           prevDisabled={activeStep === 0 || isComplete}
           nextDisabled={activeStep >= steps.length || isComplete}
-          resetDisabled={isDirty || isComplete}
+          resetDisabled={!isDirty || isComplete}
           submitDisabled={isComplete}
           loading={loading}
+          {...(onRemove && { leftElement: <RemoveButton onRemove={onRemove} /> })}
         />
       </Box>
     </FormProvider>
@@ -139,6 +179,8 @@ const UpsertCardForm: FC<Props> = ({ onSubmit, loading, isComplete, ...moreProps
 };
 
 UpsertCardForm.defaultProps = {
+  onRemove: undefined,
+  card: undefined,
   loading: false,
   isComplete: false
 };

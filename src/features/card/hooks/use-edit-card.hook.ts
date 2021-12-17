@@ -3,12 +3,13 @@ import { useLazyQuery, useMutation } from '@apollo/client';
 
 import { Card } from 'models';
 import { createCardImageBlob, createCoverImageBlob } from 'services';
-import { GET_CARDS_DETAIL_EDIT, UPDATE_CARD, UPLOAD } from 'services/graphql';
+import { DELETE_CARD, GET_CARDS_DETAIL_EDIT, UPDATE_CARD, UPLOAD } from 'services/graphql';
 import { useDebounce } from 'features/core/hooks';
 import { CardFormData } from '../components';
 
 type Result = {
   updateCard: (cardFormData: CardFormData) => void;
+  removeCard: () => void;
   loading: boolean;
   isComplete: boolean;
   currentCard?: Card;
@@ -17,8 +18,9 @@ type Result = {
 export const useEditCard = (slug: string): Result => {
   const { debounce, loading: debounceLoading } = useDebounce();
   const [updateCurrentCard, { loading: updateCardLoading }] = useMutation(UPDATE_CARD);
+  const [deleteCard, { loading: deleteCardLoading }] = useMutation(DELETE_CARD);
   const [upload, { loading: uploadLoading }] = useMutation(UPLOAD);
-  const [getCardsDetails, { data: { cards = [] } = {}, loading: getCardsDetailsLoading }] =
+  const [getCardsDetail, { data: { cards = [] } = {}, loading: getCardsDetailLoading }] =
     useLazyQuery(GET_CARDS_DETAIL_EDIT);
   const [isComplete, setIsComplete] = useState(false);
 
@@ -26,7 +28,7 @@ export const useEditCard = (slug: string): Result => {
     if (!slug.trim()) {
       return;
     }
-    getCardsDetails({ variables: { where: { slug } } });
+    getCardsDetail({ variables: { where: { slug } } });
   }, [slug]);
 
   const updateCard = useCallback(
@@ -106,9 +108,33 @@ export const useEditCard = (slug: string): Result => {
     [cards]
   );
 
+  const removeCard = useCallback(async () => {
+    debounce();
+    const { id, cardProducts } = cards[0] || {};
+
+    if (cardProducts?.length) {
+      console.error('Card has products');
+      return;
+    }
+
+    try {
+      await deleteCard({ variables: { id } });
+      setIsComplete(true);
+    } catch (err: any) {
+      // TODO
+      console.error(err);
+    }
+  }, [cards]);
+
   return {
     updateCard,
-    loading: debounceLoading || updateCardLoading || uploadLoading || getCardsDetailsLoading,
+    removeCard,
+    loading:
+      debounceLoading ||
+      updateCardLoading ||
+      deleteCardLoading ||
+      uploadLoading ||
+      getCardsDetailLoading,
     isComplete,
     currentCard: cards[0] || null
   };
