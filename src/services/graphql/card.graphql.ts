@@ -156,8 +156,7 @@ const GET_CARDS_DETAIL_EDIT = gql`
         name
         url
       }
-      card_products {
-        id
+      cardProducts: card_products {
         name
       }
     }
@@ -188,6 +187,18 @@ const UPDATE_CARD = gql`
   }
 `;
 
+const DELETE_CARD = gql`
+  mutation DeleteCard($id: ID!) {
+    deleteCard(input: { where: { id: $id } }) {
+      card {
+        id
+        name
+        slug
+      }
+    }
+  }
+`;
+
 export {
   GET_ALL_RARITIES,
   GET_ALL_CATEGORIES,
@@ -196,5 +207,6 @@ export {
   GET_CARDS_DETAIL,
   GET_CARDS_DETAIL_EDIT,
   CREATE_CARD,
-  UPDATE_CARD
+  UPDATE_CARD,
+  DELETE_CARD
 };

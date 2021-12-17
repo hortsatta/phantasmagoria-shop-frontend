@@ -19,6 +19,12 @@ const GET_CARD_PRODUCTS = gql`
       name
       description
       price
+      slug
+      image {
+        id
+        name
+        url
+      }
       cards {
         id
         name
@@ -51,6 +57,12 @@ const GET_CARD_PRODUCTS_DETAIL = gql`
       name
       description
       price
+      slug
+      image {
+        id
+        name
+        url
+      }
       cards {
         id
         name
@@ -63,6 +75,54 @@ const GET_CARD_PRODUCTS_DETAIL = gql`
           id
           name
           url
+        }
+      }
+    }
+  }
+`;
+
+const GET_CARD_PRODUCTS_DETAIL_EDIT = gql`
+  query GetCardProducts(
+    $where: JSON
+    $limit: Int
+    $start: Int
+    $sort: String = "published_at:desc"
+    $publicationState: PublicationState = LIVE
+  ) {
+    cardProducts(
+      where: $where
+      limit: $limit
+      start: $start
+      sort: $sort
+      publicationState: $publicationState
+    ) {
+      id
+      name
+      description
+      price
+      slug
+      isActive
+      image {
+        id
+        name
+        url
+      }
+      cards {
+        id
+        name
+        slug
+        rarity {
+          id
+          name
+        }
+        category {
+          id
+          name
+        }
+        coverImage {
+          id
+          name
+          hash
         }
       }
     }
@@ -93,4 +153,23 @@ const UPDATE_CARD_PRODUCT = gql`
   }
 `;
 
-export { GET_CARD_PRODUCTS, GET_CARD_PRODUCTS_DETAIL, CREATE_CARD_PRODUCT, UPDATE_CARD_PRODUCT };
+const DELETE_CARD_PRODUCT = gql`
+  mutation DeleteCardProduct($id: ID!) {
+    deleteCardProduct(input: { where: { id: $id } }) {
+      cardProduct {
+        id
+        name
+        slug
+      }
+    }
+  }
+`;
+
+export {
+  GET_CARD_PRODUCTS,
+  GET_CARD_PRODUCTS_DETAIL,
+  GET_CARD_PRODUCTS_DETAIL_EDIT,
+  CREATE_CARD_PRODUCT,
+  UPDATE_CARD_PRODUCT,
+  DELETE_CARD_PRODUCT
+};
