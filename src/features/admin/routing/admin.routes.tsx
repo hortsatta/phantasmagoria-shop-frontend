@@ -11,11 +11,11 @@ const AddShopItemPage = lazy(() =>
   }))
 );
 
-// const EditShopItemPage = lazy(() =>
-//   import('features/shop/pages/edit-shop-item.page').then((module: any) => ({
-//     default: module.EditShopItemPage
-//   }))
-// );
+const EditShopItemPage = lazy(() =>
+  import('features/shop/pages/edit-shop-item.page').then((module: any) => ({
+    default: module.EditShopItemPage
+  }))
+);
 
 export const AdminRoutes: FC<RouteComponentProps> = ({ match }) => {
   const appModules: any = useReactiveVar(appModulesVar);
@@ -25,17 +25,17 @@ export const AdminRoutes: FC<RouteComponentProps> = ({ match }) => {
     [appModules]
   );
 
-  // const editShopItemPath = useMemo(
-  //   () => `${match.path}${appModules.shop.path}${appModules.shop.children?.edit.path}`,
-  //   [appModules]
-  // );
+  const editShopItemPath = useMemo(
+    () => `${match.path}${appModules.shop.path}/:slug${appModules.shop.children?.edit.path}`,
+    [appModules]
+  );
 
   const cardPath = useMemo(() => `${match.path}${appModules.card.path}`, [appModules]);
 
   return (
     <>
       <Route exact path={addShopItemPath} component={AddShopItemPage} />
-      {/* <Route exact path={editShopItemPath} component={EditShopItemPage} /> */}
+      <Route exact path={editShopItemPath} component={EditShopItemPage} />
       <Route path={cardPath} component={CardRoutes} />
     </>
   );

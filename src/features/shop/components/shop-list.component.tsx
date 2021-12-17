@@ -12,6 +12,7 @@ type Props = {
   onCartClick?: (item: CardProduct) => void;
   onDetailClick?: (item: CardProduct) => void;
   onFavoriteClick?: (item: CardProduct) => void;
+  onEditClick?: (item: CardProduct) => void;
 };
 
 type LoadingOverlayProps = {
@@ -35,7 +36,8 @@ export const ShopList: FC<Props> = ({
   loading,
   onCartClick,
   onDetailClick,
-  onFavoriteClick
+  onFavoriteClick,
+  onEditClick
 }) => (
   <Flex pos='relative' flexDir='column' w='100%'>
     <LoadingOverlay loading={loading}>
@@ -55,6 +57,7 @@ export const ShopList: FC<Props> = ({
             {...(onCartClick && { onCartClick })}
             {...(onDetailClick && { onDetailClick })}
             {...(onFavoriteClick && { onFavoriteClick })}
+            {...(onEditClick && { onEditClick })}
           />
         ))}
         {!items.length && !loading && (
@@ -77,7 +80,8 @@ ShopList.defaultProps = {
   loading: false,
   onCartClick: undefined,
   onDetailClick: undefined,
-  onFavoriteClick: undefined
+  onFavoriteClick: undefined,
+  onEditClick: undefined
 };
 
 LoadingOverlay.defaultProps = {

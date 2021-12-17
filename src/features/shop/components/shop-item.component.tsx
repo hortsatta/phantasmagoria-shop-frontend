@@ -1,6 +1,6 @@
 import { FC, useMemo } from 'react';
 import { Box, Button, Divider, Flex, Heading, Image, Text } from '@chakra-ui/react';
-import { Brain, Knife, Tray } from 'phosphor-react';
+import { Brain, Knife, PenNib, Tray } from 'phosphor-react';
 
 import { CardProduct } from 'models';
 import { Icon, IconButton, MotionSurface } from 'features/core/components';
@@ -12,9 +12,22 @@ type Props = {
   onCartClick?: (item: CardProduct) => void;
   onDetailClick?: (item: CardProduct) => void;
   onFavoriteClick?: (item: CardProduct) => void;
+  onEditClick?: (item: CardProduct) => void;
 };
 
-export const ShopItem: FC<Props> = ({ item, onCartClick, onDetailClick, onFavoriteClick }) => {
+const iconButtonProps = {
+  flex: 1,
+  h: '100%',
+  zIndex: 2
+};
+
+export const ShopItem: FC<Props> = ({
+  item,
+  onCartClick,
+  onDetailClick,
+  onFavoriteClick,
+  onEditClick
+}) => {
   const { name, price, image, cards } = item;
   const itemImage = useMemo(() => image?.url || cards[0].coverImage.url, [item]);
 
@@ -50,7 +63,7 @@ export const ShopItem: FC<Props> = ({ item, onCartClick, onDetailClick, onFavori
         >
           {price && `\u20B1${price}`}
         </Text>
-        <Image src={itemImage} bgColor='rgba(0,0,0,0.3)' objectFit='contain' />
+        <Image src={itemImage} w='100%' bgColor='rgba(0,0,0,0.3)' objectFit='contain' />
       </Box>
       <Flex w='100%' flexDir='column' alignItems='center'>
         <Divider />
@@ -75,34 +88,36 @@ export const ShopItem: FC<Props> = ({ item, onCartClick, onDetailClick, onFavori
           h='64px'
         >
           <IconButton
+            {...iconButtonProps}
             aria-label='Add to cart'
-            flex={1}
-            pos='relative'
-            h='100%'
-            zIndex={2}
             icon={<Icon w={6} boxSizing='content-box' as={Tray} />}
             {...(onCartClick && { onClick: () => onCartClick(item) })}
           />
           <Divider h='90%' orientation='vertical' />
           <IconButton
+            {...iconButtonProps}
             aria-label='View item detail'
-            flex={1}
-            pos='relative'
-            h='100%'
-            zIndex={2}
             icon={<Icon w={6} boxSizing='content-box' as={Brain} />}
             {...(onDetailClick && { onClick: () => onDetailClick(item) })}
           />
           <Divider h='90%' orientation='vertical' />
           <IconButton
+            {...iconButtonProps}
             aria-label='Add to favorites'
-            flex={1}
-            pos='relative'
-            h='100%'
-            zIndex={2}
             icon={<Icon w={6} boxSizing='content-box' as={Knife} />}
             {...(onFavoriteClick && { onClick: () => onFavoriteClick(item) })}
           />
+          {onEditClick && (
+            <>
+              <Divider h='90%' orientation='vertical' />
+              <IconButton
+                {...iconButtonProps}
+                aria-label='Edit item'
+                icon={<Icon w={6} boxSizing='content-box' as={PenNib} />}
+                onClick={() => onEditClick(item)}
+              />
+            </>
+          )}
         </Flex>
       </Flex>
     </MotionSurface>
@@ -112,5 +127,6 @@ export const ShopItem: FC<Props> = ({ item, onCartClick, onDetailClick, onFavori
 ShopItem.defaultProps = {
   onCartClick: undefined,
   onDetailClick: undefined,
-  onFavoriteClick: undefined
+  onFavoriteClick: undefined,
+  onEditClick: undefined
 };
