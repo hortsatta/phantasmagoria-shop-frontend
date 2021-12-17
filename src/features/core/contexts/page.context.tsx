@@ -6,7 +6,7 @@ type PageContextType = {
   pageLoading: boolean;
   currentPageKey: string;
   showPage: () => void;
-  changePage: (key?: string, path?: string, isReplace?: boolean) => void;
+  changePage: (key?: string, path?: string, isReplace?: boolean, state?: any) => void;
 };
 
 const PageContext = createContext<PageContextType>({
@@ -28,10 +28,10 @@ const PageContextProvider: FC = ({ children }) => {
     }, 1000);
   };
 
-  const changePage = (key?: string, path?: string, isReplace?: boolean) => {
+  const changePage = (key?: string, path?: string, isReplace?: boolean, state?: any) => {
     setPageLoading.on();
     setCurrentPageKey(key || '');
-    isReplace ? history.replace(path || '') : history.push(path || '');
+    isReplace ? history.replace(path || '', state) : history.push(path || '', state);
   };
 
   return (

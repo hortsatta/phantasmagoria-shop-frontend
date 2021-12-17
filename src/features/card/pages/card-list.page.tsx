@@ -1,5 +1,5 @@
 import { FC, useMemo, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { useReactiveVar } from '@apollo/client';
 import {
   Button,
@@ -86,9 +86,10 @@ const CurrentFilters: FC<CurrentFiltersProps> = ({ filters, onFilterClick }) => 
 
 export const CardListPage: FC = () => {
   const history = useHistory();
+  const { state: locState } = useLocation();
   const appModules: any = useReactiveVar(appModulesVar);
   const { cards, searchKeyword, cardFilters, loading, setSearchKeyword, setCardFilters } =
-    useGetCardsByFilters();
+    useGetCardsByFilters(locState);
   // View card detail modal
   const {
     isOpen: cardModalIsOpen,
@@ -104,7 +105,7 @@ export const CardListPage: FC = () => {
   const [currentCardDetail, setCurrentCardDetail] = useState<Card | null>(null);
   const addCardPath = useMemo(
     () => `${appModules.admin.path}${appModules.card.path}${appModules.card.children?.add.path}`,
-    appModules
+    [appModules]
   );
 
   const handleCardDetailClick = (card?: Card) => {
