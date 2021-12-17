@@ -21,7 +21,6 @@ type Address = {
 type UserAccount = AuditTrail & {
   user: User;
   fullName: string;
-  isActive: boolean;
   displayName?: string;
   addresses?: Address[];
 };

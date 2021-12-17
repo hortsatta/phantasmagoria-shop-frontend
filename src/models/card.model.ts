@@ -34,6 +34,7 @@ type Card = AuditTrail & {
   image?: any;
   coverImage?: any;
   slug?: string;
+  cardProducts?: any;
 };
 
 export type { CardRarity, CardCategory, CardType, Card };
