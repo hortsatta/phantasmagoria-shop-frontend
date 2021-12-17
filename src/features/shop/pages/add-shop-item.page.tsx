@@ -20,8 +20,9 @@ export const AddShopItemPage: FC = () => {
     }
 
     const delay = setTimeout(() => {
-      const shopListNav = appModules.shop.children?.list;
-      changePage(shopListNav?.key, shopListNav?.path);
+      changePage(appModules.shop.children?.list.key, appModules.shop.path, false, {
+        refetch: true
+      });
     }, 1800);
 
     // eslint-disable-next-line consistent-return

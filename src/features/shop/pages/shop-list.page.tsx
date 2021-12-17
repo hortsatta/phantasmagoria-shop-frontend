@@ -1,4 +1,6 @@
-import { CSSProperties, FC, useState } from 'react';
+import { CSSProperties, FC, useCallback, useState } from 'react';
+import { useHistory, useLocation } from 'react-router-dom';
+import { useReactiveVar } from '@apollo/client';
 import {
   Box,
   Divider,
@@ -11,6 +13,7 @@ import {
 import { X as XSvg } from 'phosphor-react';
 import { AnimatePresence } from 'framer-motion';
 
+import { appModulesVar } from 'config';
 import { CardProduct } from 'models';
 import { Icon, IconButton, PageBox, Scrollbars, SearchInput } from 'features/core/components';
 import { useGetShopItemsByFilters } from '../hooks';
@@ -36,6 +39,9 @@ const sideSectionStyles: StackProps = {
 };
 
 export const ShopListPage: FC = () => {
+  const history = useHistory();
+  const { state: locState } = useLocation();
+  const appModules: any = useReactiveVar(appModulesVar);
   const {
     items,
     searchKeyword,
@@ -45,13 +51,21 @@ export const ShopListPage: FC = () => {
     setSearchKeyword,
     setItemSort,
     setItemFilters
-  } = useGetShopItemsByFilters();
+  } = useGetShopItemsByFilters(locState);
   const [currentItemDetail, setCurrentItemDetail] = useState<CardProduct | null>(null);
 
-  const handleSearchChange = (e: any) => {
+  const handleSearchChange = useCallback((e: any) => {
     const { value } = e.target;
     setSearchKeyword(value);
-  };
+  }, []);
+
+  const handleEditItem = useCallback(
+    (item: CardProduct) => {
+      const editPath = `${appModules.admin.path}${appModules.shop.path}/${item.slug}${appModules.shop.children?.edit.path}`;
+      history.push(editPath);
+    },
+    [appModules]
+  );
 
   return (
     <PageBox d='flex' alignItems='flex-start' justifyContent='center' pb={0} h='100%' flex={1}>
@@ -119,6 +133,7 @@ export const ShopListPage: FC = () => {
             items={items}
             loading={loading}
             onDetailClick={(item: CardProduct) => setCurrentItemDetail(item)}
+            onEditClick={(item: CardProduct) => handleEditItem(item)}
           />
         </Flex>
         <Divider pos='absolute' right='0px' h='100%' orientation='vertical' />

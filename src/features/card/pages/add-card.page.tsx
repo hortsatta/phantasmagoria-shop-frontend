@@ -1,15 +1,15 @@
-import { FC, useContext, useEffect } from 'react';
+import { FC, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import { Center, Heading } from '@chakra-ui/react';
 import { useReactiveVar } from '@apollo/client';
 
 import { appModulesVar } from 'config';
-import { PageContext } from 'features/core/contexts';
 import { PageBox } from 'features/core/components';
 import { useAddCard } from '../hooks';
 import { UpsertCardForm } from '../components';
 
 export const AddCardPage: FC = () => {
-  const { changePage } = useContext(PageContext);
+  const history = useHistory();
   const { isComplete, loading, addCard } = useAddCard();
   const appModules: any = useReactiveVar(appModulesVar);
 
@@ -20,8 +20,8 @@ export const AddCardPage: FC = () => {
     }
 
     const delay = setTimeout(() => {
-      const shopListNav = appModules.shop.children?.list;
-      changePage(shopListNav?.key, shopListNav?.path);
+      const cardListPath = `${appModules.admin.path}${appModules.card.path}`;
+      history.push(cardListPath, { refetch: true });
     }, 1800);
 
     // eslint-disable-next-line consistent-return

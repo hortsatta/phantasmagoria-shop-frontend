@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { useLazyQuery } from '@apollo/client';
 
 import { CardProduct } from 'models';
@@ -16,10 +17,13 @@ type Result = {
   setItemFilters: any;
 };
 
-export const useGetShopItemsByFilters = (): Result => {
+export const useGetShopItemsByFilters = (locState?: any): Result => {
+  const history = useHistory();
   // Card products query search with product or card name as keyword
-  const [getCardProducts, { data: { cardProducts = [] } = {}, loading: getCardProductsLoading }] =
-    useLazyQuery(GET_CARD_PRODUCTS);
+  const [
+    getCardProducts,
+    { data: { cardProducts = [] } = {}, loading: getCardProductsLoading, refetch }
+  ] = useLazyQuery(GET_CARD_PRODUCTS);
   const [itemFilters, setItemFilters] = useState<any>(null);
   const [itemSort, setItemSort] = useState<string | null>(null);
   const [searchKeyword, setSearchKeyword] = useState('');
@@ -41,12 +45,14 @@ export const useGetShopItemsByFilters = (): Result => {
         _or: [
           {
             name_contains: debounceSearchKeyword.trim(),
-            cards
+            cards,
+            isActive: true
           },
           {
             cards: {
               ...cards,
-              name_contains: debounceSearchKeyword.trim()
+              name_contains: debounceSearchKeyword.trim(),
+              isActive: true
             }
           }
         ]
@@ -57,6 +63,16 @@ export const useGetShopItemsByFilters = (): Result => {
   useEffect(() => {
     getCardProducts({ variables: itemVariables });
   }, [itemVariables]);
+
+  useEffect(() => {
+    if (!refetch || !locState?.refetch) {
+      return;
+    }
+
+    // Refetch and clear history state to prevent refetch on reload.
+    refetch(itemVariables);
+    history.replace({ state: {} });
+  }, [locState, refetch]);
 
   return {
     items: cardProducts,
