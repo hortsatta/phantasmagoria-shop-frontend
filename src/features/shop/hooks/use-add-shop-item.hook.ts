@@ -6,13 +6,13 @@ import { CREATE_CARD_PRODUCT, UPDATE_CARD_PRODUCT, UPLOAD } from 'services/graph
 import { useDebounce } from 'features/core/hooks';
 import { CardProductFormData } from 'features/card/components';
 
-type Return = {
+type Result = {
   isComplete: boolean;
   loading: boolean;
   addShopItem: (cardProdFormData: CardProductFormData) => void;
 };
 
-export const useAddShopItem = (): Return => {
+export const useAddShopItem = (): Result => {
   const { debounce, loading: debounceLoading } = useDebounce();
   const [createCardProduct, { loading: createCardProductLoading }] =
     useMutation(CREATE_CARD_PRODUCT);
