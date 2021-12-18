@@ -1,11 +1,13 @@
 import { useState } from 'react';
 
-export const DEBOUNCE_DURATION = 800;
-
-export const useDebounce = (): {
+type Result = {
   debounce: (callback?: () => void, duration?: number) => void;
   loading: boolean;
-} => {
+};
+
+export const DEBOUNCE_DURATION = 800;
+
+export const useDebounce = (): Result => {
   const [loading, setLoading] = useState(false);
 
   const debounce = (callback?: () => void, duration?: number) => {

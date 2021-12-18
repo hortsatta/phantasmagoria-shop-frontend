@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react';
 import { DEBOUNCE_DURATION } from './use-debounce.hook';
 
+type Result = { debouncedValue: any; loading: boolean };
+
 const DEBOUNCE_LOADING_DURATION = 500;
 
-export const useDebounceValue = (
-  value: any,
-  delay = DEBOUNCE_DURATION
-): { debouncedValue: any; loading: boolean } => {
+export const useDebounceValue = (value: any, delay = DEBOUNCE_DURATION): Result => {
   const [debouncedValue, setDebouncedValue] = useState(value);
   const [loading, setLoading] = useState(false);
 
