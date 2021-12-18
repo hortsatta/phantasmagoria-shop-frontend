@@ -1,3 +1,4 @@
+import { theme as chakraTheme } from '@chakra-ui/react';
 import { StepsStyleConfig } from 'chakra-ui-steps';
 import variables from 'assets/styles/_variables.module.scss';
 
@@ -19,6 +20,61 @@ const colors = {
   brand: {
     100: variables.primaryColor,
     200: variables.accentColor
+  }
+};
+
+const alertStyles = {
+  title: {
+    mb: 2,
+    fontSize: '3xl',
+    fontFamily: variables.primaryFont,
+    fontWeight: 400
+  },
+  icon: {
+    w: 0,
+    color: variables.textColor,
+    overflow: 'hidden'
+  }
+};
+
+const Alert = {
+  variants: {
+    subtle: (props: any) => {
+      const { colorScheme } = props;
+
+      let typeStyles = {};
+      switch (colorScheme) {
+        case 'green':
+          typeStyles = {
+            container: {
+              bg: variables.successColor
+            }
+          };
+          break;
+        case 'red':
+          typeStyles = {
+            container: {
+              bg: variables.errorColor
+            }
+          };
+          break;
+        case 'orange':
+          typeStyles = {
+            container: {
+              bg: variables.warningColor
+            }
+          };
+          break;
+        default:
+          break;
+      }
+
+      return {
+        ...chakraTheme.components.Alert.variants.subtle(props),
+        ...alertStyles,
+        ...typeStyles
+      };
+    }
   }
 };
 
@@ -144,7 +200,12 @@ const Steps = {
   }
 };
 
-export const theme = {
+const messages = {
+  signInFailed: 'Please check your credentials.',
+  problem: `We've encountered a problem. Please try again.`
+};
+
+const theme = {
   config: {
     initialColorMode: 'dark',
     useSystemColorMode: false
@@ -153,6 +214,7 @@ export const theme = {
   fonts,
   colors,
   components: {
+    Alert,
     Badge,
     Button,
     Divider,
@@ -164,3 +226,5 @@ export const theme = {
     Steps
   }
 };
+
+export { theme, messages };
