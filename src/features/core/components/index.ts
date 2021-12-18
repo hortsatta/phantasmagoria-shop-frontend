@@ -9,6 +9,7 @@ export * from './modal.component';
 export * from './nav.component';
 export * from './nav-item.component';
 export * from './nav-active-indicator.component';
+export * from './notifications.component';
 export * from './number-input.component';
 export * from './page-box.component';
 export * from './radio.component';

@@ -25,6 +25,7 @@ const cardRaritiesVar = makeVar<CardRarity[] | null | undefined>(undefined);
 const cardCategoriesVar = makeVar<CardCategory[] | null | undefined>(undefined);
 const cardTypesVar = makeVar<CardType[] | null | undefined>(undefined);
 const phRegionsVar = makeVar<PhRegion[] | null | undefined>(undefined);
+const notificationsVar = makeVar<any[]>([]);
 
 const cache = new InMemoryCache({
   typePolicies: {
@@ -59,6 +60,11 @@ const cache = new InMemoryCache({
           read() {
             return phRegionsVar();
           }
+        },
+        notifications: {
+          read() {
+            return notificationsVar();
+          }
         }
       }
     }
@@ -77,6 +83,7 @@ export {
   cardRaritiesVar,
   cardCategoriesVar,
   cardTypesVar,
-  client,
-  phRegionsVar
+  phRegionsVar,
+  notificationsVar,
+  client
 };

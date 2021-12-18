@@ -1,9 +1,10 @@
 import { useCallback } from 'react';
 import { useMutation } from '@apollo/client';
 
+import { messages } from 'config';
 import { signIn as doSignIn } from 'services';
 import { SIGN_IN } from 'services/graphql';
-import { useDebounce } from 'features/core/hooks';
+import { useDebounce, useNotification } from 'features/core/hooks';
 
 type Result = {
   signIn: (identifier: string, password: string) => Promise<void>;
@@ -11,6 +12,7 @@ type Result = {
 };
 
 export const useAuth = (): Result => {
+  const { notify } = useNotification();
   const { debounce, loading: debounceLoading } = useDebounce();
   const [login, { loading: loginLoading }] = useMutation(SIGN_IN);
 
@@ -21,8 +23,7 @@ export const useAuth = (): Result => {
       const { jwt, user } = data.login;
       doSignIn(jwt, user);
     } catch (err) {
-      // TODO
-      console.log('err', err);
+      notify('error', 'Failed', messages.signInFailed);
     }
   }, []);
 

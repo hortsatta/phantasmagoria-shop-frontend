@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useLazyQuery, useMutation } from '@apollo/client';
 
+import { messages } from 'config';
 import { CardProduct } from 'models';
 import {
   DELETE_CARD_PRODUCT,
@@ -8,7 +9,7 @@ import {
   UPDATE_CARD_PRODUCT,
   UPLOAD
 } from 'services/graphql';
-import { useDebounce } from 'features/core/hooks';
+import { useDebounce, useNotification } from 'features/core/hooks';
 import { CardProductFormData } from 'features/card/components';
 import { createCardImageBlob } from 'services';
 
@@ -21,6 +22,7 @@ type Result = {
 };
 
 export const useEditShopItem = (slug: string): Result => {
+  const { notify } = useNotification();
   const { debounce, loading: debounceLoading } = useDebounce();
   const [isComplete, setIsComplete] = useState(false);
 
@@ -82,8 +84,7 @@ export const useEditShopItem = (slug: string): Result => {
         await updateCardProduct({ variables: updateCardProductVariables });
         setIsComplete(true);
       } catch (err: any) {
-        // TODO
-        console.error(err);
+        notify('error', 'Failed', messages.problem);
       }
     },
     [cardProducts]
@@ -97,8 +98,7 @@ export const useEditShopItem = (slug: string): Result => {
       await deleteCardProduct({ variables: { id } });
       setIsComplete(true);
     } catch (err: any) {
-      // TODO
-      console.error(err);
+      notify('error', 'Failed', messages.problem);
     }
   }, [cardProducts]);
 

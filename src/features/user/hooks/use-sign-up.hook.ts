@@ -1,8 +1,9 @@
 import { MutableRefObject, useCallback, useRef, useState } from 'react';
 import { useMutation } from '@apollo/client';
 
+import { messages } from 'config';
 import { CREATE_USER_ACCOUNT, SIGN_UP } from 'services/graphql';
-import { useDebounce } from 'features/core/hooks';
+import { useDebounce, useNotification } from 'features/core/hooks';
 import { UserFormData, UserOptionalFormData } from '../components';
 
 type Result = {
@@ -16,6 +17,7 @@ type Result = {
 };
 
 export const useSignUp = (): Result => {
+  const { notify } = useNotification();
   const { debounce, loading: debounceLoading } = useDebounce();
   const [register, { loading: registerLoading }] = useMutation(SIGN_UP);
   const [createUserAccount, { loading: createUserAccountLoading }] =
@@ -33,8 +35,7 @@ export const useSignUp = (): Result => {
       currentUser.current = data.register;
       setIsSignUpComplete(true);
     } catch (err: any) {
-      // TODO
-      console.error(err);
+      notify('error', 'Failed', messages.problem);
     }
   }, []);
 
@@ -52,8 +53,7 @@ export const useSignUp = (): Result => {
       await createUserAccount({ variables: userAccount });
       setIsOptionalDetailComplete(true);
     } catch (err: any) {
-      // TODO
-      console.error(err);
+      notify('error', 'Failed', messages.problem);
     }
   }, []);
 

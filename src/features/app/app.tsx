@@ -2,7 +2,7 @@ import { FC, Suspense } from 'react';
 import { ChakraProvider, extendTheme } from '@chakra-ui/react';
 
 import { theme } from 'config';
-import { Header, Scrollbars } from '../core/components';
+import { Header, Notifications, Scrollbars } from '../core/components';
 import { PageContextProvider } from '../core/contexts';
 import { withPrerequisite } from './with-prerequisite.hoc';
 import { AppRoutes } from './routes';
@@ -21,6 +21,7 @@ const Component: FC = () => (
           <AppRoutes />
         </Suspense>
       </Scrollbars>
+      <Notifications />
     </ChakraProvider>
   </PageContextProvider>
 );

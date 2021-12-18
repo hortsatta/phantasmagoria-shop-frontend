@@ -1,9 +1,10 @@
 import { useCallback, useState } from 'react';
 import { useMutation } from '@apollo/client';
 
+import { messages } from 'config';
 import { createCoverImageBlob } from 'services';
 import { CREATE_CARD_PRODUCT, UPDATE_CARD_PRODUCT, UPLOAD } from 'services/graphql';
-import { useDebounce } from 'features/core/hooks';
+import { useDebounce, useNotification } from 'features/core/hooks';
 import { CardProductFormData } from 'features/card/components';
 
 type Result = {
@@ -13,6 +14,7 @@ type Result = {
 };
 
 export const useAddShopItem = (): Result => {
+  const { notify } = useNotification();
   const { debounce, loading: debounceLoading } = useDebounce();
   const [createCardProduct, { loading: createCardProductLoading }] =
     useMutation(CREATE_CARD_PRODUCT);
@@ -63,8 +65,7 @@ export const useAddShopItem = (): Result => {
       await updateCardProduct({ variables: updateCardProductVariables });
       setIsComplete(true);
     } catch (err: any) {
-      // TODO
-      console.error(JSON.stringify(err));
+      notify('error', 'Failed', messages.problem);
     }
   }, []);
 

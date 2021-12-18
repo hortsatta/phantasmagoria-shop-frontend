@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useLazyQuery, useMutation } from '@apollo/client';
 
+import { messages } from 'config';
 import { Card } from 'models';
 import { createCardImageBlob, createCoverImageBlob } from 'services';
 import { DELETE_CARD, GET_CARDS_DETAIL_EDIT, UPDATE_CARD, UPLOAD } from 'services/graphql';
-import { useDebounce } from 'features/core/hooks';
+import { useDebounce, useNotification } from 'features/core/hooks';
 import { CardFormData } from '../components';
 
 type Result = {
@@ -16,6 +17,7 @@ type Result = {
 };
 
 export const useEditCard = (slug: string): Result => {
+  const { notify } = useNotification();
   const { debounce, loading: debounceLoading } = useDebounce();
   const [updateCurrentCard, { loading: updateCardLoading }] = useMutation(UPDATE_CARD);
   const [deleteCard, { loading: deleteCardLoading }] = useMutation(DELETE_CARD);
@@ -101,8 +103,7 @@ export const useEditCard = (slug: string): Result => {
         await updateCurrentCard({ variables: updateCardVariables });
         setIsComplete(true);
       } catch (err: any) {
-        // TODO
-        console.error(err);
+        notify('error', 'Failed', messages.problem);
       }
     },
     [cards]
@@ -113,7 +114,7 @@ export const useEditCard = (slug: string): Result => {
     const { id, cardProducts } = cards[0] || {};
 
     if (cardProducts?.length) {
-      console.error('Card has products');
+      notify('error', 'Failed', 'Card has an active item on the shop.');
       return;
     }
 
@@ -121,8 +122,7 @@ export const useEditCard = (slug: string): Result => {
       await deleteCard({ variables: { id } });
       setIsComplete(true);
     } catch (err: any) {
-      // TODO
-      console.error(err);
+      notify('error', 'Failed', messages.problem);
     }
   }, [cards]);
 
