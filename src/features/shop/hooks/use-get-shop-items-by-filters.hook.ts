@@ -49,10 +49,10 @@ export const useGetShopItemsByFilters = (locState?: any): Result => {
             isActive: true
           },
           {
+            isActive: true,
             cards: {
               ...cards,
-              name_contains: debounceSearchKeyword.trim(),
-              isActive: true
+              name_contains: debounceSearchKeyword.trim()
             }
           }
         ]
