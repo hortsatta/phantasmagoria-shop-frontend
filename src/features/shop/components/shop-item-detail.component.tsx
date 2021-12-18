@@ -18,7 +18,7 @@ import { motion } from 'framer-motion';
 
 import { Card, CardProduct } from 'models';
 import { GET_CARD_PRODUCTS_DETAIL } from 'services/graphql';
-import { Icon, IconButton, SubHeading } from 'features/core/components';
+import { Icon, IconButton } from 'features/core/components';
 
 import variables from 'assets/styles/_variables.module.scss';
 
