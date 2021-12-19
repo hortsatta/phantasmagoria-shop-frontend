@@ -102,7 +102,7 @@ export const useEditCard = (slug: string): Result => {
         const updateCardVariables = { id: cardId, card };
         await updateCurrentCard({ variables: updateCardVariables });
         setIsComplete(true);
-      } catch (err: any) {
+      } catch (err) {
         notify('error', 'Failed', messages.problem);
       }
     },
@@ -121,7 +121,7 @@ export const useEditCard = (slug: string): Result => {
     try {
       await deleteCard({ variables: { id } });
       setIsComplete(true);
-    } catch (err: any) {
+    } catch (err) {
       notify('error', 'Failed', messages.problem);
     }
   }, [cards]);

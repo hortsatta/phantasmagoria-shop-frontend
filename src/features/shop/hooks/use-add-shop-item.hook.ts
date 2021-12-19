@@ -64,7 +64,7 @@ export const useAddShopItem = (): Result => {
 
       await updateCardProduct({ variables: updateCardProductVariables });
       setIsComplete(true);
-    } catch (err: any) {
+    } catch (err) {
       notify('error', 'Failed', messages.problem);
     }
   }, []);

@@ -83,7 +83,7 @@ export const useEditShopItem = (slug: string): Result => {
         const updateCardProductVariables = { id: cardProductId, cardProduct };
         await updateCardProduct({ variables: updateCardProductVariables });
         setIsComplete(true);
-      } catch (err: any) {
+      } catch (err) {
         notify('error', 'Failed', messages.problem);
       }
     },
@@ -97,7 +97,7 @@ export const useEditShopItem = (slug: string): Result => {
     try {
       await deleteCardProduct({ variables: { id } });
       setIsComplete(true);
-    } catch (err: any) {
+    } catch (err) {
       notify('error', 'Failed', messages.problem);
     }
   }, [cardProducts]);

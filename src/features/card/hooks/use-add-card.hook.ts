@@ -72,7 +72,7 @@ export const useAddCard = (): Result => {
 
       await updateCard({ variables: updateCardVariables });
       setIsComplete(true);
-    } catch (err: any) {
+    } catch (err) {
       notify('error', 'Failed', messages.problem);
     }
   }, []);
