@@ -28,7 +28,7 @@ export const ShopItem: FC<Props> = ({
   onFavoriteClick,
   onEditClick
 }) => {
-  const { name, price, image, cards } = item;
+  const { name, price, image, cards, favorites } = item;
   const itemImage = useMemo(() => image?.url || cards[0].coverImage.url, [item]);
 
   return (
@@ -105,6 +105,7 @@ export const ShopItem: FC<Props> = ({
             {...iconButtonProps}
             aria-label='Add to favorites'
             icon={<Icon w={6} boxSizing='content-box' as={Knife} />}
+            {...(favorites?.length && { color: variables.primaryColor })}
             {...(onFavoriteClick && { onClick: () => onFavoriteClick(item) })}
           />
           {onEditClick && (

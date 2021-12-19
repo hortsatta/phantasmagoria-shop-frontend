@@ -2,6 +2,7 @@ import { gql } from '@apollo/client';
 
 const GET_CARD_PRODUCTS = gql`
   query GetCardProducts(
+    $userAccountId: ID
     $where: JSON
     $limit: Int
     $start: Int
@@ -33,6 +34,9 @@ const GET_CARD_PRODUCTS = gql`
           name
           url
         }
+      }
+      favorites(where: { user_account: $userAccountId }) {
+        id
       }
     }
   }
