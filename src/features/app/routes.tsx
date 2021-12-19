@@ -5,6 +5,7 @@ import { useReactiveVar } from '@apollo/client';
 import { appModulesVar } from 'config';
 import { AdminRoutes } from '../admin/routing';
 import { CartRoutes } from '../cart/routing';
+import { FavoriteRoutes } from '../favorite/routing';
 import { ShopRoutes } from '../shop/routing';
 import { UserRoutes } from '../user/routing';
 
@@ -26,6 +27,7 @@ export const AppRoutes: FC = () => {
       />
       <Route path={appModules.shop.path} component={ShopRoutes} />
       <Route path={appModules.cart.path} component={CartRoutes} />
+      <Route path={appModules.favorite.path} component={FavoriteRoutes} />
       <Route path={appModules.user.path} component={UserRoutes} />
       <Route path={appModules.admin.path} component={AdminRoutes} />
     </>
