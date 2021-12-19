@@ -4,11 +4,20 @@ const SIGN_IN = gql`
   mutation SignIn($identifier: String!, $password: String!) {
     login(input: { identifier: $identifier, password: $password }) {
       jwt
-      user {
-        id
-        email
-        role {
-          id
+      currentUser: user {
+        user {
+          userAccount: user_account {
+            id
+            fullName
+            displayName
+            user {
+              id
+              email
+              role {
+                id
+              }
+            }
+          }
         }
       }
     }
@@ -19,11 +28,20 @@ const SIGN_UP = gql`
   mutation SignUp($username: String!, $email: String!, $password: String!) {
     register(input: { username: $username, email: $email, password: $password }) {
       jwt
-      user {
-        id
-        email
-        role {
-          id
+      currentUser: user {
+        user {
+          userAccount: user_account {
+            id
+            fullName
+            displayName
+            user {
+              id
+              email
+              role {
+                id
+              }
+            }
+          }
         }
       }
     }
@@ -33,10 +51,19 @@ const SIGN_UP = gql`
 const CHECK_SESSION = gql`
   query CheckSession {
     me {
-      id
-      email
-      role {
-        id
+      user {
+        userAccount: user_account {
+          id
+          fullName
+          displayName
+          user {
+            id
+            email
+            role {
+              id
+            }
+          }
+        }
       }
     }
   }

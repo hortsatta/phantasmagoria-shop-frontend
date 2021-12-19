@@ -6,7 +6,7 @@ import {
   cardCategoriesVar,
   cardRaritiesVar,
   cardTypesVar,
-  currentUserVar,
+  currentUserAccountVar,
   phRegionsVar
 } from 'config';
 import {
@@ -20,14 +20,14 @@ import {
 
 export const withPrerequisite = <T,>(Component: ComponentType<T>) => {
   return (hocProps: T) => {
+    const { data: userAccountData } = useQuery(CHECK_SESSION);
     const { data: appModulesData } = useQuery(GET_APP_MODULES);
-    const { data: userData } = useQuery(CHECK_SESSION);
     const { data: raritiesData } = useQuery(GET_ALL_RARITIES);
     const { data: categoriesData } = useQuery(GET_ALL_CATEGORIES);
     const { data: typesData } = useQuery(GET_ALL_TYPES);
     const { data: phRegionsData } = useQuery(GET_PH_REGIONS);
     const appModules = useReactiveVar(appModulesVar);
-    const currentUser = useReactiveVar(currentUserVar);
+    const currentUserAccount = useReactiveVar(currentUserAccountVar);
     const cardRarities = useReactiveVar(cardRaritiesVar);
     const cardCategories = useReactiveVar(cardCategoriesVar);
     const cardTypes = useReactiveVar(cardTypesVar);
@@ -36,8 +36,9 @@ export const withPrerequisite = <T,>(Component: ComponentType<T>) => {
 
     useEffect(() => {
       // If user is logged in, set current user
-      currentUserVar(userData?.me || null);
-    }, [userData]);
+      const { userAccount } = userAccountData?.me.user || {};
+      currentUserAccountVar(userAccount || null);
+    }, [userAccountData]);
 
     useEffect(() => {
       appModulesVar(appModulesData?.appModules.modules || null);
@@ -62,7 +63,7 @@ export const withPrerequisite = <T,>(Component: ComponentType<T>) => {
     useEffect(() => {
       if (
         !appModules ||
-        typeof currentUser === 'undefined' ||
+        typeof currentUserAccount === 'undefined' ||
         typeof cardRarities === 'undefined' ||
         typeof cardCategories === 'undefined' ||
         typeof cardTypes === 'undefined'
@@ -71,7 +72,7 @@ export const withPrerequisite = <T,>(Component: ComponentType<T>) => {
       }
 
       setIsFetching(false);
-    }, [currentUser, appModules, cardRarities, cardCategories, cardTypes]);
+    }, [currentUserAccount, appModules, cardRarities, cardCategories, cardTypes]);
 
     if (isFetching) {
       return null;

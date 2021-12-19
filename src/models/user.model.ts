@@ -19,6 +19,7 @@ type Address = {
 };
 
 type UserAccount = AuditTrail & {
+  id: string;
   user: User;
   fullName: string;
   displayName?: string;

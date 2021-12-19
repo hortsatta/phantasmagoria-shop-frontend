@@ -3,7 +3,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { Center, Flex, Heading, Image, Link } from '@chakra-ui/react';
 import { useReactiveVar } from '@apollo/client';
 
-import { appModulesVar, currentUserVar } from 'config';
+import { appModulesVar, currentUserAccountVar } from 'config';
 import { PageContext } from 'features/core/contexts';
 import { PageBox, SubHeading, Surface } from 'features/core/components';
 import { useAuth } from '../hooks';
@@ -14,17 +14,17 @@ import signInCover from 'assets/images/sign-in-cover.jpg';
 export const AuthPage: FC = () => {
   const { changePage } = useContext(PageContext);
   const { signIn, loading } = useAuth();
-  const currentUser = useReactiveVar(currentUserVar);
+  const currentUserAccount = useReactiveVar(currentUserAccountVar);
   const appModules: any = useReactiveVar(appModulesVar);
 
   useEffect(() => {
-    if (loading || !currentUser) {
+    if (loading || !currentUserAccount) {
       return;
     }
 
     const shopListNav = appModules.shop.children?.list;
     changePage(shopListNav?.key, shopListNav?.path);
-  }, [currentUser, loading]);
+  }, [currentUserAccount, loading]);
 
   return (
     <PageBox>

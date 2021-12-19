@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useLazyQuery } from '@apollo/client';
+import { useLazyQuery, useReactiveVar } from '@apollo/client';
 
+import { currentUserAccountVar } from 'config';
 import { CardProduct } from 'models';
 import { GET_CARD_PRODUCTS } from 'services/graphql';
 import { useDebounceValue } from 'features/core/hooks';
@@ -19,6 +20,7 @@ type Result = {
 
 export const useGetShopItemsByFilters = (locState?: any): Result => {
   const history = useHistory();
+  const currentUserAccount = useReactiveVar(currentUserAccountVar);
   // Card products query search with product or card name as keyword
   const [
     getCardProducts,
@@ -56,9 +58,10 @@ export const useGetShopItemsByFilters = (locState?: any): Result => {
             }
           }
         ]
-      }
+      },
+      userAccountId: currentUserAccount?.id || ''
     };
-  }, [debounceSearchKeyword, itemFilters, itemSort]);
+  }, [debounceSearchKeyword, itemFilters, itemSort, currentUserAccount]);
 
   useEffect(() => {
     getCardProducts({ variables: itemVariables });

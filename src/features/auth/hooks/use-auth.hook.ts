@@ -20,8 +20,11 @@ export const useAuth = (): Result => {
     debounce();
     try {
       const { data } = await login({ variables: { identifier, password } });
-      const { jwt, user } = data.login;
-      doSignIn(jwt, user);
+      const {
+        jwt,
+        currentUser: { user }
+      } = data.login;
+      doSignIn(jwt, user.userAccount);
     } catch (err) {
       notify('error', 'Failed', messages.signInFailed);
     }

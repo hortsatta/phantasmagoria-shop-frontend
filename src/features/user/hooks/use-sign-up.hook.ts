@@ -34,13 +34,16 @@ export const useSignUp = (): Result => {
       const { data } = await register({ variables: { username: email, email, password } });
       currentUser.current = data.register;
       setIsSignUpComplete(true);
-    } catch (err: any) {
+    } catch (err) {
       notify('error', 'Failed', messages.problem);
     }
   }, []);
 
   const addOptionalData = useCallback(async (data: UserOptionalFormData) => {
     const { displayName, fullName, ...address } = data || {};
+    const {
+      currentUser: { user }
+    } = currentUser.current;
     debounce();
 
     try {
@@ -48,11 +51,11 @@ export const useSignUp = (): Result => {
         displayName,
         fullName,
         addresses: [{ ...address, fullName }],
-        user: currentUser.current.user.id
+        user: user.userAccount.user.id
       };
       await createUserAccount({ variables: userAccount });
       setIsOptionalDetailComplete(true);
-    } catch (err: any) {
+    } catch (err) {
       notify('error', 'Failed', messages.problem);
     }
   }, []);

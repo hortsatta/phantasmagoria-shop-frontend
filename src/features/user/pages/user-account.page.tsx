@@ -1,7 +1,7 @@
 import { FC, useContext, useEffect } from 'react';
 import { useReactiveVar } from '@apollo/client';
 
-import { appModulesVar, currentUserVar } from 'config';
+import { appModulesVar, currentUserAccountVar } from 'config';
 import { signOut } from 'services';
 import { PageContext } from 'features/core/contexts';
 import { useDebounce } from 'features/core/hooks';
@@ -10,18 +10,18 @@ import { PageBox } from 'features/core/components';
 export const UserAccountPage: FC = () => {
   const { changePage } = useContext(PageContext);
   const { debounce } = useDebounce();
-  const currentUser = useReactiveVar(currentUserVar);
+  const currentUserAccount = useReactiveVar(currentUserAccountVar);
   const appModules: any = useReactiveVar(appModulesVar);
 
   useEffect(() => {
-    if (currentUser) {
+    if (currentUserAccount) {
       return;
     }
 
     const userNav = appModules.user;
     const signInNav = appModules.user.children?.signIn;
     changePage(signInNav?.key, `${userNav.path}${signInNav?.path}`, true);
-  }, [currentUser]);
+  }, [currentUserAccount]);
 
   const handleSignOut = () => {
     debounce(() => {

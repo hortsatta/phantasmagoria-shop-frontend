@@ -28,7 +28,7 @@ import {
 
 const LABEL_WIDTH = '125px';
 
-type UserOptionalFormData = Omit<UserAccount, 'user' | 'addresses'> &
+type UserOptionalFormData = Omit<UserAccount, 'id' | 'user' | 'addresses'> &
   Omit<Address, 'fullName' | 'zipCode'> & {
     zipCode: null | number;
   };
