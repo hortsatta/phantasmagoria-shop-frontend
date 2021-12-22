@@ -9,6 +9,7 @@ import variables from 'assets/styles/_variables.module.scss';
 
 type Props = {
   item: CardProduct;
+  loading?: boolean;
   onCartClick?: (item: CardProduct) => void;
   onDetailClick?: (item: CardProduct) => void;
   onFavoriteClick?: (item: CardProduct) => void;
@@ -18,11 +19,18 @@ type Props = {
 const iconButtonProps = {
   flex: 1,
   h: '100%',
-  zIndex: 2
+  zIndex: 2,
+  _loading: {
+    d: 'flex',
+    w: '100%',
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
 };
 
 export const ShopItem: FC<Props> = ({
   item,
+  loading,
   onCartClick,
   onDetailClick,
   onFavoriteClick,
@@ -105,6 +113,7 @@ export const ShopItem: FC<Props> = ({
             {...iconButtonProps}
             aria-label='Add to favorites'
             icon={<Icon w={6} boxSizing='content-box' as={Knife} />}
+            isLoading={loading}
             {...(favorites?.length && { color: variables.primaryColor })}
             {...(onFavoriteClick && { onClick: () => onFavoriteClick(item) })}
           />
@@ -126,6 +135,7 @@ export const ShopItem: FC<Props> = ({
 };
 
 ShopItem.defaultProps = {
+  loading: false,
   onCartClick: undefined,
   onDetailClick: undefined,
   onFavoriteClick: undefined,

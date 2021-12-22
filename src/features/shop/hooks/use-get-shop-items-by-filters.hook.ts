@@ -1,8 +1,8 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useLazyQuery, useReactiveVar } from '@apollo/client';
 
-import { currentUserAccountVar } from 'config';
+import { currentUserAccountVar, favoriteItemsVar } from 'config';
 import { CardProduct } from 'models';
 import { GET_CARD_PRODUCTS } from 'services/graphql';
 import { useDebounceValue } from 'features/core/hooks';
@@ -20,6 +20,8 @@ type Result = {
 
 export const useGetShopItemsByFilters = (locState?: any): Result => {
   const history = useHistory();
+  const hasRefetched = useRef(false);
+  const favoriteItems = useReactiveVar(favoriteItemsVar);
   const currentUserAccount = useReactiveVar(currentUserAccountVar);
   // Card products query search with product or card name as keyword
   const [
@@ -68,12 +70,20 @@ export const useGetShopItemsByFilters = (locState?: any): Result => {
   }, [itemVariables]);
 
   useEffect(() => {
-    if (!refetch || !locState?.refetch) {
+    if (favoriteItems.length || hasRefetched.current) {
+      return;
+    }
+    hasRefetched.current = true;
+    refetch && refetch();
+  }, [favoriteItems, refetch]);
+
+  useEffect(() => {
+    if (!locState?.refetch) {
       return;
     }
 
     // Refetch and clear history state to prevent refetch on reload.
-    refetch(itemVariables);
+    refetch && refetch(itemVariables);
     history.replace({ state: {} });
   }, [locState, refetch]);
 

@@ -2,6 +2,7 @@ import { gql } from '@apollo/client';
 
 const GET_FAVORITES = gql`
   query GetFavorites(
+    $userAccountId: ID
     $where: JSON
     $limit: Int
     $start: Int
@@ -41,6 +42,9 @@ const GET_FAVORITES = gql`
             url
           }
         }
+        favorites(where: { user_account: $userAccountId }) {
+          id
+        }
       }
     }
   }
@@ -66,4 +70,15 @@ const UPDATE_FAVORITE = gql`
   }
 `;
 
-export { GET_FAVORITES, CREATE_FAVORITE, UPDATE_FAVORITE };
+const UPDATE_FAVORITE_ITEMS = gql`
+  mutation UpdateFavoriteItems($addItems: [ID], $removeItems: [ID]) {
+    updateFavoriteItems(addItems: $addItems, removeItems: $removeItems) {
+      id
+      cardProducts: card_products {
+        id
+      }
+    }
+  }
+`;
+
+export { GET_FAVORITES, CREATE_FAVORITE, UPDATE_FAVORITE, UPDATE_FAVORITE_ITEMS };

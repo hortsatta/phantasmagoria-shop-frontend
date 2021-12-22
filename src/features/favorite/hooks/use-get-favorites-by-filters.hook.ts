@@ -1,9 +1,10 @@
-import { useMemo, useState } from 'react';
-import { useQuery } from '@apollo/client';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { useApolloClient, useQuery, useReactiveVar } from '@apollo/client';
 
+import { currentUserAccountVar, favoriteItemsVar } from 'config';
+import { Card, CardProduct } from 'models';
 import { GET_FAVORITES } from 'services/graphql';
 import { useDebounceValue } from 'features/core/hooks';
-import { Card, CardProduct } from 'models';
 
 type Result = {
   items: CardProduct[];
@@ -13,7 +14,17 @@ type Result = {
 };
 
 export const useGetFavoritesByFilters = (): Result => {
-  const { data: { favorites = [] } = {}, loading: getFavoritesLoading } = useQuery(GET_FAVORITES);
+  const client = useApolloClient();
+  const hasRefetched = useRef(false);
+  const userAccount = useReactiveVar(currentUserAccountVar);
+  const favoriteItems = useReactiveVar(favoriteItemsVar);
+  const {
+    data: { favorites = [] } = {},
+    loading: getFavoritesLoading,
+    refetch
+  } = useQuery(GET_FAVORITES, {
+    variables: { userAccountId: userAccount?.id, where: { user_account: userAccount?.id } }
+  });
   const [searchKeyword, setSearchKeyword] = useState('');
   const { debouncedValue: debounceSearchKeyword, loading: debounceSearchLoading } =
     useDebounceValue(searchKeyword);
@@ -24,12 +35,23 @@ export const useGetFavoritesByFilters = (): Result => {
     }
 
     const { cardProducts } = favorites[0];
-    return cardProducts.filter(
+    const items = cardProducts.filter(
       (cp: CardProduct) =>
         cp.name.includes(debounceSearchKeyword) ||
         cp.cards.some((c: Card) => c.name.includes(debounceSearchKeyword))
     );
+
+    return items.filter((item: CardProduct) => !!item.favorites);
   }, [favorites, debounceSearchKeyword]);
+
+  useEffect(() => {
+    if (favoriteItems.length || hasRefetched.current) {
+      return;
+    }
+    hasRefetched.current = true;
+    refetch();
+    client.resetStore();
+  }, [favoriteItems]);
 
   return {
     items: filteredCardProducts,

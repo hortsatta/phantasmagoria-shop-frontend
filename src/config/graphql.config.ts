@@ -26,6 +26,8 @@ const cardCategoriesVar = makeVar<CardCategory[] | null | undefined>(undefined);
 const cardTypesVar = makeVar<CardType[] | null | undefined>(undefined);
 const phRegionsVar = makeVar<PhRegion[] | null | undefined>(undefined);
 const notificationsVar = makeVar<any[]>([]);
+const favoriteItemsVar = makeVar<any[]>([]);
+const favItemsLoadingVar = makeVar<boolean>(false);
 
 const cache = new InMemoryCache({
   typePolicies: {
@@ -65,6 +67,16 @@ const cache = new InMemoryCache({
           read() {
             return notificationsVar();
           }
+        },
+        favoriteItems: {
+          read() {
+            return favoriteItemsVar();
+          }
+        },
+        favItemsLoading: {
+          read() {
+            return favItemsLoadingVar();
+          }
         }
       }
     }
@@ -85,5 +97,7 @@ export {
   cardTypesVar,
   phRegionsVar,
   notificationsVar,
+  favoriteItemsVar,
+  favItemsLoadingVar,
   client
 };

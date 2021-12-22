@@ -9,6 +9,7 @@ import variables from 'assets/styles/_variables.module.scss';
 type Props = {
   items: CardProduct[];
   loading?: boolean;
+  processingItems?: any;
   onCartClick?: (item: CardProduct) => void;
   onDetailClick?: (item: CardProduct) => void;
   onFavoriteClick?: (item: CardProduct) => void;
@@ -34,6 +35,7 @@ const LoadingOverlay: FC<LoadingOverlayProps> = ({ loading, children }) => (
 export const ShopList: FC<Props> = ({
   items,
   loading,
+  processingItems,
   onCartClick,
   onDetailClick,
   onFavoriteClick,
@@ -54,6 +56,7 @@ export const ShopList: FC<Props> = ({
           <ShopItem
             key={item.id}
             item={item}
+            loading={processingItems[item.id]}
             {...(onCartClick && { onCartClick })}
             {...(onDetailClick && { onDetailClick })}
             {...(onFavoriteClick && { onFavoriteClick })}
@@ -78,6 +81,7 @@ export const ShopList: FC<Props> = ({
 
 ShopList.defaultProps = {
   loading: false,
+  processingItems: {},
   onCartClick: undefined,
   onDetailClick: undefined,
   onFavoriteClick: undefined,
