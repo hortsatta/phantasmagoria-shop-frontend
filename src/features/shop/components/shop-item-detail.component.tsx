@@ -1,5 +1,5 @@
 import { ComponentProps, FC } from 'react';
-import { useQuery } from '@apollo/client';
+import { useQuery, useReactiveVar } from '@apollo/client';
 import {
   Box,
   BoxProps,
@@ -16,6 +16,7 @@ import {
 import { Knife, Tray, X as XSvg } from 'phosphor-react';
 import { motion } from 'framer-motion';
 
+import { currentUserAccountVar } from 'config';
 import { Card, CardProduct } from 'models';
 import { GET_CARD_PRODUCTS_DETAIL } from 'services/graphql';
 import { Icon, IconButton } from 'features/core/components';
@@ -39,10 +40,11 @@ export const ShopItemDetail: FC<Props> = ({
   onFavoriteClick,
   ...moreProps
 }) => {
+  const userAccount = useReactiveVar(currentUserAccountVar);
   const { data: { cardProducts = [] } = {}, loading } = useQuery(GET_CARD_PRODUCTS_DETAIL, {
-    variables: { where: { id } }
+    variables: { userAccountId: userAccount?.id || '', where: { id } }
   });
-  const { name, description, price, cards } = cardProducts[0] || {};
+  const { name, description, price, cards, favorites } = cardProducts[0] || {};
   const isCardsMultiple = (cards?.length || 0) > 1;
 
   return (
@@ -88,6 +90,7 @@ export const ShopItemDetail: FC<Props> = ({
                   h='100%'
                   zIndex={2}
                   icon={<Icon w={7} boxSizing='content-box' as={Knife} />}
+                  {...(favorites?.length && { color: variables.primaryColor })}
                   {...(onFavoriteClick && { onClick: () => onFavoriteClick(cardProducts[0]) })}
                 />
               </HStack>

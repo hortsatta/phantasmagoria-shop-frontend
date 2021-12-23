@@ -44,6 +44,7 @@ const GET_CARD_PRODUCTS = gql`
 
 const GET_CARD_PRODUCTS_DETAIL = gql`
   query GetCardProducts(
+    $userAccountId: ID
     $where: JSON
     $limit: Int
     $start: Int
@@ -80,6 +81,9 @@ const GET_CARD_PRODUCTS_DETAIL = gql`
           name
           url
         }
+      }
+      favorites(where: { user_account: $userAccountId }) {
+        id
       }
     }
   }

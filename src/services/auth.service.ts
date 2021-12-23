@@ -12,7 +12,7 @@ const signOut = () => {
   // Remove token from local storage and clear apollo cache.
   // eslint-disable-next-line no-undef
   localStorage.removeItem('token');
-  client.clearStore();
+  client.resetStore();
   currentUserAccountVar(null);
 };
 

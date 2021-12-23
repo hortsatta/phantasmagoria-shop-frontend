@@ -156,6 +156,7 @@ export const ShopListPage: FC = () => {
                 exit={{ opacity: 0, transform: 'translateX(32px)' }}
                 transition={{ type: 'tween', duration: 0.2 }}
                 onClose={() => setCurrentItemDetail(null)}
+                onFavoriteClick={(item: CardProduct) => updateFavoriteItem(item)}
               />
             )}
           </AnimatePresence>
