@@ -22,6 +22,7 @@ import { GET_CARD_PRODUCTS_DETAIL } from 'services/graphql';
 import { Icon, IconButton } from 'features/core/components';
 
 import variables from 'assets/styles/_variables.module.scss';
+import { FavoriteButton } from 'features/favorite/components';
 
 const MotioBox = motion<BoxProps>(Box);
 
@@ -85,12 +86,13 @@ export const ShopItemDetail: FC<Props> = ({
                   icon={<Icon w={7} boxSizing='content-box' as={Tray} />}
                   {...(onCartClick && { onClick: () => onCartClick(cardProducts[0]) })}
                 />
-                <IconButton
+                <FavoriteButton
                   aria-label='Add to favorites'
                   h='100%'
                   zIndex={2}
+                  fxScale={3}
                   icon={<Icon w={7} boxSizing='content-box' as={Knife} />}
-                  {...(favorites?.length && { color: variables.primaryColor })}
+                  isActive={!!favorites?.length}
                   {...(onFavoriteClick && { onClick: () => onFavoriteClick(cardProducts[0]) })}
                 />
               </HStack>

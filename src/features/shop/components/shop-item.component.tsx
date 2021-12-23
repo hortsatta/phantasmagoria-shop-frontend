@@ -4,6 +4,7 @@ import { Brain, Knife, PenNib, Tray } from 'phosphor-react';
 
 import { CardProduct } from 'models';
 import { Icon, IconButton, MotionSurface } from 'features/core/components';
+import { FavoriteButton } from 'features/favorite/components';
 
 import variables from 'assets/styles/_variables.module.scss';
 
@@ -109,12 +110,14 @@ export const ShopItem: FC<Props> = ({
             {...(onDetailClick && { onClick: () => onDetailClick(item) })}
           />
           <Divider h='90%' orientation='vertical' />
-          <IconButton
+          <FavoriteButton
             {...iconButtonProps}
             aria-label='Add to favorites'
+            w='100%'
+            wrapperProps={{ flex: 1, h: '100%', zIndex: 2 }}
             icon={<Icon w={6} boxSizing='content-box' as={Knife} />}
             isLoading={loading}
-            {...(favorites?.length && { color: variables.primaryColor })}
+            isActive={!!favorites?.length}
             {...(onFavoriteClick && { onClick: () => onFavoriteClick(item) })}
           />
           {onEditClick && (

@@ -1,9 +1,9 @@
 import { FC, useEffect, useRef, useState } from 'react';
 import Lottie from 'lottie-react';
-import lottieSpoopy from 'assets/images/lottie-spoopy.json';
-import lottieDone from 'assets/images/lottie-done.json';
 
 import { SubHeading, Surface } from 'features/core/components';
+import lottieSpoopy from 'assets/images/lottie-spoopy.json';
+import lottieDone from 'assets/images/lottie-done.json';
 
 type Props = {
   isComplete?: boolean;
