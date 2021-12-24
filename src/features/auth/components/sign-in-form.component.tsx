@@ -75,7 +75,7 @@ export const SignInForm: FC<Props> = ({ loading, onSubmit, ...moreProps }) => {
                   <InputRightElement pr={4}>
                     <IconButton
                       opacity={0.6}
-                      aria-label='Show/Hide Password'
+                      aria-label='show/hide password'
                       icon={
                         <Icon w={7} boxSizing='content-box' as={showPassword ? Eye : EyeClosed} />
                       }

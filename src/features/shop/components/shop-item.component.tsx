@@ -98,21 +98,21 @@ export const ShopItem: FC<Props> = ({
         >
           <IconButton
             {...iconButtonProps}
-            aria-label='Add to cart'
+            aria-label='add to cart'
             icon={<Icon w={6} boxSizing='content-box' as={Tray} />}
             {...(onCartClick && { onClick: () => onCartClick(item) })}
           />
           <Divider h='90%' orientation='vertical' />
           <IconButton
             {...iconButtonProps}
-            aria-label='View item detail'
+            aria-label='view item detail'
             icon={<Icon w={6} boxSizing='content-box' as={Brain} />}
             {...(onDetailClick && { onClick: () => onDetailClick(item) })}
           />
           <Divider h='90%' orientation='vertical' />
           <FavoriteButton
             {...iconButtonProps}
-            aria-label='Add to favorites'
+            aria-label='add to favorites'
             w='100%'
             wrapperProps={{ flex: 1, h: '100%', zIndex: 2 }}
             icon={<Icon w={6} boxSizing='content-box' as={Knife} />}
@@ -125,7 +125,7 @@ export const ShopItem: FC<Props> = ({
               <Divider h='90%' orientation='vertical' />
               <IconButton
                 {...iconButtonProps}
-                aria-label='Edit item'
+                aria-label='edit item'
                 icon={<Icon w={6} boxSizing='content-box' as={PenNib} />}
                 onClick={() => onEditClick(item)}
               />

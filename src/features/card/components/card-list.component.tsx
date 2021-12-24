@@ -41,7 +41,7 @@ const CardControl: FC<CardControlProps> = ({ onDetailClick, onEditClick }) => (
       divider={<StackDivider h='80%' alignSelf='center' opacity={0.3} orientation='vertical' />}
     >
       <IconButton
-        aria-label='View Card Detail'
+        aria-label='view card detail'
         flex={1}
         h='100%'
         icon={<Icon px={4} w={6} boxSizing='content-box' as={Brain} />}
@@ -49,7 +49,7 @@ const CardControl: FC<CardControlProps> = ({ onDetailClick, onEditClick }) => (
       />
       {onEditClick && (
         <IconButton
-          aria-label='Edit Card'
+          aria-label='edit card'
           flex={1}
           h='100%'
           icon={<Icon px={4} w={6} boxSizing='content-box' as={PenNib} />}

@@ -110,7 +110,7 @@ export const UpsertCardProductStep1: FC = () => {
             <FormSectionHeading
               rightComponent={
                 <IconButton
-                  aria-label='View Card Filters'
+                  aria-label='view card filters'
                   pos='relative'
                   icon={<Icon w={6} boxSizing='content-box' as={Funnel} />}
                   onClick={filterModalOnOpen}

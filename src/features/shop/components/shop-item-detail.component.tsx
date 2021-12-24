@@ -61,7 +61,7 @@ export const ShopItemDetail: FC<Props> = ({
             mb={1}
             w='100%'
             zIndex={2}
-            aria-label='Close detail'
+            aria-label='close detail'
             icon={<Icon w={6} boxSizing='content-box' as={XSvg} />}
             {...(onClose && { onClick: onClose })}
           />
@@ -80,14 +80,14 @@ export const ShopItemDetail: FC<Props> = ({
               </Text>
               <HStack spacing={2}>
                 <IconButton
-                  aria-label='Add to cart'
+                  aria-label='add to cart'
                   h='100%'
                   zIndex={2}
                   icon={<Icon w={7} boxSizing='content-box' as={Tray} />}
                   {...(onCartClick && { onClick: () => onCartClick(cardProducts[0]) })}
                 />
                 <FavoriteButton
-                  aria-label='Add to favorites'
+                  aria-label='add to favorites'
                   h='100%'
                   zIndex={2}
                   fxScale={3}

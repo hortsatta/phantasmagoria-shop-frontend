@@ -75,7 +75,7 @@ const CurrentFilters: FC<CurrentFiltersProps> = ({ filters, onFilterClick }) => 
         <Text {...filterTextProps}>No filters</Text>
       )}
       <IconButton
-        aria-label='View Card Filters'
+        aria-label='view card filters'
         pos='relative'
         icon={<Icon w={7} boxSizing='content-box' as={Funnel} />}
         onClick={onFilterClick}
