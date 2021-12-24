@@ -1,7 +1,7 @@
 import { AuditTrail } from './core.model';
 import { Card } from './card.model';
 
-type CardProduct = AuditTrail & {
+export type CardProduct = AuditTrail & {
   id: string;
   name: string;
   price: number;
@@ -12,5 +12,3 @@ type CardProduct = AuditTrail & {
   slug?: string;
   favorites?: any[];
 };
-
-export type { CardProduct };
