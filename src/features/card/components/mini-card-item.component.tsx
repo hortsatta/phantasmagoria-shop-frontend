@@ -33,7 +33,7 @@ export const MiniCardItem: FC<Props> = ({ card, rightComponent, ...moreProps }) 
       layout
       {...moreProps}
     >
-      <Box mr={4} h='100%' w='77px' bgColor='#28131b'>
+      <Box mr={4} h='100%' w='77px' bgColor={variables.bgColor}>
         {coverImageUri && <Image src={coverImageUri} objectFit='cover' />}
       </Box>
       <VStack flex={1} alignItems='flex-start'>

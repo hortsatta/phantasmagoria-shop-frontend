@@ -173,12 +173,8 @@ export const CardListPage: FC = () => {
                 )
               })}
             />
-
             <CardList
-              style={{
-                backgroundColor: variables.inputBgColor,
-                borderRadius: '4px'
-              }}
+              style={{ backgroundColor: variables.inputBgColor, borderRadius: '4px' }}
               cards={cards}
               loading={loading}
               onCardDetailClick={handleCardDetailClick}
