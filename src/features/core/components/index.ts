@@ -5,6 +5,7 @@ export * from './icon-button.component';
 export * from './image-upload.component';
 export * from './input.component';
 export * from './input-left-addon.component';
+export * from './loading-overlay.component';
 export * from './modal.component';
 export * from './nav.component';
 export * from './nav-item.component';
