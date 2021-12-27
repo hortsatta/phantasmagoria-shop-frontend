@@ -1,38 +1,32 @@
-import { ComponentProps, FC, useMemo, useState } from 'react';
-import numbro from 'numbro';
+import { ComponentProps, FC, useMemo } from 'react';
 import { Badge, Box, Flex, HStack, Image, Text, VStack } from '@chakra-ui/react';
 import { X as XSvg } from 'phosphor-react';
 
-import { CartItem as CartItemModel } from 'models';
+import { formatPrice } from 'helpers';
 import { MotionSurface } from 'features/core/components';
+import { CartItemFormData } from './cart-form.component';
 import { Quantity } from './quantity.component';
 
 import variables from 'assets/styles/_variables.module.scss';
 
 type Props = ComponentProps<typeof MotionSurface> & {
-  cartItem: CartItemModel;
+  cartItem: CartItemFormData;
+  onChange: (cartItem: CartItemFormData) => void;
 };
 
-const formatCurrency = (price: number) =>
-  numbro(price).formatCurrency({
-    currencySymbol: '\u20B1',
-    thousandSeparated: true,
-    mantissa: 2
-  });
-
-export const CartItem: FC<Props> = ({ cartItem, ...moreProps }) => {
-  const { quantity, cardProduct } = cartItem;
+export const CartItem: FC<Props> = ({ cartItem, onChange, ...moreProps }) => {
+  const { currentQuantity, cardProduct } = cartItem;
   const { name, price, image, cards } = cardProduct;
-  const [currentQuantity, setCurrentQuantity] = useState(quantity);
   const itemImage = useMemo(() => image?.url || cards[0].coverImage.url, [cardProduct]);
   const itemTotal = useMemo(() => currentQuantity * price, [currentQuantity, price]);
 
   const handleDecrement = () => {
-    setCurrentQuantity(currentQuantity - 1);
+    const cq = currentQuantity > 1 ? currentQuantity - 1 : 0;
+    onChange({ ...cartItem, currentQuantity: cq });
   };
 
   const handleIncrement = () => {
-    setCurrentQuantity(currentQuantity + 1);
+    onChange({ ...cartItem, currentQuantity: currentQuantity + 1 });
   };
 
   return (
@@ -59,7 +53,7 @@ export const CartItem: FC<Props> = ({ cartItem, ...moreProps }) => {
               {name}
             </Text>
             <Badge fontSize='md' variant='subtle'>
-              {formatCurrency(price)}
+              {formatPrice(price)}
             </Badge>
           </VStack>
           <Box pr={8}>
@@ -80,7 +74,7 @@ export const CartItem: FC<Props> = ({ cartItem, ...moreProps }) => {
           overflow='hidden'
           bgColor={variables.accentColor}
         >
-          <Text fontSize='md'>{formatCurrency(itemTotal)}</Text>
+          <Text>{formatPrice(itemTotal)}</Text>
         </Box>
       </Flex>
     </MotionSurface>
