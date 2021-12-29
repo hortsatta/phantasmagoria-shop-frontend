@@ -4,6 +4,7 @@ import { Brain, Knife, PenNib, Tray } from 'phosphor-react';
 
 import { CardProduct } from 'models';
 import { Icon, IconButton, MotionSurface } from 'features/core/components';
+import { AddToCartButton } from 'features/cart/components';
 import { FavoriteButton } from 'features/favorite/components';
 
 import variables from 'assets/styles/_variables.module.scss';
@@ -96,9 +97,11 @@ export const ShopItem: FC<Props> = ({
           w='100%'
           h='64px'
         >
-          <IconButton
+          <AddToCartButton
             {...iconButtonProps}
             aria-label='add to cart'
+            w='100%'
+            wrapperProps={{ flex: 1, h: '100%', zIndex: 2 }}
             icon={<Icon w={6} boxSizing='content-box' as={Tray} />}
             {...(onCartClick && { onClick: () => onCartClick(item) })}
           />

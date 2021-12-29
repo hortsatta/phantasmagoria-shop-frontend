@@ -15,6 +15,7 @@ import { AnimatePresence } from 'framer-motion';
 
 import { appModulesVar } from 'config';
 import { CardProduct } from 'models';
+import { useUpsertCart } from 'features/cart/hooks';
 import { useUpsertFavoriteCache } from 'features/favorite/hooks';
 import { Icon, IconButton, PageBox, Scrollbars, SearchInput } from 'features/core/components';
 import { useGetShopItemsByFilters } from '../hooks';
@@ -53,6 +54,7 @@ export const ShopListPage: FC = () => {
     setItemSort,
     setItemFilters
   } = useGetShopItemsByFilters(locState);
+  const { addCartItem } = useUpsertCart();
   const { updateFavoriteItem } = useUpsertFavoriteCache();
   const [currentItemDetail, setCurrentItemDetail] = useState<CardProduct | null>(null);
 
@@ -134,9 +136,10 @@ export const ShopListPage: FC = () => {
           <ShopList
             items={items}
             loading={loading}
+            onCartClick={(item: CardProduct) => addCartItem(item)}
             onDetailClick={(item: CardProduct) => setCurrentItemDetail(item)}
-            onEditClick={(item: CardProduct) => handleEditItem(item)}
             onFavoriteClick={(item: CardProduct) => updateFavoriteItem(item)}
+            onEditClick={(item: CardProduct) => handleEditItem(item)}
           />
         </Flex>
         <Divider pos='absolute' right='0px' h='100%' orientation='vertical' />
