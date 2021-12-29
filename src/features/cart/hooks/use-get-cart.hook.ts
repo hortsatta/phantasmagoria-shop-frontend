@@ -2,11 +2,11 @@ import { useMemo } from 'react';
 import { useReactiveVar, useQuery } from '@apollo/client';
 
 import { currentUserAccountVar } from 'config';
-import { CartItem } from 'models';
+import { Cart, CartItem } from 'models';
 import { GET_CARTS } from 'services/graphql';
 
 type Result = {
-  cartItems: CartItem[];
+  cart: Cart | null;
   loading: boolean;
 };
 
@@ -17,17 +17,16 @@ export const useGetCart = (): Result => {
     variables: { where: { user_account: userAccount?.id } }
   });
 
-  const cartItems = useMemo(() => {
+  const cart = useMemo(() => {
     if (!carts.length) {
-      return [];
+      return null;
     }
 
-    const { cartItems: items } = carts[0];
-    return items.filter((cartItem: CartItem) => !!cartItem.quantity);
+    const { cartItems: currentCartItems, ...moreCart } = carts[0];
+    const filteredCartItems = currentCartItems.filter((item: CartItem) => !!item.quantity);
+
+    return { ...moreCart, cartItems: filteredCartItems };
   }, [carts]);
 
-  return {
-    cartItems,
-    loading: getCartsLoading
-  };
+  return { cart, loading: getCartsLoading };
 };
