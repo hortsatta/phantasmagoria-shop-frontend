@@ -3,10 +3,11 @@ import { Flex, Center, Heading } from '@chakra-ui/react';
 
 import { PageBox } from 'features/core/components';
 import { CartForm } from '../components';
-import { useGetCart } from '../hooks';
+import { useGetCart, useUpsertCart } from '../hooks';
 
 export const CartPage: FC = () => {
   const { cart, loading } = useGetCart();
+  const { updateCartItems } = useUpsertCart();
 
   return (
     <PageBox d='flex' alignItems='flex-start' justifyContent='center' pb={0} h='100%' flex={1}>
@@ -24,7 +25,15 @@ export const CartPage: FC = () => {
             My Cart
           </Heading>
         </Center>
-        {cart && <CartForm w='100%' cart={cart} loading={loading} onSubmit={() => null} />}
+        {cart && (
+          <CartForm
+            w='100%'
+            cart={cart}
+            loading={loading}
+            onCartChange={updateCartItems}
+            onSubmit={() => null}
+          />
+        )}
       </Flex>
     </PageBox>
   );

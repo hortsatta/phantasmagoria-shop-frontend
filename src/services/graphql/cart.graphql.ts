@@ -44,4 +44,22 @@ const GET_CARTS = gql`
   }
 `;
 
-export { GET_CARTS };
+const UPDATE_CART_ITEMS = gql`
+  mutation UpdateCartItems(
+    $updateItems: [ComponentCartItemCartItemInput]
+    $removeItems: [ComponentCartItemCartItemInput]
+  ) {
+    updateCartItems(updateItems: $updateItems, removeItems: $removeItems) {
+      id
+      cartItems {
+        id
+        quantity
+        cardProduct: card_product {
+          id
+        }
+      }
+    }
+  }
+`;
+
+export { GET_CARTS, UPDATE_CART_ITEMS };

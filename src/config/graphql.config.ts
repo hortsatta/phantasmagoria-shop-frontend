@@ -3,6 +3,7 @@ import { createUploadLink } from 'apollo-upload-client';
 import { setContext } from '@apollo/client/link/context';
 
 import { AppModule, CardCategory, CardRarity, CardType, PhRegion, UserAccount } from 'models';
+import { CartItemFormData } from 'features/cart/components';
 
 const httpLink = createUploadLink({ uri: process.env.REACT_APP_API_URI });
 
@@ -28,6 +29,8 @@ const phRegionsVar = makeVar<PhRegion[] | null | undefined>(undefined);
 const notificationsVar = makeVar<any[]>([]);
 const favoriteItemsVar = makeVar<any[]>([]);
 const favItemsLoadingVar = makeVar<boolean>(false);
+const cartItemsVar = makeVar<CartItemFormData[]>([]);
+const cartItemsLoadingVar = makeVar<boolean>(false);
 
 const cache = new InMemoryCache({
   typePolicies: {
@@ -77,6 +80,16 @@ const cache = new InMemoryCache({
           read() {
             return favItemsLoadingVar();
           }
+        },
+        cartItems: {
+          read() {
+            return cartItemsVar();
+          }
+        },
+        cartItemsLoadingVar: {
+          read() {
+            return cartItemsLoadingVar();
+          }
         }
       }
     }
@@ -99,5 +112,7 @@ export {
   notificationsVar,
   favoriteItemsVar,
   favItemsLoadingVar,
+  cartItemsVar,
+  cartItemsLoadingVar,
   client
 };

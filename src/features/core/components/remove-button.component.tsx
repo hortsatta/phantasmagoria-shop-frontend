@@ -4,13 +4,15 @@ import { WarningCircle, TrashSimple } from 'phosphor-react';
 
 import { Icon } from './icon.component';
 
-type Props = { onRemove: () => void };
+type Props = {
+  onClick: () => void;
+};
 
-export const RemoveButton: FC<Props> = ({ onRemove }) => {
+export const RemoveButton: FC<Props> = ({ onClick }) => {
   const [confirmRemove, setConfirmRemove] = useState(false);
 
-  const handleCardRemove = () => {
-    onRemove && onRemove();
+  const handleRemove = () => {
+    onClick && onClick();
     setConfirmRemove(false);
   };
 
@@ -20,7 +22,7 @@ export const RemoveButton: FC<Props> = ({ onRemove }) => {
       color='orange.400'
       variant='ghost'
       size='xs'
-      onClick={handleCardRemove}
+      onClick={handleRemove}
       onBlur={() => setConfirmRemove(false)}
       leftIcon={<Icon w={6} as={WarningCircle} />}
     >

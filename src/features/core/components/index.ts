@@ -15,6 +15,7 @@ export * from './number-input.component';
 export * from './page-box.component';
 export * from './radio.component';
 export * from './remove-button.component';
+export * from './remove-icon-button.component';
 export * from './scrollbars.component';
 export * from './search-input.component';
 export * from './select.component';
