@@ -89,7 +89,10 @@ const CartForm: FC<Props> = ({
 
   useEffect(() => {
     const cartItems = getValues('cartItems');
-    if (!onCartChange || !cartItems.length) {
+    const isDirty = cartItems.some(
+      item => item.currentQuantity === undefined || item.currentQuantity !== 0
+    );
+    if (!onCartChange || !cartItems.length || !isDirty) {
       return;
     }
 

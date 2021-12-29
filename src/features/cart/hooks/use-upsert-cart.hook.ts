@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useReactiveVar } from '@apollo/client';
+
 import { cartItemsVar } from 'config';
-import { CartItemFormData } from '../components';
 import { CardProduct } from 'models';
+import { CartItemFormData } from '../components';
 
 type Result = {
   updateCartItems: (items: CartItemFormData[]) => void;
@@ -10,6 +12,7 @@ type Result = {
 
 export const useUpsertCart = (): Result => {
   const [currentCartItems, setCurrentCartItems] = useState<any>([]);
+  const cartItems = useReactiveVar(cartItemsVar);
 
   const updateCartItems = useCallback((items: CartItemFormData[]) => {
     cartItemsVar([...items]);
@@ -41,6 +44,10 @@ export const useUpsertCart = (): Result => {
     },
     [currentCartItems]
   );
+
+  useEffect(() => {
+    !cartItems.length && setCurrentCartItems([]);
+  }, [cartItems]);
 
   useEffect(() => {
     currentCartItems.length && cartItemsVar([...currentCartItems]);

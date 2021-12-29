@@ -39,6 +39,7 @@ const useEffectUpsertCart = () => {
       cartItemsVar([]);
     } catch (err) {
       notify('error', 'Failed', messages.problem);
+      cartItemsVar([]);
     }
   }, []);
 
