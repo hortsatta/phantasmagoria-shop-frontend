@@ -14,10 +14,6 @@ const useEffectUpsertFavorite = () => {
   const { debouncedValue: debounceFavoriteItems, loading: debounceFavItemsLoading } =
     useDebounceValue(favoriteItems, DEBOUNCE_DURATION);
 
-  useEffect(() => {
-    favItemsLoadingVar(debounceFavItemsLoading);
-  }, [debounceFavItemsLoading]);
-
   const updateFavorites = useCallback(async (items: any[]) => {
     const addItems = items.filter((fi: any) => fi.isFavorite).map((fi: any) => fi.id);
     const removeItems = items.filter((fi: any) => !fi.isFavorite).map((fi: any) => fi.id);
@@ -30,6 +26,10 @@ const useEffectUpsertFavorite = () => {
       notify('error', 'Failed', messages.problem);
     }
   }, []);
+
+  useEffect(() => {
+    favItemsLoadingVar(debounceFavItemsLoading);
+  }, [debounceFavItemsLoading]);
 
   useEffect(() => {
     if (!debounceFavoriteItems.length) {
