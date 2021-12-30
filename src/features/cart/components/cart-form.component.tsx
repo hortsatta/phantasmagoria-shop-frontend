@@ -24,9 +24,10 @@ type CartFormData = Omit<Cart, 'cartItems'> & {
 type Props = Omit<FlexProps, 'onSubmit'> & {
   onSubmit: (cart: CartFormData) => void;
   cart: Cart | null;
-  loading?: boolean;
   isComplete?: boolean;
   onCartChange?: (items: CartItemFormData[]) => void;
+  onClearCartItems?: () => void;
+  loading?: boolean;
 };
 
 const schema = z.object({
@@ -43,9 +44,10 @@ const defaultValues: CartFormData = {
 const CartForm: FC<Props> = ({
   onSubmit,
   cart,
-  loading,
   isComplete,
   onCartChange,
+  onClearCartItems,
+  loading,
   ...moreProps
 }) => {
   const currentCart = useMemo(() => {
@@ -128,9 +130,14 @@ const CartForm: FC<Props> = ({
 
   return (
     <Flex as='form' pos='relative' flexDir='column' onSubmit={handleSubmit} {...moreProps}>
-      <Surface p={12}>
-        <LoadingOverlay loading={loading}>
+      <Surface pos='relative' p={12}>
+        <LoadingOverlay h='100%' bgColor='rgba(0,0,0,0.5)' loading={loading}>
           <VStack flex={1} alignItems='flex-start' spacing={4}>
+            {isEmpty && (
+              <Text w='100%' textAlign='center' fontFamily={variables.primaryFont} fontSize='4xl'>
+                we could only show nothing.
+              </Text>
+            )}
             {fields.map((field, index) => (
               <Controller
                 key={field.id}
@@ -145,43 +152,33 @@ const CartForm: FC<Props> = ({
                 )}
               />
             ))}
-            {!isEmpty && (
-              <>
-                <Divider />
-                <Flex w='100%' justifyContent='flex-end' alignItems='center'>
-                  <SubHeading mr={4} fontSize='3xl'>
-                    Total
-                  </SubHeading>
-                  <Box
-                    flexGrow={0}
-                    py={2}
-                    minW='130px'
-                    bgColor={variables.accentColor}
-                    textAlign='center'
-                    borderRadius='3px'
-                    overflow='hidden'
-                  >
-                    <Text fontSize='xl'>{formatPrice(totalPrice)}</Text>
-                  </Box>
-                </Flex>
-              </>
-            )}
+            <Divider />
+            <Flex w='100%' justifyContent='flex-end' alignItems='center'>
+              <SubHeading mr={4} fontSize='3xl'>
+                Total
+              </SubHeading>
+              <Box
+                flexGrow={0}
+                py={2}
+                minW='130px'
+                bgColor={variables.accentColor}
+                textAlign='center'
+                borderRadius='3px'
+                overflow='hidden'
+              >
+                <Text fontSize='xl'>{formatPrice(totalPrice)}</Text>
+              </Box>
+            </Flex>
           </VStack>
-          {isEmpty && (
-            <Text w='100%' textAlign='center' fontFamily={variables.primaryFont} fontSize='4xl'>
-              we could only show nothing.
-            </Text>
-          )}
         </LoadingOverlay>
       </Surface>
-      <ButtonGroup
-        justifyContent='space-between'
-        alignItems='center'
-        flex={1}
-        mt={6}
-        disabled={loading || isComplete}
-      >
-        <Button variant='ghost' leftIcon={<Icon as={Eraser} />}>
+      <ButtonGroup justifyContent='space-between' alignItems='center' flex={1} mt={6}>
+        <Button
+          variant='ghost'
+          leftIcon={<Icon as={Eraser} />}
+          onClick={onClearCartItems}
+          disabled={isComplete || isEmpty || loading}
+        >
           Clear All
         </Button>
         <Button
@@ -191,6 +188,7 @@ const CartForm: FC<Props> = ({
           onClick={handleSubmit}
           leftIcon={<Icon w={6} as={RocketLaunch} />}
           isLoading={loading}
+          disabled={isComplete || isEmpty}
         >
           Checkout
         </Button>
@@ -200,9 +198,10 @@ const CartForm: FC<Props> = ({
 };
 
 CartForm.defaultProps = {
-  loading: false,
   isComplete: false,
-  onCartChange: undefined
+  onCartChange: undefined,
+  onClearCartItems: undefined,
+  loading: false
 };
 
 export type { CartItemFormData, CartFormData };

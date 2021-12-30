@@ -1,21 +1,33 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useReactiveVar } from '@apollo/client';
+import { useMutation, useReactiveVar } from '@apollo/client';
 
 import { cartItemsVar } from 'config';
 import { CardProduct } from 'models';
+import { CLEAR_CART_ITEMS } from 'services/graphql';
+import { useDebounce } from 'features/core/hooks';
 import { CartItemFormData } from '../components';
 
 type Result = {
   updateCartItems: (items: CartItemFormData[]) => void;
+  clearCartItems: () => void;
   addCartItem: (cardProduct: CardProduct) => void;
+  loading: boolean;
 };
 
 export const useUpsertCart = (): Result => {
   const [currentCartItems, setCurrentCartItems] = useState<any>([]);
   const cartItems = useReactiveVar(cartItemsVar);
+  const [clearCart, { loading: clearCartItemsLoading }] = useMutation(CLEAR_CART_ITEMS);
+  const { debounce, loading: debounceLoading } = useDebounce();
 
   const updateCartItems = useCallback((items: CartItemFormData[]) => {
     cartItemsVar([...items]);
+  }, []);
+
+  const clearCartItems = useCallback(async () => {
+    debounce();
+    await clearCart();
+    cartItemsVar([]);
   }, []);
 
   const addCartItem = useCallback(
@@ -53,5 +65,10 @@ export const useUpsertCart = (): Result => {
     currentCartItems.length && cartItemsVar([...currentCartItems]);
   }, [currentCartItems]);
 
-  return { updateCartItems, addCartItem };
+  return {
+    updateCartItems,
+    clearCartItems,
+    addCartItem,
+    loading: clearCartItemsLoading || debounceLoading
+  };
 };

@@ -7,7 +7,7 @@ import { useGetCart, useUpsertCart } from '../hooks';
 
 export const CartPage: FC = () => {
   const { cart, loading } = useGetCart();
-  const { updateCartItems } = useUpsertCart();
+  const { updateCartItems, clearCartItems, loading: upsertCartLoading } = useUpsertCart();
 
   return (
     <PageBox d='flex' alignItems='flex-start' justifyContent='center' pb={0} h='100%' flex={1}>
@@ -29,9 +29,10 @@ export const CartPage: FC = () => {
           <CartForm
             w='100%'
             cart={cart}
-            loading={loading}
             onCartChange={updateCartItems}
+            onClearCartItems={clearCartItems}
             onSubmit={() => null}
+            loading={loading || upsertCartLoading}
           />
         )}
       </Flex>

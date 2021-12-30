@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useCallback, useState } from 'react';
 import { Button } from '@chakra-ui/react';
 import { WarningCircle, TrashSimple } from 'phosphor-react';
 
@@ -11,10 +11,10 @@ type Props = {
 export const RemoveButton: FC<Props> = ({ onClick }) => {
   const [confirmRemove, setConfirmRemove] = useState(false);
 
-  const handleRemove = () => {
+  const handleRemove = useCallback(() => {
     onClick && onClick();
     setConfirmRemove(false);
-  };
+  }, [onClick, setConfirmRemove]);
 
   return confirmRemove ? (
     <Button

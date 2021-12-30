@@ -1,4 +1,4 @@
-import { ComponentProps, FC } from 'react';
+import { ComponentProps, FC, useCallback } from 'react';
 import { Box, BoxProps, Flex, FlexProps, Text } from '@chakra-ui/react';
 import { motion, useAnimation } from 'framer-motion';
 
@@ -18,7 +18,7 @@ export const AddToCartButton: FC<Props> = ({ wrapperProps, onClick, ...moreProps
   const controls = useAnimation();
   const { debounce, loading: debounceLoading } = useDebounce();
 
-  const handleClick = () => {
+  const handleClick = useCallback(() => {
     if (debounceLoading) {
       return;
     }
@@ -30,7 +30,7 @@ export const AddToCartButton: FC<Props> = ({ wrapperProps, onClick, ...moreProps
       y: [10, -10, -10, -10]
     });
     onClick && onClick();
-  };
+  }, [onClick, debounce, debounceLoading]);
 
   return (
     <Box pos='relative' {...wrapperProps}>
