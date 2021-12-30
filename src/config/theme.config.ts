@@ -104,7 +104,7 @@ const Button = {
     ghost: {
       _active: { bgColor: 'rgba(0,0,0,0)' },
       _focus: { boxShadow: 0 },
-      _hover: { bgColor: 'rgba(0,0,0,0)', color: variables.primaryColor }
+      _hover: { bgColor: variables.hoverBgColor }
     }
   }
 };

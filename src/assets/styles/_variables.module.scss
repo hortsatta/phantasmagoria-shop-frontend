@@ -12,6 +12,7 @@ $error-color: #af0000;
 $warning-color: #c76700;
 $input-bg-color: rgba(126,16,53,0.15);
 $input-bg-focus-color: #420f2a;
+$hover-bg-color: rgba(255,193,227,0.15);
 
 :export {
   primaryColor: $primary-color;
@@ -24,6 +25,7 @@ $input-bg-focus-color: #420f2a;
   warningColor: $warning-color;
   inputBgColor: $input-bg-color;
   inputBgFocusColor: $input-bg-focus-color;
+  hoverBgColor: $hover-bg-color;
   primaryFont: $primary-font;
   accentFont: $accent-font;
   textFont: $text-font;

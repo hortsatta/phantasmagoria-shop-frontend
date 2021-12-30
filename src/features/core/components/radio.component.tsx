@@ -25,7 +25,7 @@ export const Radio: FC = ({ children, ...moreProps }) => {
         cursor='pointer'
         transition='all 0.2s ease'
         _checked={{ bgColor: variables.accentColor }}
-        _hover={{ color: input.checked ? variables.textColor : variables.primaryColor }}
+        _hover={{ bgColor: input.checked ? variables.accentColor : variables.hoverBgColor }}
       >
         <Box mr={2}>{input.checked ? <CheckCircle weight='bold' /> : <Circle weight='bold' />}</Box>
         {children}
