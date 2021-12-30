@@ -62,4 +62,12 @@ const UPDATE_CART_ITEMS = gql`
   }
 `;
 
-export { GET_CARTS, UPDATE_CART_ITEMS };
+const CLEAR_CART_ITEMS = gql`
+  mutation ClearCartItems {
+    clearCartItems {
+      id
+    }
+  }
+`;
+
+export { GET_CARTS, UPDATE_CART_ITEMS, CLEAR_CART_ITEMS };
