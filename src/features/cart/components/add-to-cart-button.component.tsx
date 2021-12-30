@@ -25,9 +25,10 @@ export const AddToCartButton: FC<Props> = ({ wrapperProps, onClick, ...moreProps
 
     debounce(() => null, 500);
     controls.start({
-      opacity: [1, 1, 1, 0],
-      scale: [1, 1, 1, 0],
-      y: [10, -10, -10, -10]
+      opacity: [1, 1, 1, 1, 1, 0],
+      scale: [0, 1.2, 1, 1, 1, 0],
+      y: [10, 8, 6, -5, -10, -10],
+      zIndex: [2]
     });
     onClick && onClick();
   }, [onClick, debounce, debounceLoading]);
@@ -45,12 +46,12 @@ export const AddToCartButton: FC<Props> = ({ wrapperProps, onClick, ...moreProps
         h={7}
         bgColor={variables.primaryColor}
         borderRadius='99px'
-        opacity={0}
         overflow='hidden'
-        zIndex={2}
+        opacity={0}
+        zIndex={-1}
         initial={false}
         animate={controls}
-        transition={{ duration: 0.8, ease: 'linear', times: [0, 0.2, 0.8, 1] }}
+        transition={{ duration: 1, ease: 'linear', times: [0, 0.1, 0.15, 0.2, 0.8, 1] }}
       >
         <Text mr='2px'>+1</Text>
       </MotionFlex>

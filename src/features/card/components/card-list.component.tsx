@@ -32,6 +32,18 @@ type CardControlProps = {
   onEditClick?: (e: any) => void;
 };
 
+const iconButtonProps = {
+  w: '100%',
+  h: '100%'
+};
+
+const iconButtonWrapperProps = {
+  p: 1.5,
+  flex: 1,
+  w: '56px',
+  h: '100%'
+};
+
 const CardControl: FC<CardControlProps> = ({ onDetailClick, onEditClick }) => (
   <Flex h='100%' alignItems='center'>
     <Divider h='80%' alignSelf='center' orientation='vertical' />
@@ -40,21 +52,23 @@ const CardControl: FC<CardControlProps> = ({ onDetailClick, onEditClick }) => (
       spacing={0}
       divider={<StackDivider h='80%' alignSelf='center' opacity={0.3} orientation='vertical' />}
     >
-      <IconButton
-        aria-label='view card detail'
-        flex={1}
-        h='100%'
-        icon={<Icon px={4} w={6} boxSizing='content-box' as={Brain} />}
-        onClick={onDetailClick}
-      />
-      {onEditClick && (
+      <Box {...iconButtonWrapperProps}>
         <IconButton
-          aria-label='edit card'
-          flex={1}
-          h='100%'
-          icon={<Icon px={4} w={6} boxSizing='content-box' as={PenNib} />}
-          onClick={onEditClick}
+          {...iconButtonProps}
+          aria-label='view card detail'
+          icon={<Icon w={6} boxSizing='content-box' as={Brain} />}
+          onClick={onDetailClick}
         />
+      </Box>
+      {onEditClick && (
+        <Box {...iconButtonWrapperProps}>
+          <IconButton
+            {...iconButtonProps}
+            aria-label='edit card'
+            icon={<Icon w={6} boxSizing='content-box' as={PenNib} />}
+            onClick={onEditClick}
+          />
+        </Box>
       )}
     </HStack>
   </Flex>

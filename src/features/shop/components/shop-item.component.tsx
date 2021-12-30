@@ -21,13 +21,21 @@ type Props = {
 const iconButtonProps = {
   flex: 1,
   h: '100%',
-  zIndex: 2,
+  w: '100%',
   _loading: {
     d: 'flex',
     w: '100%',
     justifyContent: 'center',
     alignItems: 'center'
   }
+};
+
+const iconButtonWrapperProps = {
+  p: 1.5,
+  flex: 1,
+  w: '100%',
+  h: '100%',
+  zIndex: 2
 };
 
 export const ShopItem: FC<Props> = ({
@@ -101,24 +109,25 @@ export const ShopItem: FC<Props> = ({
             {...iconButtonProps}
             aria-label='add to cart'
             w='100%'
-            wrapperProps={{ flex: 1, h: '100%', zIndex: 2 }}
+            wrapperProps={{ ...iconButtonWrapperProps }}
             icon={<Icon w={6} boxSizing='content-box' as={Tray} />}
             {...(onCartClick && { onClick: () => onCartClick(item) })}
           />
           <Divider h='90%' orientation='vertical' />
-          <IconButton
-            {...iconButtonProps}
-            aria-label='view item detail'
-            icon={<Icon w={6} boxSizing='content-box' as={Brain} />}
-            {...(onDetailClick && { onClick: () => onDetailClick(item) })}
-          />
+          <Box {...iconButtonWrapperProps}>
+            <IconButton
+              {...iconButtonProps}
+              aria-label='view item detail'
+              icon={<Icon w={6} boxSizing='content-box' as={Brain} />}
+              {...(onDetailClick && { onClick: () => onDetailClick(item) })}
+            />
+          </Box>
           <Divider h='90%' orientation='vertical' />
           <FavoriteButton
             {...iconButtonProps}
             aria-label='add to favorites'
             w='100%'
-            wrapperProps={{ flex: 1, h: '100%', zIndex: 2 }}
-            icon={<Icon w={6} boxSizing='content-box' as={Knife} />}
+            wrapperProps={{ ...iconButtonWrapperProps }}
             isLoading={loading}
             isActive={!!favorites?.length}
             {...(onFavoriteClick && { onClick: () => onFavoriteClick(item) })}
@@ -126,12 +135,14 @@ export const ShopItem: FC<Props> = ({
           {onEditClick && (
             <>
               <Divider h='90%' orientation='vertical' />
-              <IconButton
-                {...iconButtonProps}
-                aria-label='edit item'
-                icon={<Icon w={6} boxSizing='content-box' as={PenNib} />}
-                onClick={() => onEditClick(item)}
-              />
+              <Box {...iconButtonWrapperProps}>
+                <IconButton
+                  {...iconButtonProps}
+                  aria-label='edit item'
+                  icon={<Icon w={6} boxSizing='content-box' as={PenNib} />}
+                  onClick={() => onEditClick(item)}
+                />
+              </Box>
             </>
           )}
         </Flex>

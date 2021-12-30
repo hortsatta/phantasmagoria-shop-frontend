@@ -13,18 +13,25 @@ import {
   Text,
   VStack
 } from '@chakra-ui/react';
-import { Knife, Tray, X as XSvg } from 'phosphor-react';
+import { Tray, X as XSvg } from 'phosphor-react';
 import { motion } from 'framer-motion';
 
 import { currentUserAccountVar } from 'config';
 import { Card, CardProduct } from 'models';
 import { GET_CARD_PRODUCTS_DETAIL } from 'services/graphql';
 import { Icon, IconButton } from 'features/core/components';
-
-import variables from 'assets/styles/_variables.module.scss';
+import { AddToCartButton } from 'features/cart/components';
 import { FavoriteButton } from 'features/favorite/components';
 
+import variables from 'assets/styles/_variables.module.scss';
+
 const MotioBox = motion<BoxProps>(Box);
+
+const iconButtonProps = {
+  w: '100%',
+  h: '100%',
+  wrapperProps: { w: '50px', h: '50px', zIndex: 2 }
+};
 
 type Props = Omit<ComponentProps<typeof MotioBox>, 'transition'> & {
   id: string;
@@ -78,21 +85,17 @@ export const ShopItemDetail: FC<Props> = ({
               >
                 {price && `\u20B1${price}`}
               </Text>
-              <HStack spacing={2}>
-                <IconButton
+              <HStack spacing={0}>
+                <AddToCartButton
                   aria-label='add to cart'
-                  h='100%'
-                  zIndex={2}
-                  icon={<Icon w={7} boxSizing='content-box' as={Tray} />}
+                  icon={<Icon w={6} boxSizing='content-box' as={Tray} />}
+                  {...iconButtonProps}
                   {...(onCartClick && { onClick: () => onCartClick(cardProducts[0]) })}
                 />
                 <FavoriteButton
                   aria-label='add to favorites'
-                  h='100%'
-                  zIndex={2}
-                  fxScale={3}
-                  icon={<Icon w={7} boxSizing='content-box' as={Knife} />}
                   isActive={!!favorites?.length}
+                  {...iconButtonProps}
                   {...(onFavoriteClick && { onClick: () => onFavoriteClick(cardProducts[0]) })}
                 />
               </HStack>
