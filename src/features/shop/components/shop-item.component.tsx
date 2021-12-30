@@ -1,7 +1,8 @@
 import { FC, useMemo } from 'react';
 import { Box, Button, Divider, Flex, Heading, Image, Text } from '@chakra-ui/react';
-import { Brain, Knife, PenNib, Tray } from 'phosphor-react';
+import { Brain, PenNib, Tray } from 'phosphor-react';
 
+import { formatPrice } from 'helpers';
 import { CardProduct } from 'models';
 import { Icon, IconButton, MotionSurface } from 'features/core/components';
 import { AddToCartButton } from 'features/cart/components';
@@ -79,7 +80,7 @@ export const ShopItem: FC<Props> = ({
           borderRadius='999px'
           overflow='hidden'
         >
-          {price && `\u20B1${price}`}
+          {formatPrice(price)}
         </Text>
         <Image src={itemImage} w='100%' bgColor='rgba(0,0,0,0.3)' objectFit='contain' />
       </Box>

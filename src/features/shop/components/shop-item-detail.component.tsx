@@ -16,6 +16,7 @@ import {
 import { Tray, X as XSvg } from 'phosphor-react';
 import { motion } from 'framer-motion';
 
+import { formatPrice } from 'helpers';
 import { currentUserAccountVar } from 'config';
 import { Card, CardProduct } from 'models';
 import { GET_CARD_PRODUCTS_DETAIL } from 'services/graphql';
@@ -83,7 +84,7 @@ export const ShopItemDetail: FC<Props> = ({
                 borderRadius='999px'
                 overflow='hidden'
               >
-                {price && `\u20B1${price}`}
+                {formatPrice(price)}
               </Text>
               <HStack spacing={0}>
                 <AddToCartButton
