@@ -2,7 +2,7 @@ import { MutableRefObject, useCallback, useRef, useState } from 'react';
 import { useMutation } from '@apollo/client';
 
 import { messages } from 'config';
-import { CREATE_USER_ACCOUNT, SIGN_UP } from 'services/graphql';
+import { CREATE_USER_ACCOUNT, UPDATE_USER_ACCOUNT, SIGN_UP } from 'services/graphql';
 import { useDebounce, useNotification } from 'features/core/hooks';
 import { UserFormData, UserOptionalFormData } from '../components';
 
@@ -22,6 +22,7 @@ export const useSignUp = (): Result => {
   const [register, { loading: registerLoading }] = useMutation(SIGN_UP);
   const [createUserAccount, { loading: createUserAccountLoading }] =
     useMutation(CREATE_USER_ACCOUNT);
+  const [updateUserAccount, { loading: updateAccountLoading }] = useMutation(UPDATE_USER_ACCOUNT);
   const [isSignUpComplete, setIsSignUpComplete] = useState(false);
   const [isOptionalDetailComplete, setIsOptionalDetailComplete] = useState(false);
   const currentUser = useRef<any>(null);
@@ -31,8 +32,16 @@ export const useSignUp = (): Result => {
     debounce();
 
     try {
-      const { data } = await register({ variables: { username: email, email, password } });
-      currentUser.current = data.register;
+      const {
+        data: { register: registerData }
+      } = await register({ variables: { username: email, email, password } });
+      const { data: userAccountData } = await createUserAccount({
+        variables: { userAccount: { user: registerData.currentUser.user.id } }
+      });
+      const { jwt } = registerData;
+      const { userAccount } = userAccountData.createUserAccount;
+
+      currentUser.current = { jwt, userAccount };
       setIsSignUpComplete(true);
     } catch (err) {
       notify('error', 'Failed', messages.problem);
@@ -41,19 +50,19 @@ export const useSignUp = (): Result => {
 
   const addOptionalData = useCallback(async (data: UserOptionalFormData) => {
     const { displayName, fullName, ...address } = data || {};
-    const {
-      currentUser: { user }
-    } = currentUser.current;
+    const { userAccount: currentUserAccount } = currentUser.current;
     debounce();
 
     try {
-      const userAccount = {
-        displayName,
-        fullName,
-        addresses: [{ ...address, fullName }],
-        user: user.userAccount.user.id
+      const variables = {
+        id: currentUserAccount.id,
+        userAccount: {
+          displayName,
+          fullName,
+          addresses: [{ ...address, fullName }]
+        }
       };
-      await createUserAccount({ variables: userAccount });
+      await updateUserAccount({ variables });
       setIsOptionalDetailComplete(true);
     } catch (err) {
       notify('error', 'Failed', messages.problem);
@@ -61,7 +70,7 @@ export const useSignUp = (): Result => {
   }, []);
 
   return {
-    loading: debounceLoading || registerLoading || createUserAccountLoading,
+    loading: debounceLoading || registerLoading || createUserAccountLoading || updateAccountLoading,
     isSignUpComplete,
     isOptionalDetailComplete,
     currentUser,
