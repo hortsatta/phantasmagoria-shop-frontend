@@ -3,7 +3,7 @@ import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Box, Button, ButtonGroup, Divider, Flex, FlexProps, Text, VStack } from '@chakra-ui/react';
-import { Eraser, RocketLaunch } from 'phosphor-react';
+import { Eraser, ArrowFatLinesRight } from 'phosphor-react';
 
 import { formatPrice } from 'helpers';
 import { Cart, CartItem as CartItemModel } from 'models';
@@ -25,6 +25,7 @@ type Props = Omit<FlexProps, 'onSubmit'> & {
   onSubmit: (cart: CartFormData) => void;
   cart: Cart | null;
   isComplete?: boolean;
+  isSubmitting?: boolean;
   onCartChange?: (items: CartItemFormData[]) => void;
   onClearCartItems?: () => void;
   loading?: boolean;
@@ -45,6 +46,7 @@ const CartForm: FC<Props> = ({
   onSubmit,
   cart,
   isComplete,
+  isSubmitting,
   onCartChange,
   onClearCartItems,
   loading,
@@ -68,6 +70,11 @@ const CartForm: FC<Props> = ({
   }, [cart]);
 
   const isEmpty = useMemo(() => !currentCart.cartItems.length && !loading, [currentCart, loading]);
+
+  const isDisabled = useMemo(
+    () => isComplete || isEmpty || loading || isSubmitting,
+    [isComplete, isEmpty, loading, isSubmitting]
+  );
 
   const {
     control,
@@ -104,10 +111,8 @@ const CartForm: FC<Props> = ({
   const handleSubmit = useCallback(
     (event: FormEvent) => {
       event.preventDefault();
-
-      submitForm(async (cartFormData: CartFormData) => {
-        console.log('cartFormData', cartFormData);
-        await onSubmit(cartFormData);
+      submitForm((cartFormData: CartFormData) => {
+        onSubmit(cartFormData);
       })();
     },
     [submitForm, onSubmit]
@@ -155,7 +160,7 @@ const CartForm: FC<Props> = ({
             <Divider />
             <Flex w='100%' justifyContent='flex-end' alignItems='center'>
               <SubHeading mr={4} fontSize='3xl'>
-                Total
+                Subtotal
               </SubHeading>
               <Box
                 flexGrow={0}
@@ -177,7 +182,7 @@ const CartForm: FC<Props> = ({
           variant='ghost'
           leftIcon={<Icon as={Eraser} />}
           onClick={onClearCartItems}
-          disabled={isComplete || isEmpty || loading}
+          disabled={isDisabled}
         >
           Clear All
         </Button>
@@ -186,9 +191,9 @@ const CartForm: FC<Props> = ({
           pr={7}
           w='190px'
           onClick={handleSubmit}
-          leftIcon={<Icon w={6} as={RocketLaunch} />}
-          isLoading={loading}
-          disabled={isComplete || isEmpty}
+          leftIcon={<Icon w={6} as={ArrowFatLinesRight} />}
+          isLoading={loading || isSubmitting}
+          disabled={isDisabled}
         >
           Checkout
         </Button>
@@ -199,6 +204,7 @@ const CartForm: FC<Props> = ({
 
 CartForm.defaultProps = {
   isComplete: false,
+  isSubmitting: false,
   onCartChange: undefined,
   onClearCartItems: undefined,
   loading: false

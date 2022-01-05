@@ -39,7 +39,7 @@ export const ShopAdminControl: FC = () => {
   );
 
   return (
-    <VStack flexDir='column' alignItems='flex-start'>
+    <VStack alignItems='flex-start'>
       <Box>
         <Text {...sectionHeaderStyles}>Shop Item</Text>
         <Button

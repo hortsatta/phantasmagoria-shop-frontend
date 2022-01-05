@@ -43,6 +43,10 @@ const styles: StylesConfig = {
     ...provided,
     width: '100%'
   }),
+  valueContainer: provided => ({
+    ...provided,
+    paddingInline: '16px'
+  }),
   control: (provided, state) => ({
     ...provided,
     padding: 0,

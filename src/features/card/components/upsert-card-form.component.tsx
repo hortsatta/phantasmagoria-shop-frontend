@@ -171,7 +171,7 @@ const UpsertCardForm: FC<Props> = ({
           resetDisabled={!isDirty || isComplete}
           submitDisabled={isComplete}
           loading={loading}
-          {...(onRemove && { leftElement: <RemoveButton onRemove={onRemove} /> })}
+          {...(onRemove && { leftElement: <RemoveButton onClick={onRemove} /> })}
         />
       </Box>
     </FormProvider>

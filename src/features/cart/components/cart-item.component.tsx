@@ -1,4 +1,4 @@
-import { ComponentProps, FC, useMemo } from 'react';
+import { ComponentProps, FC, useCallback, useMemo } from 'react';
 import { Badge, Box, Flex, HStack, Image, Spinner, Text, VStack } from '@chakra-ui/react';
 import { X as XSvg } from 'phosphor-react';
 
@@ -11,7 +11,7 @@ import variables from 'assets/styles/_variables.module.scss';
 
 type Props = Omit<ComponentProps<typeof MotionSurface>, 'onChange'> & {
   cartItem: CartItemFormData;
-  onChange: (cartItem: CartItemFormData) => void;
+  onChange?: (cartItem: CartItemFormData) => void;
 };
 
 export const CartItem: FC<Props> = ({ cartItem, onChange, ...moreProps }) => {
@@ -21,23 +21,23 @@ export const CartItem: FC<Props> = ({ cartItem, onChange, ...moreProps }) => {
   const itemQuantity = useMemo(() => quantity + currentQuantity, [quantity, currentQuantity]);
   const itemTotal = useMemo(() => itemQuantity * price, [itemQuantity, price]);
 
-  const handleDecrement = () => {
+  const handleDecrement = useCallback(() => {
     if (itemQuantity <= 1) {
       return;
     }
 
-    onChange({ ...cartItem, currentQuantity: currentQuantity - 1 });
-  };
+    onChange && onChange({ ...cartItem, currentQuantity: currentQuantity - 1 });
+  }, [itemQuantity, cartItem]);
 
-  const handleIncrement = () => {
-    onChange({ ...cartItem, currentQuantity: currentQuantity + 1 });
-  };
+  const handleIncrement = useCallback(() => {
+    onChange && onChange({ ...cartItem, currentQuantity: currentQuantity + 1 });
+  }, [itemQuantity, cartItem]);
 
-  const handleRemove = () => {
+  const handleRemove = useCallback(() => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { currentQuantity: cq, ...moreCartItem } = cartItem;
-    onChange({ ...moreCartItem, quantity: 0 });
-  };
+    onChange && onChange({ ...moreCartItem, quantity: 0 });
+  }, [itemQuantity, cartItem]);
 
   return (
     <MotionSurface
@@ -66,7 +66,7 @@ export const CartItem: FC<Props> = ({ cartItem, onChange, ...moreProps }) => {
           <Spinner />
         </Flex>
       )}
-      <Box mr={4} h='100%' w='103px' bgColor={variables.bgColor}>
+      <Box mr={4} w='103px'>
         {itemImage && <Image src={itemImage} objectFit='cover' />}
       </Box>
       <Flex pr={4} flex={1} alignItems='center' justifyContent='space-between'>
@@ -107,4 +107,8 @@ export const CartItem: FC<Props> = ({ cartItem, onChange, ...moreProps }) => {
       </Flex>
     </MotionSurface>
   );
+};
+
+CartItem.defaultProps = {
+  onChange: undefined
 };

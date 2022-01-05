@@ -7,9 +7,9 @@ type ModalProps = Omit<ComponentProps<typeof Modal>, 'children'>;
 
 type Props = ModalProps & {
   filters: any;
-  loading: boolean;
   onFiltersChange: any;
   headerLabel?: string;
+  loading?: boolean;
 };
 
 export const CardFiltersModal: FC<Props> = ({
@@ -23,7 +23,7 @@ export const CardFiltersModal: FC<Props> = ({
   <Modal onClose={onClose} isOpen={isOpen} modalContentProps={{ maxW: '2xl' }} isCentered>
     <Surface flexDir='column' p={6}>
       <FormSectionHeading pt={0} w='100%'>
-        {headerLabel || 'Filters'}
+        {headerLabel}
       </FormSectionHeading>
       <CardFilters value={filters} loading={loading} onChange={onFiltersChange} />
     </Surface>
@@ -31,5 +31,6 @@ export const CardFiltersModal: FC<Props> = ({
 );
 
 CardFiltersModal.defaultProps = {
-  headerLabel: undefined
+  headerLabel: 'Filters',
+  loading: false
 };

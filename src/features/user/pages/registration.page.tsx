@@ -76,11 +76,8 @@ export const RegistrationPage: FC = () => {
       clearTimeout(delay);
       // Sign in user
       if (currentUser.current) {
-        const {
-          jwt,
-          currentUser: { user }
-        } = currentUser.current;
-        signIn(jwt, user.userAccount);
+        const { jwt, userAccount } = currentUser.current;
+        signIn(jwt, userAccount);
       }
     };
   }, [isOptionalDetailComplete, loading]);
