@@ -7,6 +7,7 @@ type User = {
 };
 
 type Address = {
+  id: string;
   fullName: string;
   phoneNumber: string;
   region: string;
