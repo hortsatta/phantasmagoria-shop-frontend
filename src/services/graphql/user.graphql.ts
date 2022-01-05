@@ -5,7 +5,7 @@ const GET_USER_ACCOUNTS = gql`
     $where: JSON
     $limit: Int
     $start: Int
-    $sort: String = "name:asc"
+    $sort: String = "fullName:asc"
     $publicationState: PublicationState = LIVE
   ) {
     userAccounts(
@@ -46,18 +46,14 @@ const CREATE_USER_ACCOUNT = gql`
     createUserAccount(input: { data: $userAccount }) {
       userAccount {
         id
-        displayName
         fullName
-        addresses {
-          fullName
-          phoneNumber
-          region
-          province
-          city
-          barangay
-          zipCode
-          addressLine
-          isDefault
+        displayName
+        user {
+          id
+          email
+          role {
+            id
+          }
         }
       }
     }

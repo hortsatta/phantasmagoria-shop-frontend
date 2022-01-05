@@ -30,18 +30,7 @@ const SIGN_UP = gql`
       jwt
       currentUser: user {
         user {
-          userAccount: user_account {
-            id
-            fullName
-            displayName
-            user {
-              id
-              email
-              role {
-                id
-              }
-            }
-          }
+          id
         }
       }
     }
