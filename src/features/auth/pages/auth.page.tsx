@@ -1,6 +1,6 @@
 import { FC, useContext, useEffect } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { Center, Flex, Heading, Image, Link } from '@chakra-ui/react';
+import { Box, Center, Flex, Heading, Image, Link } from '@chakra-ui/react';
 import { useReactiveVar } from '@apollo/client';
 
 import { appModulesVar, currentUserAccountVar } from 'config';
@@ -28,32 +28,31 @@ export const AuthPage: FC = () => {
 
   return (
     <PageBox>
-      <Surface
-        flexDir='column'
-        alignItems='flex-start'
-        m='6rem auto 0 auto'
-        w='xl'
-        overflow='hidden'
-      >
-        <Flex d='flex' flexDir='column' alignItems='center' py={8} px={8} w='100%'>
-          <Center flexDir='column' flex={1} mb={12}>
-            <Heading as='h2' fontSize='4xl'>
-              Sign In
-            </Heading>
-            <SubHeading>Enter your details below to continue.</SubHeading>
-          </Center>
-          <SignInForm mb={2} w='100%' loading={loading} onSubmit={signIn} />
-          <Link
-            fontSize={14}
-            opacity={0.8}
-            as={RouterLink}
-            to={`${appModules.user.path}${appModules.user.children?.signUp.path}` || ''}
-          >
-            I don&apos;t have an account, sign me up.
-          </Link>
-        </Flex>
-        <Image w='100%' h={120} objectFit='cover' src={signInCover} />
-      </Surface>
+      <Flex d='flex' flexDir='column' alignItems='center' py={8} px={8} w='100%'>
+        <Center mb={10} flexDir='column' flex={1}>
+          <Heading as='h2' fontSize='4xl'>
+            Sign In
+          </Heading>
+        </Center>
+        <Surface flexDir='column' alignItems='flex-start' w='xl' overflow='hidden'>
+          <Flex flexDir='column' justifyContent='center' p={12} w='100%'>
+            <SubHeading mb={10} textAlign='center'>
+              Enter your details below to continue.
+            </SubHeading>
+            <SignInForm mb={2} w='100%' loading={loading} onSubmit={signIn} />
+            <Link
+              fontSize={14}
+              textAlign='center'
+              opacity={0.8}
+              as={RouterLink}
+              to={`${appModules.user.path}${appModules.user.children?.signUp.path}` || ''}
+            >
+              I don&apos;t have an account, sign me up.
+            </Link>
+          </Flex>
+          <Image w='100%' h={120} objectFit='cover' src={signInCover} />
+        </Surface>
+      </Flex>
     </PageBox>
   );
 };
