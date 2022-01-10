@@ -3,31 +3,27 @@ import { useMutation, useReactiveVar } from '@apollo/client';
 
 import { cartItemsVar } from 'config';
 import { CardProduct } from 'models';
-import { CLEAR_CART_ITEMS } from 'services/graphql';
+import { CLEAR_CART, CLEAR_CART_ITEMS } from 'services/graphql';
 import { useDebounce } from 'features/core/hooks';
 import { CartItemFormData } from '../components';
 
 type Result = {
+  addCartItem: (cardProduct: CardProduct) => void;
   updateCartItems: (items: CartItemFormData[]) => void;
   clearCartItems: () => void;
-  addCartItem: (cardProduct: CardProduct) => void;
+  clearCart: () => void;
   loading: boolean;
 };
 
 export const useUpsertCart = (): Result => {
   const [currentCartItems, setCurrentCartItems] = useState<any>([]);
   const cartItems = useReactiveVar(cartItemsVar);
-  const [clearCart, { loading: clearCartItemsLoading }] = useMutation(CLEAR_CART_ITEMS);
+  const [clearCartItemsMutate, { loading: clearCartItemsLoading }] = useMutation(CLEAR_CART_ITEMS);
+  const [clearCartMutate, { loading: clearCartLoading }] = useMutation(CLEAR_CART);
   const { debounce, loading: debounceLoading } = useDebounce();
 
   const updateCartItems = useCallback((items: CartItemFormData[]) => {
     cartItemsVar([...items]);
-  }, []);
-
-  const clearCartItems = useCallback(async () => {
-    debounce();
-    await clearCart();
-    cartItemsVar([]);
   }, []);
 
   const addCartItem = useCallback(
@@ -57,6 +53,18 @@ export const useUpsertCart = (): Result => {
     [currentCartItems]
   );
 
+  const clearCart = useCallback(async () => {
+    debounce();
+    await clearCartMutate();
+    cartItemsVar([]);
+  }, []);
+
+  const clearCartItems = useCallback(async () => {
+    debounce();
+    await clearCartItemsMutate();
+    cartItemsVar([]);
+  }, []);
+
   useEffect(() => {
     !cartItems.length && setCurrentCartItems([]);
   }, [cartItems]);
@@ -66,9 +74,10 @@ export const useUpsertCart = (): Result => {
   }, [currentCartItems]);
 
   return {
+    addCartItem,
     updateCartItems,
     clearCartItems,
-    addCartItem,
-    loading: clearCartItemsLoading || debounceLoading
+    clearCart,
+    loading: clearCartItemsLoading || debounceLoading || clearCartLoading
   };
 };

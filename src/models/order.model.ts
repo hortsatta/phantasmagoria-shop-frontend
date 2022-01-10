@@ -1,12 +1,19 @@
 import { AuditTrail } from './core.model';
-import { CartItem } from './cart.model';
 import { Address, UserAccount } from './user.model';
+import { CartItem } from './cart.model';
 
-export type Order = AuditTrail & {
+type OrderItem = CartItem & {
+  price: number;
+};
+
+type Order = AuditTrail & {
   id: string;
   date: Date;
   totalPrice: number;
-  address: Omit<Address, 'id'>;
-  cartItems: CartItem[];
+  address: Omit<Address, 'id'> | Address;
+  orderItems: OrderItem[];
   userAccount: UserAccount;
+  paymentIntent: string;
 };
+
+export type { Order, OrderItem };

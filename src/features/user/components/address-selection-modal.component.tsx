@@ -1,4 +1,4 @@
-import { ComponentProps, FC, useMemo, useState } from 'react';
+import { ComponentProps, FC, FormEvent, useMemo, useState } from 'react';
 import { Box, Button, Flex, HStack } from '@chakra-ui/react';
 
 import { Address } from 'models';
@@ -36,7 +36,9 @@ export const AddressSelectionModal: FC<Props> = ({
   );
   const [activeAddress, setActiveAddress] = useState<Address | null>(currentAddress || null);
 
-  const handleSubmit = () => {
+  const handleSubmit = (event: FormEvent) => {
+    event.preventDefault();
+
     if (!activeAddress) {
       return;
     }
@@ -46,7 +48,7 @@ export const AddressSelectionModal: FC<Props> = ({
 
   return (
     <Modal onClose={onClose} isOpen={isOpen} modalContentProps={{ maxW: '5xl' }} isCentered>
-      <Surface flexDir='column' p={6}>
+      <Surface as='form' flexDir='column' p={6} onSubmit={handleSubmit}>
         <FormSectionHeading pt={0} w='100%'>
           {headerLabel || 'Select Address'}
         </FormSectionHeading>

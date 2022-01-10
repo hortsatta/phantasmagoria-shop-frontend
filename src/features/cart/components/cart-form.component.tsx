@@ -22,7 +22,7 @@ type CartFormData = Omit<Cart, 'cartItems'> & {
 };
 
 type Props = Omit<FlexProps, 'onSubmit'> & {
-  onSubmit: (cart: CartFormData) => void;
+  onSubmit: () => void;
   cart: Cart | null;
   isComplete?: boolean;
   isSubmitting?: boolean;
@@ -111,8 +111,9 @@ const CartForm: FC<Props> = ({
   const handleSubmit = useCallback(
     (event: FormEvent) => {
       event.preventDefault();
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       submitForm((cartFormData: CartFormData) => {
-        onSubmit(cartFormData);
+        onSubmit();
       })();
     },
     [submitForm, onSubmit]

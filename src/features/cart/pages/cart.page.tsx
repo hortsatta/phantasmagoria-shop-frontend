@@ -1,22 +1,36 @@
-import { FC, useCallback, useMemo, useState } from 'react';
+import { FC, useCallback, useEffect, useMemo } from 'react';
+import { useHistory } from 'react-router-dom';
+import { Elements } from '@stripe/react-stripe-js';
 import { Flex, Center, Heading } from '@chakra-ui/react';
 import { Step, Steps, useSteps } from 'chakra-ui-steps';
 import { ShoppingBagOpen, Wallet } from 'phosphor-react';
 
-import { useDebounce } from 'features/core/hooks';
+import { stripeElementsOptions, stripePromise } from 'config';
 import { PageBox } from 'features/core/components';
 import { useGetUserAccount } from 'features/user/hooks';
-import { OrderForm } from 'features/order/components';
-import { CartForm, CartFormData } from '../components';
+import { useOrder } from 'features/order/hooks';
+import { OrderForm, OrderFormData } from 'features/order/components';
+import { CartForm } from '../components';
 import { useGetCart, useUpsertCart } from '../hooks';
 
 export const CartPage: FC = () => {
+  const history = useHistory();
   const { userAccount, loading: userAccountLoading } = useGetUserAccount();
   const { cart, loading: cartLoading } = useGetCart();
-  const { updateCartItems, clearCartItems, loading: upsertCartLoading } = useUpsertCart();
-  const { debounce, loading: debounceLoading } = useDebounce();
-  const [isCheckoutComplete, setIsCheckoutComplete] = useState(false);
-  const { nextStep, prevStep, activeStep } = useSteps({ initialStep: 0 });
+  const {
+    updateCartItems,
+    clearCartItems,
+    clearCart,
+    loading: upsertCartLoading
+  } = useUpsertCart();
+  const {
+    addOrder,
+    upsertPaymentIntent,
+    clientSecret,
+    paymentIntentId,
+    loading: upsertPaymentIntentLoading
+  } = useOrder();
+  const { nextStep, activeStep } = useSteps({ initialStep: 0 });
 
   const loading = useMemo(
     () => userAccountLoading || cartLoading || upsertCartLoading,
@@ -24,12 +38,21 @@ export const CartPage: FC = () => {
   );
   const headerText = useMemo(() => (activeStep !== 0 ? 'Place Order' : 'My Cart'), [activeStep]);
 
-  const checkout = useCallback((cartFormData: CartFormData) => {
-    debounce(() => {
-      nextStep();
-    });
-    console.log(cartFormData);
-  }, []);
+  useEffect(() => {
+    if (!clientSecret || !clientSecret.trim()) {
+      return;
+    }
+    nextStep();
+  }, [clientSecret]);
+
+  const handleAddOrder = useCallback(
+    async (orderFormData: OrderFormData, orderCompletePath?: string) => {
+      await addOrder(orderFormData);
+      await clearCart();
+      paymentIntentId && history.push(`${orderCompletePath}/?pi=${paymentIntentId}`);
+    },
+    [paymentIntentId, addOrder, clearCart]
+  );
 
   return (
     <PageBox d='flex' alignItems='flex-start' justifyContent='center' pb={0} h='100%' flex={1}>
@@ -53,23 +76,25 @@ export const CartPage: FC = () => {
               <CartForm
                 w='100%'
                 cart={cart}
-                isSubmitting={debounceLoading}
+                isSubmitting={upsertPaymentIntentLoading}
                 onCartChange={updateCartItems}
                 onClearCartItems={clearCartItems}
-                onSubmit={checkout}
+                onSubmit={upsertPaymentIntent}
                 loading={loading}
               />
             </Step>
             <Step label='Checkout' icon={Wallet}>
-              <OrderForm
-                w='100%'
-                userAccount={userAccount}
-                cartItems={cart.cartItems}
-                isComplete={isCheckoutComplete}
-                isSubmitting={debounceLoading}
-                onSubmit={() => null}
-                loading={loading}
-              />
+              {clientSecret && (
+                <Elements stripe={stripePromise} options={stripeElementsOptions(clientSecret)}>
+                  <OrderForm
+                    w='100%'
+                    userAccount={userAccount}
+                    cartItems={cart.cartItems}
+                    loading={loading}
+                    onAddOrder={handleAddOrder}
+                  />
+                </Elements>
+              )}
             </Step>
           </Steps>
         )}

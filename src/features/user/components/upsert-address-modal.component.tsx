@@ -22,19 +22,13 @@ export const UpsertAddressModal: FC<Props> = ({
   isSubmitting,
   onSubmit
 }) => {
-  const label = useMemo(() => {
-    if (headerLabel) {
-      return headerLabel;
-    }
-
-    return !address ? 'New Address' : 'Update Address';
-  }, [headerLabel]);
+  const label = useMemo(() => (!address ? 'New Address' : 'Update Address'), [address]);
 
   return (
     <Modal onClose={onClose} isOpen={isOpen} modalContentProps={{ maxW: 'xl' }} isCentered>
       <Surface flexDir='column' p={6}>
         <FormSectionHeading pt={0} w='100%'>
-          {label}
+          {headerLabel || label}
         </FormSectionHeading>
         <UpsertAddressForm
           address={address}
