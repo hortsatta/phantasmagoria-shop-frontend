@@ -1,8 +1,16 @@
 import { ComponentProps, FC, FormEvent, useMemo, useState } from 'react';
 import { Box, Button, Flex, HStack } from '@chakra-ui/react';
+import { TrashSimple } from 'phosphor-react';
 
 import { Address } from 'models';
-import { FormSectionHeading, Modal, Scrollbars, Surface } from 'features/core/components';
+import {
+  FormSectionHeading,
+  Icon,
+  Modal,
+  RemoveIconButton,
+  Scrollbars,
+  Surface
+} from 'features/core/components';
 import { AddressFields } from './address-fields.component';
 
 import variables from 'assets/styles/_variables.module.scss';
@@ -14,7 +22,9 @@ type Props = ModalProps & {
   onSubmit: (address: Address) => void;
   currentAddressId?: string;
   headerLabel?: string;
+  isRemoveDisabled?: boolean;
   loading?: boolean;
+  onRemove?: (address: Address) => void;
 };
 
 export const AddressSelectionModal: FC<Props> = ({
@@ -23,17 +33,24 @@ export const AddressSelectionModal: FC<Props> = ({
   currentAddressId,
   addresses,
   headerLabel,
+  isRemoveDisabled,
   loading,
-  onSubmit
+  onSubmit,
+  onRemove
 }) => {
   const currentAddress = useMemo(
     () => addresses.find(address => address.id === currentAddressId),
     [addresses, currentAddressId]
   );
+
   const addressesFields = useMemo(
-    () => [currentAddress, ...addresses.filter(address => address.id !== currentAddressId)],
-    [currentAddress, currentAddressId, addresses]
+    () =>
+      currentAddress
+        ? [currentAddress, ...addresses.filter(address => address.id !== currentAddress.id)]
+        : addresses,
+    [currentAddress, addresses]
   );
+
   const [activeAddress, setActiveAddress] = useState<Address | null>(currentAddress || null);
 
   const handleSubmit = (event: FormEvent) => {
@@ -56,28 +73,46 @@ export const AddressSelectionModal: FC<Props> = ({
           <Scrollbars className='scrollbar' hideVerticalScroll>
             <HStack spacing={2}>
               {addressesFields.map((address: any) => (
-                <AddressFields
-                  key={address.id}
-                  flexShrink={0}
-                  p={4}
-                  w='md'
-                  bgColor={
-                    address.id === activeAddress?.id
-                      ? variables.accentColor
-                      : variables.inputBgColor
-                  }
-                  borderRadius='4px'
-                  cursor='pointer'
-                  _hover={{
-                    bgColor:
+                <Box pos='relative' key={address.id}>
+                  <AddressFields
+                    flexShrink={0}
+                    p={4}
+                    w='md'
+                    bgColor={
                       address.id === activeAddress?.id
                         ? variables.accentColor
-                        : variables.hoverBgColor
-                  }}
-                  transition='background 0.12s ease'
-                  address={address}
-                  onClick={() => setActiveAddress(address)}
-                />
+                        : variables.inputBgColor
+                    }
+                    borderRadius='4px'
+                    cursor='pointer'
+                    _hover={{
+                      bgColor:
+                        address.id === activeAddress?.id
+                          ? variables.accentColor
+                          : variables.hoverBgColor
+                    }}
+                    transition='background 0.12s ease'
+                    address={address}
+                    onClick={() => setActiveAddress(address)}
+                  />
+                  {!isRemoveDisabled && (
+                    <Box
+                      pos='absolute'
+                      bottom={4}
+                      right={4}
+                      bgColor={variables.inputBgColor}
+                      borderRadius='99px'
+                      borderWidth='1px'
+                      overflow='hidden'
+                    >
+                      <RemoveIconButton
+                        icon={<Icon as={TrashSimple} w={6} />}
+                        onClick={() => onRemove && onRemove(address)}
+                        disabled={loading}
+                      />
+                    </Box>
+                  )}
+                </Box>
               ))}
             </HStack>
           </Scrollbars>
@@ -102,5 +137,7 @@ export const AddressSelectionModal: FC<Props> = ({
 AddressSelectionModal.defaultProps = {
   currentAddressId: undefined,
   headerLabel: undefined,
-  loading: false
+  isRemoveDisabled: false,
+  loading: false,
+  onRemove: undefined
 };

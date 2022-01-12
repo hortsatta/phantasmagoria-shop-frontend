@@ -10,7 +10,7 @@ type Result = {
   loading: boolean;
 };
 
-export const useGetUserAccount = (id?: string): Result => {
+export const useGetUser = (id?: string): Result => {
   const currentUserAccount = useReactiveVar(currentUserAccountVar);
 
   const { data: { userAccounts = [] } = {}, loading } = useQuery(GET_USER_ACCOUNTS, {

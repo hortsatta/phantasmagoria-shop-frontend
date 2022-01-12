@@ -1,15 +1,5 @@
 import { FC, useMemo } from 'react';
-import {
-  Box,
-  BoxProps,
-  Center,
-  Divider,
-  Spinner,
-  Text,
-  TextProps,
-  Wrap,
-  WrapItem
-} from '@chakra-ui/react';
+import { Box, BoxProps, Center, Spinner, Wrap, WrapItem } from '@chakra-ui/react';
 
 import { Address, SelectOption } from 'models';
 import {
@@ -18,8 +8,7 @@ import {
   usePhLocationCity,
   usePhLocationBarangay
 } from 'features/user/hooks';
-
-import variables from 'assets/styles/_variables.module.scss';
+import { TextField } from 'features/core/components';
 
 type Props = BoxProps & {
   address: Address | null;
@@ -31,28 +20,8 @@ const wrapProps = {
 };
 
 const textFieldWrapperProps = {
-  w: '100%',
-  px: 4,
-  py: 3,
-  bgColor: variables.inputBgColor,
-  borderRadius: '4px',
-  overflow: 'hidden'
+  wrapperProps: { w: '100%' }
 };
-
-const textFieldLabelProps: TextProps = {
-  color: 'rgba(255,255,255,0.7)',
-  fontSize: 12,
-  textTransform: 'uppercase',
-  lineHeight: 1
-};
-
-const TextField: FC<{ label: string }> = ({ label, children }) => (
-  <Box {...textFieldWrapperProps}>
-    <Text lineHeight={1}>{children}</Text>
-    <Divider my={2} bgColor='rgba(255,255,255,0.1)' />
-    <Text {...textFieldLabelProps}>{label}</Text>
-  </Box>
-);
 
 export const AddressFields: FC<Props> = ({ address, ...moreProps }) => {
   const {
@@ -115,21 +84,29 @@ export const AddressFields: FC<Props> = ({ address, ...moreProps }) => {
       )}
       <Wrap>
         <WrapItem w='100%' {...wrapProps}>
-          <TextField label='Full Name'>{fullName}</TextField>
+          <TextField {...textFieldWrapperProps} label='Full Name'>
+            {fullName}
+          </TextField>
         </WrapItem>
         <WrapItem w='100%' {...wrapProps}>
-          <TextField label='Brgy, City / Munici, Province, Region'>
+          <TextField {...textFieldWrapperProps} label='Brgy, City / Munici, Province, Region'>
             {barangay}, {city}, {province}, {region}
           </TextField>
         </WrapItem>
         <WrapItem w='100%' {...wrapProps}>
-          <TextField label='Line'>{addressLine}</TextField>
+          <TextField {...textFieldWrapperProps} label='Line'>
+            {addressLine}
+          </TextField>
         </WrapItem>
         <WrapItem flex={1} {...wrapProps}>
-          <TextField label='Zip Code'>{zipCode}</TextField>
+          <TextField {...textFieldWrapperProps} label='Zip Code'>
+            {zipCode}
+          </TextField>
         </WrapItem>
         <WrapItem flex={1} {...wrapProps}>
-          <TextField label='Phone No.'>{phoneNumber}</TextField>
+          <TextField {...textFieldWrapperProps} label='Phone No.'>
+            {phoneNumber}
+          </TextField>
         </WrapItem>
       </Wrap>
     </Box>

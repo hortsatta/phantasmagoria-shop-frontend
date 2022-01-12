@@ -2,29 +2,30 @@ import { useCallback } from 'react';
 import { useMutation, useReactiveVar } from '@apollo/client';
 
 import { currentUserAccountVar, messages } from 'config';
-import { UserAccount } from 'models';
 import { UPDATE_USER_ACCOUNT } from 'services/graphql';
 import { useDebounce, useNotification } from 'features/core/hooks';
 import { AddressFormData } from '../components';
 
 type Result = {
-  updateUserAccount: (userAccount: UserAccount) => void;
+  updateUserAccount: (userAccount: any) => void;
   updateAddress: (data: AddressFormData[]) => Promise<void>;
   loading: boolean;
 };
 
-export const useUpsertUser = (id?: string): Result => {
+export const useEditUser = (id?: string): Result => {
   const currentUserAccount = useReactiveVar(currentUserAccountVar);
   const { notify } = useNotification();
   const { debounce, loading: debounceLoading } = useDebounce();
   const [updateUserAcc, { loading: updateUserAccLoading }] = useMutation(UPDATE_USER_ACCOUNT);
 
   const updateUserAccount = useCallback(
-    async (userAccount: UserAccount) => {
+    async (userAccount: any) => {
       debounce();
+      const { id: userAccountId, ...moreUserAccount } = userAccount;
 
       try {
-        console.log('TODO', userAccount);
+        const variables = { id: userAccountId, userAccount: moreUserAccount };
+        updateUserAcc({ variables });
       } catch (err) {
         notify('error', 'Failed', messages.problem);
       }

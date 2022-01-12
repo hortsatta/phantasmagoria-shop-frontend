@@ -2,10 +2,12 @@ import { FC, useCallback, useState } from 'react';
 import {
   Box,
   BoxProps,
+  Center,
   HStack,
   VStack,
   Button,
   ButtonProps,
+  Text,
   useDisclosure
 } from '@chakra-ui/react';
 import { AddressBook, PenNib, PlusCircle } from 'phosphor-react';
@@ -26,12 +28,26 @@ type Props = BoxProps & {
   value: Address;
   userCurrentAddresses: Address[];
   onUpdateAddress: (data: AddressFormData[]) => Promise<void>;
-  onChange?: (data: AddressFormData) => void;
+  headerText?: string;
+  changeButtonLabel?: string;
+  editButtonLabel?: string;
   isSubmitting?: boolean;
+  isRemoveDisabled?: boolean;
   loading?: boolean;
+  onChange?: (data: AddressFormData) => void;
+  onRemove?: (address: Address) => void;
 };
 
 const MotionFlex = motion<Omit<BoxProps, 'transition'>>(Box);
+
+const addressFields = {
+  flexShrink: 0,
+  p: 4,
+  w: 'md',
+  bgColor: variables.inputBgColor,
+  borderRadius: '4px',
+  overflow: 'hidden'
+};
 
 const buttonStyles: ButtonProps = {
   justifyContent: 'flex-start',
@@ -44,9 +60,14 @@ export const ShippingAddress: FC<Props> = ({
   value,
   userCurrentAddresses,
   loading,
+  isRemoveDisabled,
   isSubmitting,
+  headerText,
+  changeButtonLabel,
+  editButtonLabel,
   onUpdateAddress,
   onChange,
+  onRemove,
   ...moreProps
 }) => {
   // Upsert address modal
@@ -72,7 +93,10 @@ export const ShippingAddress: FC<Props> = ({
         if (isAddressNew) {
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const { id: addressId, ...newAddress } = addressFormData;
-          targetAddresses = [...userCurrentAddresses, newAddress];
+          targetAddresses = [
+            ...userCurrentAddresses.map(ca => ({ ...ca, isDefault: false })),
+            { ...newAddress, isDefault: true }
+          ];
         } else {
           targetAddresses = [
             ...userCurrentAddresses.filter(
@@ -121,36 +145,38 @@ export const ShippingAddress: FC<Props> = ({
   return (
     <>
       <Box {...moreProps}>
-        <FormSectionHeading pt={0}>Ship To</FormSectionHeading>
-        <HStack alignItems='flex-start' spacing={4}>
+        <FormSectionHeading pt={0}>{headerText}</FormSectionHeading>
+        <HStack justifyContent='flex-start' alignItems='flex-start' spacing={4}>
           <MotionFlex
             animate={animationAddressFieldsControls}
             transition={{ duration: 0.2, delay: 0.2 }}
           >
-            <AddressFields
-              flexShrink={0}
-              p={4}
-              w='md'
-              bgColor={variables.inputBgColor}
-              borderRadius='4px'
-              overflow='hidden'
-              address={value}
-            />
+            {!userCurrentAddresses.length ? (
+              <Center {...addressFields} h='340px'>
+                <Text fontFamily={variables.primaryFont} fontSize='4xl'>
+                  no address added
+                </Text>
+              </Center>
+            ) : (
+              <AddressFields {...addressFields} address={value} />
+            )}
           </MotionFlex>
           <VStack flex={1} alignItems='flex-start' py={4} spacing={2}>
             <Button
               {...buttonStyles}
               leftIcon={<Icon w={7} as={AddressBook} />}
               onClick={handleOpenSelectAddressModal}
+              disabled={!userCurrentAddresses.length}
             >
-              Change Address
+              {changeButtonLabel}
             </Button>
             <Button
               {...buttonStyles}
               leftIcon={<Icon w={7} as={PenNib} />}
               onClick={() => handleOpenUpdateAddressModal(false)}
+              disabled={!userCurrentAddresses.length}
             >
-              Edit Address
+              {editButtonLabel}
             </Button>
             <Button
               {...buttonStyles}
@@ -170,14 +196,18 @@ export const ShippingAddress: FC<Props> = ({
         onSubmit={handleUpdateAddress}
         {...(!isAddressNew && { address: value })}
       />
-      <AddressSelectionModal
-        currentAddressId={value.id}
-        addresses={userCurrentAddresses}
-        onClose={addressSelectionModalOnClose}
-        isOpen={addressSelectionModalIsOpen}
-        loading={loading}
-        onSubmit={handleSelectAddress}
-      />
+      {!!userCurrentAddresses.length && (
+        <AddressSelectionModal
+          currentAddressId={value.id}
+          addresses={userCurrentAddresses}
+          onClose={addressSelectionModalOnClose}
+          isOpen={addressSelectionModalIsOpen}
+          loading={loading}
+          onSubmit={handleSelectAddress}
+          onRemove={onRemove}
+          isRemoveDisabled={isRemoveDisabled}
+        />
+      )}
     </>
   );
 };
@@ -185,5 +215,10 @@ export const ShippingAddress: FC<Props> = ({
 ShippingAddress.defaultProps = {
   loading: false,
   isSubmitting: false,
-  onChange: undefined
+  isRemoveDisabled: false,
+  headerText: 'Addresses',
+  changeButtonLabel: 'Change Address',
+  editButtonLabel: 'Edit Address',
+  onChange: undefined,
+  onRemove: undefined
 };

@@ -20,7 +20,7 @@ import { appModulesVar, messages } from 'config';
 import { formatPrice } from 'helpers';
 import { Address, CartItem, Order, UserAccount } from 'models';
 import { useDebounce, useNotification } from 'features/core/hooks';
-import { useUpsertUser } from 'features/user/hooks';
+import { useEditUser } from 'features/user/hooks';
 import {
   FormSectionHeading,
   Icon,
@@ -28,9 +28,9 @@ import {
   SubHeading,
   Surface
 } from 'features/core/components';
+import { ShippingAddress } from 'features/user/components';
 import { MiniCartItem, CartItemFormData } from 'features/cart/components';
 import { PaymentModal } from './payment-modal.component';
-import { ShippingAddress } from './shipping-address.component';
 
 import variables from 'assets/styles/_variables.module.scss';
 
@@ -74,7 +74,7 @@ const OrderForm: FC<Props> = ({ userAccount, cartItems, loading, onAddOrder, ...
   const elements = useElements();
   const { debounce, loading: debounceLoading } = useDebounce();
   const { notify } = useNotification();
-  const { updateAddress, loading: upsertUserLoading } = useUpsertUser();
+  const { updateAddress, loading: editUserLoading } = useEditUser();
   // Stripe payment modal
   const {
     isOpen: paymentModalIsOpen,
@@ -167,15 +167,17 @@ const OrderForm: FC<Props> = ({ userAccount, cartItems, loading, onAddOrder, ...
               <Controller
                 name='address'
                 control={control}
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 render={({ field: { value, onChange } }) => (
                   <ShippingAddress
+                    w='100%'
                     value={value as any}
                     userCurrentAddresses={userCurrentAddresses}
+                    headerText='Ship To'
                     loading={loading}
-                    isSubmitting={upsertUserLoading}
+                    isSubmitting={editUserLoading}
                     onUpdateAddress={updateAddress}
                     onChange={onChange}
+                    isRemoveDisabled
                   />
                 )}
               />
@@ -215,7 +217,7 @@ const OrderForm: FC<Props> = ({ userAccount, cartItems, loading, onAddOrder, ...
             onClick={handleOpenPaymentModal}
             leftIcon={<Icon w={6} as={RocketLaunch} />}
             isLoading={loading}
-            disabled={loading || upsertUserLoading}
+            disabled={loading || editUserLoading}
           >
             Place Order
           </Button>
