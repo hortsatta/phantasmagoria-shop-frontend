@@ -8,7 +8,7 @@ import { ShoppingBagOpen, Wallet } from 'phosphor-react';
 import { stripeElementsOptions, stripePromise } from 'config';
 import { PageBox } from 'features/core/components';
 import { useGetUser } from 'features/user/hooks';
-import { useOrder } from 'features/order/hooks';
+import { useStripeOrder } from 'features/order/hooks';
 import { OrderForm, OrderFormData } from 'features/order/components';
 import { CartForm } from '../components';
 import { useGetCart, useUpsertCart } from '../hooks';
@@ -29,7 +29,7 @@ export const CartPage: FC = () => {
     clientSecret,
     paymentIntentId,
     loading: upsertPaymentIntentLoading
-  } = useOrder();
+  } = useStripeOrder();
   const { nextStep, activeStep } = useSteps({ initialStep: 0 });
 
   const loading = useMemo(

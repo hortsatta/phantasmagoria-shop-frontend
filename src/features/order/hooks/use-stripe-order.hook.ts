@@ -16,7 +16,7 @@ type Result = {
   loading: boolean;
 };
 
-export const useOrder = (): Result => {
+export const useStripeOrder = (): Result => {
   const { notify } = useNotification();
   const { debounce, loading: debounceLoading } = useDebounce();
   const [getPaymentIntentById, { data: paymentIntentData, loading: getPaymentIntentLoading }] =
