@@ -17,7 +17,7 @@ import { appModulesVar } from 'config';
 import { PageContext } from 'features/core/contexts';
 import { useUrlQuery } from 'features/core/hooks';
 import { LoadingOverlay, PageBox, SubHeading, Surface } from 'features/core/components';
-import { useOrder } from '../hooks';
+import { useStripeOrder } from '../hooks';
 
 import lottieDone from 'assets/images/lottie-done.json';
 
@@ -36,7 +36,7 @@ export const OrderCompletePage: FC = () => {
   const query = useUrlQuery();
   const { changePage } = useContext(PageContext);
   const appModules = useReactiveVar(appModulesVar);
-  const { loading, currentPaymentIntent, getPaymentIntent } = useOrder();
+  const { loading, currentPaymentIntent, getPaymentIntent } = useStripeOrder();
   const [pageLoading, setPageLoading] = useState(true);
 
   const isStatusSuccessful = useMemo(() => {

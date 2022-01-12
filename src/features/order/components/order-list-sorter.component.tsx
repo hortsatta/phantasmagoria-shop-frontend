@@ -16,22 +16,32 @@ type Props = {
   onChange?: (val: any) => void;
 };
 
+const sectionProps = {
+  p: 4,
+  alignItems: 'flex-start',
+  w: '100%',
+  border: '1px solid rgba(255,255,255,0.1)',
+  borderRadius: 4,
+  overflow: 'hidden'
+};
+
 const fieldOptions = [
-  { label: 'Release Date', value: 'published_at' },
-  { label: 'Alphabetical', value: 'name' }
+  { label: 'Purchase Date', value: 'date' },
+  { label: 'Total Amount', value: 'totalPrice' }
 ];
 
-const orderOptions = [
+const ordrOptions = [
   { label: 'Ascending', value: 'asc' },
   { label: 'Descending', value: 'desc' }
 ];
 
-const sortDefaultValue = 'published_at:desc';
+const sortDefaultValue = 'date:desc';
 
-export const ShopItemSorter: FC<Props> = ({ value, loading, onChange }) => {
-  const [currentField, currentOrder] = (value || sortDefaultValue).split(':');
+export const OrderListSorter: FC<Props> = ({ value, loading, onChange }) => {
+  // Shorten "order" variable to "ordr" to prevent confusion.
+  const [currentField, currentOrdr] = (value || sortDefaultValue).split(':');
   const [field, setField] = useState(currentField);
-  const [order, setOrder] = useState(currentOrder);
+  const [ordr, setOrdr] = useState(currentOrdr);
 
   const { getRootProps: getFieldRootProps, getRadioProps: getFieldRadioProps } = useRadioGroup({
     name: 'Field',
@@ -39,18 +49,18 @@ export const ShopItemSorter: FC<Props> = ({ value, loading, onChange }) => {
     onChange: (val: string) => setField(val)
   });
 
-  const { getRootProps: getOrderRootProps, getRadioProps: getOrderRadioProps } = useRadioGroup({
+  const { getRootProps: getOrdrRootProps, getRadioProps: getOrdrRadioProps } = useRadioGroup({
     name: 'Order',
-    defaultValue: currentOrder,
-    onChange: (val: string) => setOrder(val)
+    defaultValue: currentOrdr,
+    onChange: (val: string) => setOrdr(val)
   });
 
   const fieldGroup = getFieldRootProps();
-  const orderGroup = getOrderRootProps();
+  const ordrGroup = getOrdrRootProps();
 
   return (
     <VStack alignItems='flex-start' spacing={4}>
-      <VStack {...fieldGroup} alignItems='flex-start' w='100%'>
+      <VStack {...fieldGroup} {...sectionProps}>
         <Text {...sectionHeaderStyles}>By</Text>
         {fieldOptions.map(({ label, value: option }) => {
           const radio = getFieldRadioProps({ value: option });
@@ -61,10 +71,10 @@ export const ShopItemSorter: FC<Props> = ({ value, loading, onChange }) => {
           );
         })}
       </VStack>
-      <VStack {...orderGroup} alignItems='flex-start' w='100%'>
+      <VStack {...ordrGroup} {...sectionProps}>
         <Text {...sectionHeaderStyles}>Order</Text>
-        {orderOptions.map(({ label, value: option }) => {
-          const radio = getOrderRadioProps({ value: option });
+        {ordrOptions.map(({ label, value: option }) => {
+          const radio = getOrdrRadioProps({ value: option });
           return (
             <Radio key={option} {...radio}>
               {label}
@@ -76,7 +86,7 @@ export const ShopItemSorter: FC<Props> = ({ value, loading, onChange }) => {
         alignSelf='flex-end'
         fontSize='sm'
         variant='ghost'
-        onClick={() => onChange && onChange(`${field}:${order}`)}
+        onClick={() => onChange && onChange(`${field}:${ordr}`)}
         leftIcon={<Icon as={MagicWand} w={6} />}
         disabled={loading}
       >
@@ -86,8 +96,8 @@ export const ShopItemSorter: FC<Props> = ({ value, loading, onChange }) => {
   );
 };
 
-ShopItemSorter.defaultProps = {
-  value: 'published_at:desc',
+OrderListSorter.defaultProps = {
+  value: 'date:desc',
   loading: false,
   onChange: undefined
 };

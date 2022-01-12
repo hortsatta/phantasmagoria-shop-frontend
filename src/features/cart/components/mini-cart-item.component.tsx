@@ -1,5 +1,5 @@
 import { ComponentProps, FC, useMemo } from 'react';
-import { Badge, Box, Flex, HStack, Image, Text, VStack } from '@chakra-ui/react';
+import { Badge, Box, Flex, HStack, Image, Text } from '@chakra-ui/react';
 import { X as XSvg } from 'phosphor-react';
 
 import { formatPrice } from 'helpers';
