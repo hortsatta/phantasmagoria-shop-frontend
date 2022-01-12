@@ -1,3 +1,4 @@
+export * from './editable-field.component';
 export * from './form-section-heading.component';
 export * from './header.component';
 export * from './icon.component';
@@ -23,3 +24,4 @@ export * from './skeleton.component';
 export * from './sub-heading.component';
 export * from './steps-control.component';
 export * from './surface.component';
+export * from './text-field.component';
