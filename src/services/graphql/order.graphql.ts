@@ -39,7 +39,6 @@ const GET_ORDERS = gql`
       id
       date
       totalPrice
-      address
       orderItems {
         price
         quantity
