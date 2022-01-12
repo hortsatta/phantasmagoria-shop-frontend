@@ -7,7 +7,7 @@ import { ShoppingBagOpen, Wallet } from 'phosphor-react';
 
 import { stripeElementsOptions, stripePromise } from 'config';
 import { PageBox } from 'features/core/components';
-import { useGetUserAccount } from 'features/user/hooks';
+import { useGetUser } from 'features/user/hooks';
 import { useOrder } from 'features/order/hooks';
 import { OrderForm, OrderFormData } from 'features/order/components';
 import { CartForm } from '../components';
@@ -15,7 +15,7 @@ import { useGetCart, useUpsertCart } from '../hooks';
 
 export const CartPage: FC = () => {
   const history = useHistory();
-  const { userAccount, loading: userAccountLoading } = useGetUserAccount();
+  const { userAccount, loading: userAccountLoading } = useGetUser();
   const { cart, loading: cartLoading } = useGetCart();
   const {
     updateCartItems,
