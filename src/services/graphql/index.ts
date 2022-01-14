@@ -5,5 +5,6 @@ export * from './core.graphql';
 export * from './favorite.graphql';
 export * from './order.graphql';
 export * from './shop.graphql';
+export * from './single.graphql';
 export * from './upload.graphql';
 export * from './user.graphql';

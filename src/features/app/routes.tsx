@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, lazy } from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import { useReactiveVar } from '@apollo/client';
 
@@ -9,6 +9,12 @@ import { FavoriteRoutes } from '../favorite/routing';
 import { ShopRoutes } from '../shop/routing';
 import { OrderRoutes } from '../order/routing';
 import { UserRoutes } from '../user/routing';
+
+const AboutPage = lazy(() =>
+  import('features/single/about.page').then((module: any) => ({
+    default: module.AboutPage
+  }))
+);
 
 export const AppRoutes: FC = () => {
   const appModules: any = useReactiveVar(appModulesVar);
@@ -32,6 +38,7 @@ export const AppRoutes: FC = () => {
       <Route path={appModules.order.path} component={OrderRoutes} />
       <Route path={appModules.user.path} component={UserRoutes} />
       <Route path={appModules.admin.path} component={AdminRoutes} />
+      <Route path={appModules.about.path} component={AboutPage} />
     </>
   );
 };
