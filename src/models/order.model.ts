@@ -10,7 +10,7 @@ type Order = AuditTrail & {
   id: string;
   date: Date;
   totalPrice: number;
-  address: Omit<Address, 'id'> | Address;
+  address: Omit<Address, 'id'> & { id?: string };
   orderItems: OrderItem[];
   userAccount: UserAccount;
   paymentIntent: string;
