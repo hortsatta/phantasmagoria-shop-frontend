@@ -1,4 +1,4 @@
-import { FC, useContext, useCallback, useEffect, useMemo } from 'react';
+import { FC, useContext, useCallback, useEffect, useMemo, useState } from 'react';
 import { useReactiveVar } from '@apollo/client';
 import { Box, Center, Flex, Heading, VStack, useDisclosure } from '@chakra-ui/react';
 import { Funnel } from 'phosphor-react';
@@ -8,24 +8,32 @@ import { signOut } from 'services';
 import { PageContext } from 'features/core/contexts';
 import { useDebounce } from 'features/core/hooks';
 import { useGetOrdersByFilters } from 'features/order/hooks';
-import { Icon, IconButton, PageBox, Surface } from 'features/core/components';
-import { OrderList, OrderListSorterModal } from 'features/order/components';
+import { Icon, IconButton, LoadingOverlay, PageBox, Surface } from 'features/core/components';
+import { OrderItemDetailModal, OrderList, OrderListSorterModal } from 'features/order/components';
 import { EditUserAccountForm } from '../components';
 import { useGetUser, useEditUser } from '../hooks';
+import { Order } from 'models';
 
 export const UserAccountPage: FC = () => {
   const { changePage } = useContext(PageContext);
-  const { debounce } = useDebounce();
+  const { debounce, loading: debounceLoading } = useDebounce();
   const { userAccount, loading: getUserLoading } = useGetUser();
   const { updateUserAccount, updateAddress, loading: editUserLoading } = useEditUser();
   const { orders, orderSort, setOrderSort, loading: getOrdersLoading } = useGetOrdersByFilters();
   const appModules: any = useReactiveVar(appModulesVar);
+  const [currentOrderItem, setCurrentOrderItem] = useState<Order | null>(null);
 
   // View order filter modal
   const {
     isOpen: sortModalIsOpen,
     onOpen: sortModalOnOpen,
     onClose: sortModalOnClose
+  } = useDisclosure();
+  // View order item detail
+  const {
+    isOpen: orderDetailModalIsOpen,
+    onOpen: orderDetailModalOnOpen,
+    onClose: orderDetailModalOnClose
   } = useDisclosure();
 
   const loading = useMemo(
@@ -43,18 +51,23 @@ export const UserAccountPage: FC = () => {
     changePage(signInNav?.key, `${userNav.path}${signInNav?.path}`, true);
   }, [userAccount, loading]);
 
-  const handleSignOut = () => {
+  const handleOrderSortChange = useCallback((sort: any) => {
+    sortModalOnClose();
+    setOrderSort(sort);
+  }, []);
+
+  const handleOrderItemClick = useCallback((order: Order) => {
+    setCurrentOrderItem(order);
+    orderDetailModalOnOpen();
+  }, []);
+
+  const handleSignOut = useCallback(() => {
     debounce(() => {
       signOut();
       const shopListNav = appModules.shop.children?.list;
       changePage(shopListNav?.key, shopListNav?.path);
     });
-  };
-
-  const handleOrderSortChange = useCallback((sort: any) => {
-    sortModalOnClose();
-    setOrderSort(sort);
-  }, []);
+  }, [appModules]);
 
   return (
     <>
@@ -73,47 +86,62 @@ export const UserAccountPage: FC = () => {
               Account
             </Heading>
           </Center>
-          <VStack spacing={8}>
-            <Surface p={12} w='100%'>
-              {userAccount && (
-                <EditUserAccountForm
-                  w='100%'
-                  userAccount={userAccount}
-                  loading={loading}
-                  onUpdateUserAccount={updateUserAccount}
-                  onUpdateAddress={updateAddress}
-                />
-              )}
-            </Surface>
-            <Surface p={12} w='100%'>
-              <Box pos='relative' flex={1}>
-                <IconButton
-                  aria-label='view card filters'
-                  pos='absolute'
-                  top={-2}
-                  right={2}
-                  icon={<Icon w={6} boxSizing='content-box' as={Funnel} />}
-                  onClick={sortModalOnOpen}
-                />
-                <OrderList
-                  w='100%'
-                  orders={orders}
-                  loading={getOrdersLoading}
-                  scrollbarsProps={{ style: { height: '430px' } }}
-                  onClickItem={() => null}
-                />
-              </Box>
-            </Surface>
-          </VStack>
+          <Box pos='relative'>
+            <LoadingOverlay
+              h='100%'
+              bgColor='rgba(0,0,0,0.3)'
+              borderRadius={8}
+              loading={debounceLoading}
+            >
+              <VStack spacing={8}>
+                <Surface p={12} w='100%'>
+                  {userAccount && (
+                    <EditUserAccountForm
+                      w='100%'
+                      userAccount={userAccount}
+                      loading={loading}
+                      onUpdateUserAccount={updateUserAccount}
+                      onUpdateAddress={updateAddress}
+                      onLogout={handleSignOut}
+                    />
+                  )}
+                </Surface>
+                <Surface p={12} w='100%'>
+                  <Box pos='relative' flex={1}>
+                    <IconButton
+                      aria-label='view card filters'
+                      pos='absolute'
+                      top={-2}
+                      right={2}
+                      icon={<Icon w={6} boxSizing='content-box' as={Funnel} />}
+                      onClick={sortModalOnOpen}
+                    />
+                    <OrderList
+                      w='100%'
+                      orders={orders}
+                      loading={getOrdersLoading}
+                      scrollbarsProps={{ style: { height: '430px' } }}
+                      onClickItem={handleOrderItemClick}
+                    />
+                  </Box>
+                </Surface>
+              </VStack>
+            </LoadingOverlay>
+          </Box>
         </Flex>
-        <OrderListSorterModal
-          sort={orderSort}
-          isOpen={sortModalIsOpen}
-          loading={loading}
-          onClose={sortModalOnClose}
-          onSortChange={handleOrderSortChange}
-        />
       </PageBox>
+      <OrderItemDetailModal
+        order={currentOrderItem}
+        isOpen={orderDetailModalIsOpen}
+        onClose={orderDetailModalOnClose}
+      />
+      <OrderListSorterModal
+        sort={orderSort}
+        isOpen={sortModalIsOpen}
+        loading={loading}
+        onClose={sortModalOnClose}
+        onSortChange={handleOrderSortChange}
+      />
     </>
   );
 };
