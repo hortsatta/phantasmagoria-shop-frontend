@@ -1,8 +1,8 @@
 import { FC, ComponentProps } from 'react';
-import { CardDetail } from './card-detail.component';
 
 import { Card } from 'models';
 import { Modal, Surface } from 'features/core/components';
+import { CardDetail } from './card-detail.component';
 
 type ModalProps = Omit<ComponentProps<typeof Modal>, 'children'>;
 

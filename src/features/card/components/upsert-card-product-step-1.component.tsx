@@ -1,4 +1,5 @@
-import { FC, useContext, useMemo, useState } from 'react';
+import { FC, useCallback, useMemo, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { useReactiveVar } from '@apollo/client';
 import { Controller, useFormContext } from 'react-hook-form';
 import {
@@ -14,7 +15,6 @@ import { Funnel, X as XSvg } from 'phosphor-react';
 
 import { appModulesVar } from 'config';
 import { Card } from 'models';
-import { PageContext } from 'features/core/contexts';
 import { FormSectionHeading, Icon, IconButton, Input } from 'features/core/components';
 import { useGetCardsByFilters } from '../hooks';
 import { CardProductFormData } from './upsert-card-product-form.component';
@@ -33,7 +33,7 @@ const cardListStyle = {
 };
 
 export const UpsertCardProductStep1: FC = () => {
-  const { changePage } = useContext(PageContext);
+  const history = useHistory();
   const appModules: any = useReactiveVar(appModulesVar);
   // Form controls
   const { control, watch } = useFormContext<CardProductFormData>();
@@ -60,28 +60,28 @@ export const UpsertCardProductStep1: FC = () => {
     [cards, selectedCards]
   );
 
-  const handleNavigateToAddCard = () => {
-    const addCardNav = appModules.card.children?.add;
-    changePage(addCardNav?.key, `${appModules.card.path}${addCardNav?.path}`);
-  };
+  const handleNavigateToAddCard = useCallback(() => {
+    const addCardPath = `${appModules.admin.path}${appModules.card.path}${appModules.card.children?.add.path}`;
+    history.push(addCardPath);
+  }, [appModules]);
 
-  const handleCardDetailClick = (card?: Card) => {
+  const handleCardDetailClick = useCallback((card?: Card) => {
     if (!card) {
       return;
     }
     cardModalOnOpen();
     setCurrentCardDetail(card);
-  };
+  }, []);
 
-  const handleCardModalClose = () => {
+  const handleCardModalClose = useCallback(() => {
     cardModalOnClose();
     setCurrentCardDetail(null);
-  };
+  }, []);
 
-  const handleCardFiltersChange = (filters: any) => {
+  const handleCardFiltersChange = useCallback((filters: any) => {
     filterModalOnClose();
     setCardFilters(filters);
-  };
+  }, []);
 
   return (
     <>

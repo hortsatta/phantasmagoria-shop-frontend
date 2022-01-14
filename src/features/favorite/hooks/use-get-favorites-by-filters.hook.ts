@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useApolloClient, useQuery, useReactiveVar } from '@apollo/client';
+import { useApolloClient, useLazyQuery, useReactiveVar } from '@apollo/client';
 
 import { currentUserAccountVar, favoriteItemsVar } from 'config';
 import { Card, CardProduct } from 'models';
@@ -18,19 +18,14 @@ export const useGetFavoritesByFilters = (): Result => {
   const hasRefetched = useRef(false);
   const userAccount = useReactiveVar(currentUserAccountVar);
   const favoriteItems = useReactiveVar(favoriteItemsVar);
-  const {
-    data: { favorites = [] } = {},
-    loading: getFavoritesLoading,
-    refetch
-  } = useQuery(GET_FAVORITES, {
-    variables: { userAccountId: userAccount?.id, where: { user_account: userAccount?.id } }
-  });
+  const [getFavorites, { data: { favorites = [] } = {}, loading: getFavoritesLoading, refetch }] =
+    useLazyQuery(GET_FAVORITES);
   const [searchKeyword, setSearchKeyword] = useState('');
   const { debouncedValue: debounceSearchKeyword, loading: debounceSearchLoading } =
     useDebounceValue(searchKeyword);
 
   const filteredCardProducts: CardProduct[] = useMemo(() => {
-    if (!favorites.length) {
+    if (!favorites || !favorites.length) {
       return [];
     }
 
@@ -45,13 +40,25 @@ export const useGetFavoritesByFilters = (): Result => {
   }, [favorites, debounceSearchKeyword]);
 
   useEffect(() => {
-    if (favoriteItems.length || hasRefetched.current) {
+    if (favoriteItems.length || hasRefetched.current || !refetch) {
       return;
     }
     hasRefetched.current = true;
     refetch();
     client.resetStore();
-  }, [favoriteItems]);
+  }, [favoriteItems, refetch]);
+
+  useEffect(() => {
+    if (!userAccount) {
+      return;
+    }
+
+    const variables = {
+      userAccountId: userAccount?.id || '',
+      where: { user_account: userAccount?.id || '' }
+    };
+    getFavorites({ variables });
+  }, [userAccount]);
 
   return {
     items: filteredCardProducts,

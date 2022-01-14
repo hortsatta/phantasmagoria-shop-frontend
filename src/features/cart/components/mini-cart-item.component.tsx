@@ -12,7 +12,7 @@ type Props = ComponentProps<typeof MotionSurface> & {
   cartItem: CartItemFormData;
 };
 
-export const MiniCartItem: FC<Props> = ({ cartItem, onChange, ...moreProps }) => {
+export const MiniCartItem: FC<Props> = ({ cartItem, ...moreProps }) => {
   const { quantity = 0, currentQuantity = 0, cardProduct } = cartItem || {};
   const { name, price, image, cards = [] } = cardProduct || {};
   const itemImage = useMemo(() => image?.url || cards[0]?.coverImage.url, [cardProduct]);

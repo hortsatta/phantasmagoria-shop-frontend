@@ -17,19 +17,24 @@ export const useGetOrdersByFilters = (userAccountid?: string): Result => {
   const [getOrders, { data: { orders = [] } = {}, loading }] = useLazyQuery(GET_ORDERS);
   const [orderSort, setOrderSort] = useState<string | null>(null);
 
-  const orderVariables = useMemo(
+  const variables = useMemo(
     () => ({
       ...(orderSort && { sort: orderSort }),
       where: {
-        user_account: userAccount?.id || userAccountid
+        user_account: userAccount?.id || userAccountid || ''
       }
     }),
     [orderSort, userAccount, userAccountid]
   );
 
   useEffect(() => {
-    getOrders({ variables: orderVariables });
-  }, [orderVariables]);
+    getOrders({ variables });
+  }, [variables]);
 
-  return { orders, orderSort, setOrderSort, loading };
+  return {
+    orders,
+    orderSort,
+    setOrderSort,
+    loading
+  };
 };

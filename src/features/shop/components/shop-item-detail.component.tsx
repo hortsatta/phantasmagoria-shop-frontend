@@ -1,5 +1,4 @@
-import { ComponentProps, FC } from 'react';
-import { useQuery, useReactiveVar } from '@apollo/client';
+import { ComponentProps, FC, useEffect } from 'react';
 import {
   Box,
   BoxProps,
@@ -17,12 +16,11 @@ import { Tray, X as XSvg } from 'phosphor-react';
 import { motion } from 'framer-motion';
 
 import { formatPrice } from 'helpers';
-import { currentUserAccountVar } from 'config';
 import { Card, CardProduct } from 'models';
-import { GET_CARD_PRODUCTS_DETAIL } from 'services/graphql';
 import { Icon, IconButton } from 'features/core/components';
 import { AddToCartButton } from 'features/cart/components';
 import { FavoriteButton } from 'features/favorite/components';
+import { useGetShopItemsDetailByIds } from '../hooks';
 
 import variables from 'assets/styles/_variables.module.scss';
 
@@ -49,12 +47,11 @@ export const ShopItemDetail: FC<Props> = ({
   onFavoriteClick,
   ...moreProps
 }) => {
-  const userAccount = useReactiveVar(currentUserAccountVar);
-  const { data: { cardProducts = [] } = {}, loading } = useQuery(GET_CARD_PRODUCTS_DETAIL, {
-    variables: { userAccountId: userAccount?.id || '', where: { id } }
-  });
+  const { cardProducts, setCardProductIds, loading } = useGetShopItemsDetailByIds();
   const { name, description, price, cards, favorites } = cardProducts[0] || {};
   const isCardsMultiple = (cards?.length || 0) > 1;
+
+  useEffect(() => setCardProductIds([id]), [id]);
 
   return (
     <MotioBox {...moreProps}>

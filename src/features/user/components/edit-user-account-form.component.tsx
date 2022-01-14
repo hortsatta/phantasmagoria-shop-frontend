@@ -2,11 +2,12 @@ import { FC, useCallback, useEffect, useMemo } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Box, BoxProps, VStack } from '@chakra-ui/react';
+import { Box, BoxProps, Button, HStack, VStack } from '@chakra-ui/react';
+import { Door } from 'phosphor-react';
 
 import { Address, UserAccount } from 'models';
 import { useNotification } from 'features/core/hooks';
-import { EditableField, FormSectionHeading, TextField } from 'features/core/components';
+import { EditableField, Icon, FormSectionHeading, TextField } from 'features/core/components';
 import { ShippingAddress } from './shipping-address.component';
 
 import variables from 'assets/styles/_variables.module.scss';
@@ -18,6 +19,7 @@ type UserAccountFormData = Omit<UserAccount, 'user' | 'addresses'> & {
 type Props = Omit<BoxProps, 'onSubmit'> & {
   onUpdateUserAccount: (userAccountFormData: UserAccountFormData) => void;
   onUpdateAddress: (addresses: any[]) => Promise<void>;
+  onLogout: () => void;
   userAccount?: UserAccount;
   loading?: boolean;
 };
@@ -54,6 +56,7 @@ const defaultValues = {
 export const EditUserAccountForm: FC<Props> = ({
   userAccount,
   loading,
+  onLogout,
   onUpdateUserAccount,
   onUpdateAddress,
   ...moreProps
@@ -118,44 +121,56 @@ export const EditUserAccountForm: FC<Props> = ({
       <VStack justifyContent='flex-start' alignItems='flex-start' spacing={4}>
         <Box w='100%' mb={4}>
           <FormSectionHeading pt={0}>General Details</FormSectionHeading>
-          <VStack
-            flexShrink={0}
-            p={4}
-            w='md'
-            bgColor={variables.inputBgColor}
-            borderRadius='4px'
-            overflow='hidden'
-          >
-            <TextField {...wrapperFieldProps} label='Email'>
-              {user?.email}
-            </TextField>
-            <Controller
-              name='fullName'
-              control={control}
-              render={({ field: { onChange, value, onBlur } }) => (
-                <EditableField
-                  {...wrapperFieldProps}
-                  label='Full Name'
-                  defaultValue={value}
-                  onBlur={onBlur}
-                  onSubmit={val => onChange(val)}
-                />
-              )}
-            />
-            <Controller
-              name='displayName'
-              control={control}
-              render={({ field: { onChange, value, onBlur } }) => (
-                <EditableField
-                  {...wrapperFieldProps}
-                  label='Display Name'
-                  defaultValue={value}
-                  onBlur={onBlur}
-                  onSubmit={val => onChange(val)}
-                />
-              )}
-            />
-          </VStack>
+          <HStack justifyContent='flex-start' alignItems='flex-start' spacing={4}>
+            <VStack
+              flexShrink={0}
+              p={4}
+              w='md'
+              bgColor={variables.inputBgColor}
+              borderRadius='4px'
+              overflow='hidden'
+            >
+              <TextField {...wrapperFieldProps} label='Email'>
+                {user?.email}
+              </TextField>
+              <Controller
+                name='fullName'
+                control={control}
+                render={({ field: { onChange, value, onBlur } }) => (
+                  <EditableField
+                    {...wrapperFieldProps}
+                    label='Full Name'
+                    defaultValue={value}
+                    onBlur={onBlur}
+                    onSubmit={val => onChange(val)}
+                  />
+                )}
+              />
+              <Controller
+                name='displayName'
+                control={control}
+                render={({ field: { onChange, value, onBlur } }) => (
+                  <EditableField
+                    {...wrapperFieldProps}
+                    label='Display Name'
+                    defaultValue={value}
+                    onBlur={onBlur}
+                    onSubmit={val => onChange(val)}
+                  />
+                )}
+              />
+            </VStack>
+            <Button
+              justifyContent='flex-start'
+              w='100%'
+              variant='ghost'
+              size='sm'
+              leftIcon={<Icon w={7} as={Door} />}
+              onClick={onLogout}
+            >
+              Sign Out
+            </Button>
+          </HStack>
         </Box>
         <Box w='100%'>
           <Controller

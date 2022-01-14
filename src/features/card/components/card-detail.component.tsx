@@ -1,11 +1,9 @@
-import { FC } from 'react';
-import { useQuery } from '@apollo/client';
+import { FC, useEffect } from 'react';
 import {
   AspectRatio,
   Box,
   BoxProps,
   Center,
-  Heading as ChakraHeading,
   HStack,
   Image,
   Spinner,
@@ -14,7 +12,8 @@ import {
 } from '@chakra-ui/react';
 
 import { CardType } from 'models';
-import { GET_CARDS_DETAIL } from 'services/graphql';
+import { FormSectionHeading } from 'features/core/components';
+import { useGetCardsDetailByIds } from '../hooks';
 
 import variables from 'assets/styles/_variables.module.scss';
 
@@ -23,16 +22,16 @@ type Props = BoxProps & {
 };
 
 const Heading: FC = ({ children }) => (
-  <ChakraHeading fontSize={20} as='h6'>
+  <FormSectionHeading pt={0} pb={2} headingProps={{ fontSize: 20, as: 'h6' }}>
     {children}
-  </ChakraHeading>
+  </FormSectionHeading>
 );
 
 export const CardDetail: FC<Props> = ({ id, ...moreProps }) => {
-  const { data: { cards = [] } = {}, loading } = useQuery(GET_CARDS_DETAIL, {
-    variables: { where: { id } }
-  });
+  const { cards, setCardIds, loading } = useGetCardsDetailByIds();
   const { name, description, attr, rarity, category, types, image } = cards[0] || {};
+
+  useEffect(() => setCardIds([id]), [id]);
 
   return (
     <Box {...moreProps}>
@@ -57,11 +56,11 @@ export const CardDetail: FC<Props> = ({ id, ...moreProps }) => {
             {image && <Image src={image.url} alt={name} objectFit='cover' />}
           </AspectRatio>
           <VStack pt={4} minW='250px' alignItems='flex-start' spacing={4}>
-            <Box>
+            <Box w='100%'>
               <Heading>Name</Heading>
               <Text>{name}</Text>
             </Box>
-            <Box>
+            <Box w='100%'>
               <Heading>Description</Heading>
               <Text
                 overflow='hidden'
@@ -75,21 +74,21 @@ export const CardDetail: FC<Props> = ({ id, ...moreProps }) => {
                 {description}
               </Text>
             </Box>
-            <Box>
+            <Box w='100%'>
               <Heading>Attributes</Heading>
               <Text>Offense: {attr.offense}</Text>
               <Text>Defense: {attr.defense}</Text>
               <Text>Cost: {attr.cost}</Text>
             </Box>
-            <Box>
+            <Box w='100%'>
               <Heading>Rarity</Heading>
               <Text>{rarity.name}</Text>
             </Box>
-            <Box>
+            <Box w='100%'>
               <Heading>Category</Heading>
               <Text>{category.name}</Text>
             </Box>
-            <Box>
+            <Box w='100%'>
               <Heading>Types</Heading>
               <Text>{types.map((type: CardType) => type.name).join(', ')}</Text>
             </Box>

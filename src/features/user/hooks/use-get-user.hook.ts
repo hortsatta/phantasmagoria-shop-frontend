@@ -14,7 +14,7 @@ export const useGetUser = (id?: string): Result => {
   const currentUserAccount = useReactiveVar(currentUserAccountVar);
 
   const { data: { userAccounts = [] } = {}, loading } = useQuery(GET_USER_ACCOUNTS, {
-    variables: { where: { id: id || currentUserAccount?.id } }
+    variables: { where: { id: id || currentUserAccount?.id || '' } }
   });
 
   const userAccount = useMemo(
