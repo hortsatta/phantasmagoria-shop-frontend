@@ -2,8 +2,10 @@ import { FC, useMemo } from 'react';
 import { Box, Button, Divider, Flex, Heading, Image, Text } from '@chakra-ui/react';
 import { Brain, PenNib, Tray } from 'phosphor-react';
 
+import { CardProductRbacType } from 'config/rbac';
 import { formatPrice } from 'helpers';
 import { CardProduct } from 'models';
+import { useGuard } from 'features/core/hooks';
 import { Icon, IconButton, MotionSurface } from 'features/core/components';
 import { AddToCartButton } from 'features/cart/components';
 import { FavoriteButton } from 'features/favorite/components';
@@ -48,7 +50,12 @@ export const ShopItem: FC<Props> = ({
   onEditClick
 }) => {
   const { name, price, image, cards, favorites } = item;
+  const { canActivate } = useGuard();
   const itemImage = useMemo(() => image?.url || cards[0].coverImage.url, [item]);
+  const canEdit = useMemo(
+    () => canActivate([CardProductRbacType.UPDATE]) && !!onEditClick,
+    [CardProductRbacType, onEditClick]
+  );
 
   return (
     <MotionSurface
@@ -133,7 +140,7 @@ export const ShopItem: FC<Props> = ({
             isActive={!!favorites?.length}
             {...(onFavoriteClick && { onClick: () => onFavoriteClick(item) })}
           />
-          {onEditClick && (
+          {canEdit && (
             <>
               <Divider h='90%' orientation='vertical' />
               <Box {...iconButtonWrapperProps}>
@@ -141,7 +148,7 @@ export const ShopItem: FC<Props> = ({
                   {...iconButtonProps}
                   aria-label='edit item'
                   icon={<Icon w={6} boxSizing='content-box' as={PenNib} />}
-                  onClick={() => onEditClick(item)}
+                  onClick={() => onEditClick && onEditClick(item)}
                 />
               </Box>
             </>

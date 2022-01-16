@@ -1,9 +1,13 @@
 import { AuditTrail } from './core.model';
 
+type UserRole = {
+  id: string;
+};
+
 type User = {
   id: string;
   email: string;
-  role: number;
+  role: UserRole;
 };
 
 type Address = {

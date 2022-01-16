@@ -9,6 +9,7 @@ import {
   currentUserAccountVar,
   phRegionsVar
 } from 'config';
+import { signOut } from 'services';
 import {
   CHECK_SESSION,
   GET_ALL_CATEGORIES,
@@ -20,7 +21,7 @@ import {
 
 export const withPrerequisite = <T,>(Component: ComponentType<T>) => {
   return (hocProps: T) => {
-    const { data: userAccountData } = useQuery(CHECK_SESSION);
+    const { data: userAccountData, loading: checkSessionLoading } = useQuery(CHECK_SESSION);
     const { data: appModulesData } = useQuery(GET_APP_MODULES);
     const { data: raritiesData } = useQuery(GET_ALL_RARITIES);
     const { data: categoriesData } = useQuery(GET_ALL_CATEGORIES);
@@ -38,7 +39,8 @@ export const withPrerequisite = <T,>(Component: ComponentType<T>) => {
       // If user is logged in, set current user
       const { userAccount } = userAccountData?.me.user || {};
       currentUserAccountVar(userAccount || null);
-    }, [userAccountData]);
+      !userAccountData && !checkSessionLoading && signOut(true);
+    }, [userAccountData, checkSessionLoading]);
 
     useEffect(() => {
       appModulesVar(appModulesData?.appModules.modules || null);
