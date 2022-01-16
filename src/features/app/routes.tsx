@@ -1,5 +1,5 @@
 import { FC, lazy } from 'react';
-import { Redirect, Route } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import { useReactiveVar } from '@apollo/client';
 
 import { appModulesVar } from 'config';
@@ -16,11 +16,17 @@ const AboutPage = lazy(() =>
   }))
 );
 
+const NotFoundPage = lazy(() =>
+  import('features/core/pages/not-found.page').then((module: any) => ({
+    default: module.NotFoundPage
+  }))
+);
+
 export const AppRoutes: FC = () => {
   const appModules: any = useReactiveVar(appModulesVar);
 
   return (
-    <>
+    <Switch>
       <Route exact path='/' render={() => <Redirect to={appModules.shop.path} />} />
       <Route
         exact
@@ -39,6 +45,7 @@ export const AppRoutes: FC = () => {
       <Route path={appModules.user.path} component={UserRoutes} />
       <Route path={appModules.admin.path} component={AdminRoutes} />
       <Route path={appModules.about.path} component={AboutPage} />
-    </>
+      <Route component={NotFoundPage} />
+    </Switch>
   );
 };
