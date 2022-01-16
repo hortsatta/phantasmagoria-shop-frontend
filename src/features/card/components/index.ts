@@ -1,3 +1,4 @@
+export * from './card-control.component';
 export * from './card-detail.component';
 export * from './card-detail-modal.component';
 export * from './card-filters.component';

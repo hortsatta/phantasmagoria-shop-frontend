@@ -1,19 +1,9 @@
 import { ComponentProps, FC } from 'react';
-import {
-  Box,
-  BoxProps,
-  Center,
-  Divider,
-  Flex,
-  HStack,
-  Spinner,
-  StackDivider,
-  VStack
-} from '@chakra-ui/react';
-import { Brain, PenNib } from 'phosphor-react';
+import { Box, BoxProps, Center, Spinner, VStack } from '@chakra-ui/react';
 
 import { Card } from 'models';
-import { Icon, IconButton, Scrollbars } from 'features/core/components';
+import { Scrollbars } from 'features/core/components';
+import { CardControl } from './card-control.component';
 import { MiniCardItem } from './mini-card-item.component';
 
 import variables from 'assets/styles/_variables.module.scss';
@@ -26,53 +16,6 @@ type Props = ComponentProps<typeof Scrollbars> & {
   onCardDetailClick?: (card?: Card) => void;
   onCardEditClick?: (card?: Card) => void;
 };
-
-type CardControlProps = {
-  onDetailClick: (e: any) => void;
-  onEditClick?: (e: any) => void;
-};
-
-const iconButtonProps = {
-  w: '100%',
-  h: '100%'
-};
-
-const iconButtonWrapperProps = {
-  p: 1.5,
-  flex: 1,
-  w: '56px',
-  h: '100%'
-};
-
-const CardControl: FC<CardControlProps> = ({ onDetailClick, onEditClick }) => (
-  <Flex h='100%' alignItems='center'>
-    <Divider h='80%' alignSelf='center' orientation='vertical' />
-    <HStack
-      h='100%'
-      spacing={0}
-      divider={<StackDivider h='80%' alignSelf='center' opacity={0.3} orientation='vertical' />}
-    >
-      <Box {...iconButtonWrapperProps}>
-        <IconButton
-          {...iconButtonProps}
-          aria-label='view card detail'
-          icon={<Icon w={6} boxSizing='content-box' as={Brain} />}
-          onClick={onDetailClick}
-        />
-      </Box>
-      {onEditClick && (
-        <Box {...iconButtonWrapperProps}>
-          <IconButton
-            {...iconButtonProps}
-            aria-label='edit card'
-            icon={<Icon w={6} boxSizing='content-box' as={PenNib} />}
-            onClick={onEditClick}
-          />
-        </Box>
-      )}
-    </HStack>
-  </Flex>
-);
 
 export const CardList: FC<Props> = ({
   cards,
@@ -135,10 +78,6 @@ export const CardList: FC<Props> = ({
       </Box>
     </Scrollbars>
   );
-};
-
-CardControl.defaultProps = {
-  onEditClick: undefined
 };
 
 CardList.defaultProps = {
