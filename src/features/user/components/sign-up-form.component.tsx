@@ -1,12 +1,15 @@
-import { FC, FormEvent, useState } from 'react';
+import { FC, FormEvent, useCallback, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Box, BoxProps, Button, Flex, InputRightElement, VStack } from '@chakra-ui/react';
+import { Box, BoxProps, Button, Flex, InputRightElement, Text, VStack } from '@chakra-ui/react';
 import { Eye, EyeClosed, RocketLaunch } from 'phosphor-react';
 
 import { AuthCredentials } from 'models';
 import { Icon, IconButton, Input, SubHeading, Surface } from 'features/core/components';
+
+import variables from 'assets/styles/_variables.module.scss';
 
 const LABEL_WIDTH = '165px';
 
@@ -37,24 +40,30 @@ const defaultValues: UserFormData = {
 };
 
 const SignUpForm: FC<Props> = ({ loading, onSubmit, ...moreProps }) => {
+  const { state: { isCheckout } = {} } = useLocation<any>();
   const { control, handleSubmit: submitForm } = useForm<UserFormData>({
     defaultValues,
     resolver: zodResolver(schema)
   });
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleSubmit = (event: FormEvent) => {
+  const handleSubmit = useCallback((event: FormEvent) => {
     event.preventDefault();
 
     submitForm(async (userFormData: UserFormData) => {
       await onSubmit(userFormData);
     })();
-  };
+  }, []);
 
   return (
     <Box {...moreProps}>
       <Surface p={12} w='100%'>
         <VStack as='form' flex={1} spacing={4} onSubmit={handleSubmit}>
+          {isCheckout && (
+            <Text as='p' w='100%' mb={4} p={4} bgColor={variables.warningColor} borderRadius={4}>
+              Register a new account to proceed to the checkout page.
+            </Text>
+          )}
           <SubHeading pb={4}>
             Create an account using a valid email and set your password with a minimum of 6
             characters.

@@ -1,5 +1,5 @@
-import { FC, createContext, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { FC, createContext, useState, useCallback } from 'react';
+import { useHistory, useLocation } from 'react-router-dom';
 import { useBoolean } from '@chakra-ui/react';
 
 type PageContextType = {
@@ -17,22 +17,29 @@ const PageContext = createContext<PageContextType>({
 });
 
 const PageContextProvider: FC = ({ children }) => {
+  const location = useLocation();
   const history = useHistory();
   const [pageLoading, setPageLoading] = useBoolean(true);
   const [currentPageKey, setCurrentPageKey] = useState('');
 
-  const showPage = () => {
+  const showPage = useCallback(() => {
     const debounce = setTimeout(() => {
       setPageLoading.off();
       clearTimeout(debounce);
     }, 1000);
-  };
+  }, []);
 
-  const changePage = (key?: string, path?: string, isReplace?: boolean, state?: any) => {
-    setPageLoading.on();
-    setCurrentPageKey(key || '');
-    isReplace ? history.replace(path || '', state) : history.push(path || '', state);
-  };
+  const changePage = useCallback(
+    (key?: string, path?: string, isReplace?: boolean, state?: any) => {
+      if (location.pathname.replace(/\//g, '') === path?.replace(/\//g, '')) {
+        return;
+      }
+      setPageLoading.on();
+      setCurrentPageKey(key || '');
+      isReplace ? history.replace(path || '', state) : history.push(path || '', state);
+    },
+    [location]
+  );
 
   return (
     <PageContext.Provider value={{ pageLoading, currentPageKey, showPage, changePage }}>

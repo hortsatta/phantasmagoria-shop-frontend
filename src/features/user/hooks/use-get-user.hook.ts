@@ -6,7 +6,7 @@ import { UserAccount } from 'models';
 import { GET_USER_ACCOUNTS } from 'services/graphql';
 
 type Result = {
-  userAccount: UserAccount;
+  userAccount: UserAccount | null;
   loading: boolean;
 };
 

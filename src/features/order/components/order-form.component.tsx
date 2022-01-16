@@ -1,4 +1,4 @@
-import { FC, FormEvent, useCallback, useMemo } from 'react';
+import { FC, FormEvent, useCallback, useEffect, useMemo } from 'react';
 import { useReactiveVar } from '@apollo/client';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -93,7 +93,7 @@ const OrderForm: FC<Props> = ({ userAccount, cartItems, loading, onAddOrder, ...
   }, [userCurrentAddresses]);
 
   const currentOrder = useMemo(() => {
-    if (!cartItems.length || !userCurrentAddress) {
+    if (!cartItems.length) {
       return defaultValues;
     }
 
@@ -112,6 +112,7 @@ const OrderForm: FC<Props> = ({ userAccount, cartItems, loading, onAddOrder, ...
   const {
     control,
     handleSubmit: submitForm,
+    setValue,
     watch
   } = useForm<OrderFormData>({
     shouldFocusError: false,
@@ -120,6 +121,10 @@ const OrderForm: FC<Props> = ({ userAccount, cartItems, loading, onAddOrder, ...
   });
 
   const totalPrice = watch('totalPrice');
+
+  useEffect(() => {
+    setValue('address', userCurrentAddress);
+  }, [userCurrentAddress]);
 
   const confirmPayment = useCallback(async () => {
     submitForm(async (orderFormData: OrderFormData) => {
@@ -153,10 +158,19 @@ const OrderForm: FC<Props> = ({ userAccount, cartItems, loading, onAddOrder, ...
     })();
   }, [stripe, elements]);
 
-  const handleOpenPaymentModal = useCallback((event: FormEvent) => {
-    event.preventDefault();
-    paymentModalOnOpen();
-  }, []);
+  const handleOpenPaymentModal = useCallback(
+    (event: FormEvent) => {
+      event.preventDefault();
+
+      if (!userCurrentAddress) {
+        notify('error', 'Failed', 'Please provide an address');
+        return;
+      }
+
+      paymentModalOnOpen();
+    },
+    [userCurrentAddress]
+  );
 
   return (
     <>

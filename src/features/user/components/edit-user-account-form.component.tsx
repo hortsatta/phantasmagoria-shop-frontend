@@ -103,7 +103,7 @@ export const EditUserAccountForm: FC<Props> = ({
   }, [userAccount, fullName, displayName]);
 
   useEffect(() => {
-    if (address.id === undefined || !Number(address.id)) {
+    if (!address || address.id === undefined || !Number(address.id)) {
       return;
     }
 
