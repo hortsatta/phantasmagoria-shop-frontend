@@ -1,9 +1,10 @@
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { ApolloProvider } from '@apollo/client';
 
-import { client } from 'config';
+import { APP_TITLE, client } from 'config';
 import { App } from './features/app/app';
 import reportWebVitals from './reportWebVitals';
 
@@ -11,11 +12,18 @@ import './index.scss';
 
 ReactDOM.render(
   <StrictMode>
-    <ApolloProvider client={client}>
-      <Router>
-        <App />
-      </Router>
-    </ApolloProvider>
+    <HelmetProvider>
+      <Helmet>
+        <meta charSet='utf-8' />
+        <title>{APP_TITLE}</title>
+        <link rel='canonical' href={process.env.REACT_APP_BASE_URI} />
+      </Helmet>
+      <ApolloProvider client={client}>
+        <Router>
+          <App />
+        </Router>
+      </ApolloProvider>
+    </HelmetProvider>
   </StrictMode>,
   // eslint-disable-next-line no-undef
   document.getElementById('root')

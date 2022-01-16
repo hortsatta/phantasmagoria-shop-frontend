@@ -29,7 +29,7 @@ export const AddCardPage: FC = () => {
   }, [isComplete]);
 
   return (
-    <PageBox pt={8}>
+    <PageBox pt={8} pageTitle='Add Card' pageDescription='Add a new card.'>
       <Center mb={6}>
         <Heading as='h2' fontSize='4xl'>
           Conjure New Card

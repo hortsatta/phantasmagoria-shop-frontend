@@ -68,7 +68,16 @@ export const OrderCompletePage: FC = () => {
   }, []);
 
   return (
-    <PageBox d='flex' alignItems='flex-start' justifyContent='center' pb={0} h='100%' flex={1}>
+    <PageBox
+      d='flex'
+      alignItems='flex-start'
+      justifyContent='center'
+      pb={0}
+      h='100%'
+      flex={1}
+      pageTitle='Order Complete'
+      pageDescription='Order successfully completed.'
+    >
       <Flex
         pt={8}
         flexDir='column'

@@ -1,20 +1,26 @@
-import { FC, useCallback, useEffect, useMemo } from 'react';
+import { FC, useCallback, useContext, useEffect, useMemo } from 'react';
+import { useReactiveVar } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
 import { Elements } from '@stripe/react-stripe-js';
 import { Flex, Center, Heading } from '@chakra-ui/react';
 import { Step, Steps, useSteps } from 'chakra-ui-steps';
 import { ShoppingBagOpen, Wallet } from 'phosphor-react';
 
-import { stripeElementsOptions, stripePromise } from 'config';
-import { PageBox } from 'features/core/components';
+import { appModulesVar, stripeElementsOptions, stripePromise } from 'config';
+import { PageContext } from 'features/core/contexts';
+import { useDebounce } from 'features/core/hooks';
 import { useGetUser } from 'features/user/hooks';
 import { useStripeOrder } from 'features/order/hooks';
+import { PageBox } from 'features/core/components';
 import { OrderForm, OrderFormData } from 'features/order/components';
 import { CartForm } from '../components';
 import { useGetCart, useUpsertCart } from '../hooks';
 
 export const CartPage: FC = () => {
   const history = useHistory();
+  const { changePage } = useContext(PageContext);
+  const { debounce, loading: debounceLoading } = useDebounce();
+  const appModules = useReactiveVar(appModulesVar);
   const { userAccount, loading: userAccountLoading } = useGetUser();
   const { cart, loading: cartLoading } = useGetCart();
   const {
@@ -54,8 +60,30 @@ export const CartPage: FC = () => {
     [paymentIntentId, addOrder, clearCart]
   );
 
+  const handleSubmit = useCallback(async () => {
+    if (userAccount) {
+      await upsertPaymentIntent();
+    } else {
+      debounce(() => {
+        const registrationPath = `${appModules?.user.path}${appModules?.user.children?.signUp.path}`;
+        changePage(appModules?.user.children?.signUp.key, registrationPath, false, {
+          isCheckout: true
+        });
+      });
+    }
+  }, [userAccount, appModules]);
+
   return (
-    <PageBox d='flex' alignItems='flex-start' justifyContent='center' pb={0} h='100%' flex={1}>
+    <PageBox
+      d='flex'
+      alignItems='flex-start'
+      justifyContent='center'
+      pb={0}
+      h='100%'
+      flex={1}
+      pageTitle='Cart'
+      pageDescription='My cart'
+    >
       <Flex
         pt={8}
         flexDir='column'
@@ -76,10 +104,10 @@ export const CartPage: FC = () => {
               <CartForm
                 w='100%'
                 cart={cart}
-                isSubmitting={upsertPaymentIntentLoading}
+                isSubmitting={upsertPaymentIntentLoading || debounceLoading}
                 onCartChange={updateCartItems}
-                onClearCartItems={clearCartItems}
-                onSubmit={upsertPaymentIntent}
+                onClearCartItems={() => clearCartItems(cart)}
+                onSubmit={handleSubmit}
                 loading={loading}
               />
             </Step>

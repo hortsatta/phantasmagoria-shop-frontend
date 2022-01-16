@@ -71,12 +71,22 @@ export const UserAccountPage: FC = () => {
 
   return (
     <>
-      <PageBox d='flex' alignItems='flex-start' justifyContent='center' pb={0} h='100%' flex={1}>
+      <PageBox
+        d='flex'
+        alignItems='flex-start'
+        justifyContent='center'
+        pb={0}
+        h='100%'
+        flex={1}
+        pageTitle='Account'
+        pageDescription='Your account'
+      >
         <Flex
           pt={8}
           flexDir='column'
           pb='60px'
-          w='4xl'
+          w='100%'
+          maxW='4xl'
           minH='100vh'
           pos='relative'
           justifyContent='flex-start'

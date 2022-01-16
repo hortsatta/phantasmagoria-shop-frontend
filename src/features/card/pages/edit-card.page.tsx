@@ -31,7 +31,7 @@ export const EditCardPage: FC = () => {
   }, [isComplete]);
 
   return (
-    <PageBox pt={8}>
+    <PageBox pt={8} pageTitle={headingText} pageDescription='Update card'>
       <Center mb={6}>
         <Heading as='h2' fontSize='4xl'>
           {headingText}

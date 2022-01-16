@@ -33,7 +33,7 @@ export const EditShopItemPage: FC = () => {
   }, [isComplete]);
 
   return (
-    <PageBox pt={8}>
+    <PageBox pt={8} pageTitle={headingText} pageDescription='Update shop item'>
       <Center mb={6}>
         <Heading as='h2' fontSize='4xl'>
           {headingText}

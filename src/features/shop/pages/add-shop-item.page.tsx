@@ -30,7 +30,7 @@ export const AddShopItemPage: FC = () => {
   }, [isComplete]);
 
   return (
-    <PageBox pt={8}>
+    <PageBox pt={8} pageTitle='Add Item' pageDescription='Add new shop item.'>
       <Center mb={6}>
         <Heading as='h2' fontSize='4xl'>
           Conjure New Item

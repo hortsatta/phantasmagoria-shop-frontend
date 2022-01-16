@@ -19,12 +19,22 @@ export const FavoriteListPage: FC = () => {
   }, []);
 
   return (
-    <PageBox d='flex' alignItems='flex-start' justifyContent='center' pb={0} h='100%' flex={1}>
+    <PageBox
+      d='flex'
+      alignItems='flex-start'
+      justifyContent='center'
+      pb={0}
+      h='100%'
+      flex={1}
+      pageTitle='Favorites'
+      pageDescription='My favorites'
+    >
       <Flex
         pt={8}
         flexDir='column'
         pb='60px'
-        w='7xl'
+        w='100%'
+        maxW='7xl'
         minH='100vh'
         pos='relative'
         justifyContent='flex-start'

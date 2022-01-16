@@ -1,6 +1,6 @@
 import { FC, useContext, useEffect } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { Box, Center, Flex, Heading, Image, Link } from '@chakra-ui/react';
+import { Center, Flex, Heading, Image, Link } from '@chakra-ui/react';
 import { useReactiveVar } from '@apollo/client';
 
 import { appModulesVar, currentUserAccountVar } from 'config';
@@ -27,7 +27,7 @@ export const AuthPage: FC = () => {
   }, [currentUserAccount, loading]);
 
   return (
-    <PageBox>
+    <PageBox pageTitle='Sign In' pageDescription='Sign in existing account.'>
       <Flex d='flex' flexDir='column' alignItems='center' py={8} px={8} w='100%'>
         <Center mb={10} flexDir='column' flex={1}>
           <Heading as='h2' fontSize='4xl'>

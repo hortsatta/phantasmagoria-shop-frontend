@@ -136,7 +136,7 @@ export const CardListPage: FC = () => {
 
   return (
     <>
-      <PageBox pt={8}>
+      <PageBox pt={8} pageTitle='Cards' pageDescription='Card list'>
         <Center mb={6}>
           <Heading as='h2' fontSize='4xl'>
             Cards
