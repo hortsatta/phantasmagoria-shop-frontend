@@ -2,7 +2,8 @@ import { ApolloClient, InMemoryCache, makeVar } from '@apollo/client';
 import { createUploadLink } from 'apollo-upload-client';
 import { setContext } from '@apollo/client/link/context';
 
-import { AppModule, CardCategory, CardRarity, CardType, PhRegion, UserAccount } from 'models';
+import { makeVarPersisted } from 'helpers';
+import { AppModule, CardCategory, CardRarity, CardType, Cart, PhRegion, UserAccount } from 'models';
 import { CartItemFormData } from 'features/cart/components';
 
 const httpLink = createUploadLink({ uri: process.env.REACT_APP_API_URI });
@@ -31,6 +32,7 @@ const favoriteItemsVar = makeVar<any[]>([]);
 const favItemsLoadingVar = makeVar<boolean>(false);
 const cartItemsVar = makeVar<CartItemFormData[]>([]);
 const cartItemsLoadingVar = makeVar<boolean>(false);
+const guestCartVar = makeVarPersisted<Cart>({ id: '0', cartItems: [] }, 'guestCart');
 
 const cache = new InMemoryCache({
   typePolicies: {
@@ -86,9 +88,14 @@ const cache = new InMemoryCache({
             return cartItemsVar();
           }
         },
-        cartItemsLoadingVar: {
+        cartItemsLoading: {
           read() {
             return cartItemsLoadingVar();
+          }
+        },
+        guestCart: {
+          read() {
+            return guestCartVar();
           }
         }
       }
@@ -114,5 +121,6 @@ export {
   favItemsLoadingVar,
   cartItemsVar,
   cartItemsLoadingVar,
+  guestCartVar,
   client
 };

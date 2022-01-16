@@ -1,4 +1,5 @@
 import { FC, useContext, useEffect, useMemo } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useReactiveVar } from '@apollo/client';
 import { Box, Center, Heading } from '@chakra-ui/react';
 import { Step, Steps, useSteps } from 'chakra-ui-steps';
@@ -7,11 +8,13 @@ import { Flask, TestTube } from 'phosphor-react';
 import { appModulesVar } from 'config';
 import { signIn } from 'services';
 import { PageContext } from 'features/core/contexts';
+import { useUpsertCart } from 'features/cart/hooks';
 import { PageBox } from 'features/core/components';
 import { useSignUp } from '../hooks';
 import { SignUpForm, SignUpOptionalForm } from '../components';
 
 export const RegistrationPage: FC = () => {
+  const { state: { isCheckout } = {} } = useLocation<any>();
   const { changePage } = useContext(PageContext);
   const appModules: any = useReactiveVar(appModulesVar);
   const { activeStep, setStep } = useSteps({ initialStep: 0 });
@@ -24,6 +27,7 @@ export const RegistrationPage: FC = () => {
     addOptionalData,
     signUp
   } = useSignUp();
+  const { createCartFromGuestCart } = useUpsertCart();
 
   const steps = useMemo(
     () => [
@@ -64,11 +68,10 @@ export const RegistrationPage: FC = () => {
     if (!isOptionalDetailComplete) {
       return;
     }
-
+    // Navigate to main shop page or to the cart page
     const delay = setTimeout(() => {
-      // Navigate to main shop page
-      const shopListNav = appModules.shop.children?.list;
-      changePage(shopListNav?.key, shopListNav?.path);
+      const nav = isCheckout ? appModules.cart : appModules.shop.children?.list;
+      changePage(nav?.key, nav?.path);
     }, 800);
 
     // eslint-disable-next-line consistent-return
@@ -77,13 +80,16 @@ export const RegistrationPage: FC = () => {
       // Sign in user
       if (currentUser.current) {
         const { jwt, userAccount } = currentUser.current;
-        signIn(jwt, userAccount);
+        signIn(jwt, userAccount, () => {
+          // Create cart from guest cart if checkout.
+          isCheckout && createCartFromGuestCart();
+        });
       }
     };
   }, [isOptionalDetailComplete, loading]);
 
   return (
-    <PageBox pt={8}>
+    <PageBox pt={8} pageTitle='Sign Up' pageDescription='Register a new account.'>
       <Center mb={6}>
         <Heading as='h2' fontSize='4xl'>
           Conjure An Account

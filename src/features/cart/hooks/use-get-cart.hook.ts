@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from 'react';
-import { useReactiveVar, useQuery } from '@apollo/client';
+import { useReactiveVar, useLazyQuery } from '@apollo/client';
 
-import { cartItemsVar, currentUserAccountVar } from 'config';
+import { cartItemsVar, currentUserAccountVar, guestCartVar } from 'config';
 import { Cart, CartItem } from 'models';
 import { GET_CARTS } from 'services/graphql';
 
@@ -12,19 +12,15 @@ type Result = {
 
 export const useGetCart = (): Result => {
   const userAccount = useReactiveVar(currentUserAccountVar);
+  const guestCart = useReactiveVar(guestCartVar);
   const cartItems = useReactiveVar(cartItemsVar);
 
-  const {
-    data: { carts = [] } = {},
-    loading: getCartsLoading,
-    refetch
-  } = useQuery(GET_CARTS, {
-    variables: { where: { user_account: userAccount?.id } }
-  });
+  const [getCarts, { data: { carts = [] } = {}, loading: getCartsLoading, refetch }] =
+    useLazyQuery(GET_CARTS);
 
   const cart = useMemo(() => {
-    if (!carts.length) {
-      return null;
+    if (!carts || !carts.length) {
+      return guestCart;
     }
 
     const { cartItems: currentCartItems, ...moreCart } = carts[0];
@@ -34,10 +30,16 @@ export const useGetCart = (): Result => {
   }, [carts]);
 
   useEffect(() => {
-    if (cartItems.length) {
+    if (!userAccount) {
       return;
     }
+    getCarts({ variables: { where: { user_account: userAccount.id } } });
+  }, [cartItems]);
 
+  useEffect(() => {
+    if (!refetch || (!!cartItems && cartItems.length)) {
+      return;
+    }
     refetch();
   }, [cartItems]);
 
