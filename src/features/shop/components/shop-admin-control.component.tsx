@@ -15,6 +15,8 @@ const sectionHeaderStyles: TextProps = {
 };
 
 const buttonStyles: ButtonProps = {
+  justifyContent: { '2xl': 'center', xl: 'flex-start', base: 'flex-start' },
+  w: { '2xl': 'auto', base: '100%' },
   variant: 'ghost',
   size: 'sm'
 };
@@ -40,7 +42,7 @@ export const ShopAdminControl: FC = () => {
 
   return (
     <VStack alignItems='flex-start'>
-      <Box>
+      <Box w='100%'>
         <Text {...sectionHeaderStyles}>Shop Item</Text>
         <Button
           {...buttonStyles}
@@ -50,11 +52,16 @@ export const ShopAdminControl: FC = () => {
           Add New
         </Button>
       </Box>
-      <Box>
+      <Box w='100%'>
         <Text {...sectionHeaderStyles}>Card</Text>
-        <ButtonGroup isAttached>
+        <ButtonGroup
+          w={{ '2xl': 'auto', base: '100%' }}
+          flexDir={{ '2xl': 'row', base: 'column' }}
+          isAttached
+        >
           <Button
             {...buttonStyles}
+            mb={{ '2xl': 0, base: 2 }}
             leftIcon={<Icon w={7} as={PlusCircle} />}
             onClick={() => history.push(addCardPath)}
           >

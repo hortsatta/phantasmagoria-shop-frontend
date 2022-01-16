@@ -99,7 +99,7 @@ export const ShopItemDetail: FC<Props> = ({
               </HStack>
             </Flex>
             <Divider width='90%' />
-            <Heading fontSize='3xl' as='h4'>
+            <Heading fontSize={{ '2xl': '3xl', base: '2xl' }} as='h4'>
               {name}
             </Heading>
             <Divider width='90%' />

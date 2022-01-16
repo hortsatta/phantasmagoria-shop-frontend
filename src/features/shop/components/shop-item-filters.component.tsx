@@ -114,12 +114,26 @@ export const ShopItemFilters: FC<Props> = ({ value, loading, onChange }) => {
         onChange={(val: any) => handleChange(val, 'types')}
         isMulti
       />
-      <ButtonGroup w='100%' justifyContent='space-between'>
-        <Button variant='ghost' fontSize='sm' onClick={handleClear} disabled={loading}>
+      <ButtonGroup
+        flexDir={{ '2xl': 'row', base: 'column' }}
+        justifyContent={{ '2xl': 'space-between', base: 'flex-start' }}
+        w='100%'
+        isAttached
+      >
+        <Button
+          variant='ghost'
+          w={{ '2xl': 'auto', base: '100%' }}
+          justifyContent={{ '2xl': 'center', base: 'flex-start' }}
+          fontSize='sm'
+          onClick={handleClear}
+          disabled={loading}
+        >
           Clear
         </Button>
         <Button
           variant='ghost'
+          w={{ '2xl': 'auto', base: '100%' }}
+          justifyContent={{ '2xl': 'center', base: 'flex-start' }}
           fontSize='sm'
           onClick={() => onChange && onChange(filters)}
           leftIcon={<Icon as={MagicWand} w={6} />}

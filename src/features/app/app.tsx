@@ -20,6 +20,7 @@ const Component: FC = () => {
           className='scrollbar'
           style={{ height: '100vh', width: '100%', zIndex: 999 }}
           viewProps={{ pt: '61px' }}
+          trackVerticalProps={{ zIndex: 4 }}
           hideHorizontalScroll
         >
           <Header />

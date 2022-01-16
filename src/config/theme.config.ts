@@ -1,6 +1,15 @@
 import { theme as chakraTheme } from '@chakra-ui/react';
+import { createBreakpoints } from '@chakra-ui/theme-tools';
 import { StepsStyleConfig } from 'chakra-ui-steps';
 import variables from 'assets/styles/_variables.module.scss';
+
+const breakpoints = createBreakpoints({
+  sm: '320px',
+  md: '768px',
+  lg: '960px',
+  xl: '1200px',
+  '2xl': '1536px'
+});
 
 const styles = {
   global: {
@@ -210,6 +219,7 @@ const theme = {
     initialColorMode: 'dark',
     useSystemColorMode: false
   },
+  breakpoints,
   styles,
   fonts,
   colors,

@@ -73,6 +73,8 @@ export const ShopItemSorter: FC<Props> = ({ value, loading, onChange }) => {
         })}
       </VStack>
       <Button
+        w={{ '2xl': 'auto', base: '100%' }}
+        justifyContent={{ '2xl': 'center', base: 'flex-start' }}
         alignSelf='flex-end'
         fontSize='sm'
         variant='ghost'

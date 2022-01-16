@@ -34,7 +34,7 @@ export const ShopList: FC<Props> = ({
         <Flex
           flex={1}
           alignItems='flex-start'
-          justifyContent='flex-start'
+          justifyContent='center'
           flexWrap='wrap'
           w='100%'
           opacity={loading ? 0.5 : 1}
