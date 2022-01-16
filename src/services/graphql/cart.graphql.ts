@@ -44,6 +44,23 @@ const GET_CARTS = gql`
   }
 `;
 
+const CREATE_CART = gql`
+  mutation CreateCart($cart: CartInput) {
+    createCart(input: { data: $cart }) {
+      cart {
+        id
+        cartItems {
+          id
+          quantity
+          cardProduct: card_product {
+            id
+          }
+        }
+      }
+    }
+  }
+`;
+
 const UPDATE_CART_ITEMS = gql`
   mutation UpdateCartItems(
     $updateItems: [ComponentCartItemCartItemInput]
@@ -78,4 +95,4 @@ const CLEAR_CART = gql`
   }
 `;
 
-export { GET_CARTS, UPDATE_CART_ITEMS, CLEAR_CART_ITEMS, CLEAR_CART };
+export { GET_CARTS, CREATE_CART, UPDATE_CART_ITEMS, CLEAR_CART_ITEMS, CLEAR_CART };

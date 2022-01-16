@@ -8,7 +8,7 @@ type CartItem = AuditTrail & {
 };
 
 type Cart = AuditTrail & {
-  id: string;
+  id?: string;
   cartItems: CartItem[];
 };
 
