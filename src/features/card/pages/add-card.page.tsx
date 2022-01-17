@@ -16,7 +16,7 @@ export const AddCardPage: FC = () => {
   // Redirect to main shop page if process is fully complete.
   useEffect(() => {
     if (!isComplete) {
-      return;
+      return undefined;
     }
 
     const delay = setTimeout(() => {
@@ -24,8 +24,9 @@ export const AddCardPage: FC = () => {
       history.push(cardListPath, { refetch: true });
     }, 1800);
 
-    // eslint-disable-next-line consistent-return
-    return () => clearTimeout(delay);
+    return () => {
+      clearTimeout(delay);
+    };
   }, [isComplete]);
 
   return (

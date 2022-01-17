@@ -51,21 +51,22 @@ export const SignInForm: FC<Props> = ({ loading, onSubmit, ...moreProps }) => {
           <Controller
             name='email'
             control={control}
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            render={({ field: { ref, ...moreField }, formState: { errors } }) => (
+            render={({ field: { onChange, onBlur, value, name }, formState: { errors } }) => (
               <Input
                 inputLeftAddonProps={{ w: LABEL_WIDTH }}
                 leftComponent='Email'
                 error={errors && errors.email?.message}
-                {...moreField}
+                name={name}
+                value={value}
+                onChange={onChange}
+                onBlur={onBlur}
               />
             )}
           />
           <Controller
             name='password'
             control={control}
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            render={({ field: { ref, ...moreField }, formState: { errors } }) => (
+            render={({ field: { onChange, onBlur, value, name }, formState: { errors } }) => (
               <Input
                 inputLeftAddonProps={{ w: LABEL_WIDTH }}
                 type={showPassword ? 'text' : 'password'}
@@ -83,7 +84,10 @@ export const SignInForm: FC<Props> = ({ loading, onSubmit, ...moreProps }) => {
                     />
                   </InputRightElement>
                 }
-                {...moreField}
+                name={name}
+                value={value}
+                onChange={onChange}
+                onBlur={onBlur}
               />
             )}
           />

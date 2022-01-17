@@ -74,7 +74,6 @@ export const OrderItemDetail: FC<Props> = ({ id, ...moreProps }) => {
               <FormSectionHeading>Items</FormSectionHeading>
               <VStack flex={1} alignItems='flex-start' spacing={3}>
                 {cartItems.map((ci, index) => (
-                  // eslint-disable-next-line react/no-array-index-key
                   <MiniCartItem key={index} cartItem={ci} />
                 ))}
                 <Divider />

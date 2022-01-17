@@ -11,7 +11,7 @@ import {
   HStack,
   StackDivider
 } from '@chakra-ui/react';
-import Lottie from 'lottie-react';
+import Lottie from 'react-lottie-player';
 
 import { appModulesVar } from 'config';
 import { PageContext } from 'features/core/contexts';
@@ -97,7 +97,7 @@ export const OrderCompletePage: FC = () => {
             {isStatusSuccessful && (
               <Box flex={1}>
                 <Flex alignItems='center' flex={1} pr={12}>
-                  <Lottie style={LOTTIE_STYLES} animationData={lottieDone} loop={false} />
+                  <Lottie style={LOTTIE_STYLES} animationData={lottieDone} loop={false} play />
                   <SubHeading w='70%' textAlign='center' lineHeight={1.2}>
                     Congratulations! Your order has been successful. View the order details or
                     return to shop.

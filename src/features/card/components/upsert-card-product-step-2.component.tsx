@@ -24,26 +24,30 @@ export const UpsertCardProductStep2: FC = () => {
       <Controller
         name='name'
         control={control}
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        render={({ field: { ref, ...moreFields }, formState: { errors } }) => (
+        render={({ field: { onChange, onBlur, value, name }, formState: { errors } }) => (
           <Input
             inputLeftAddonProps={{ w: LABEL_WIDTH }}
             leftComponent='Name'
             error={errors && errors.name?.message}
-            {...moreFields}
+            name={name}
+            value={value}
+            onChange={onChange}
+            onBlur={onBlur}
           />
         )}
       />
       <Controller
         name='description'
         control={control}
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        render={({ field: { ref, ...moreFields }, formState: { errors } }) => (
+        render={({ field: { onChange, onBlur, value, name }, formState: { errors } }) => (
           <Input
             inputLeftAddonProps={{ w: LABEL_WIDTH }}
             leftComponent='Description'
             error={errors && errors.description?.message}
-            {...moreFields}
+            name={name}
+            value={value}
+            onChange={onChange}
+            onBlur={onBlur}
           />
         )}
       />
@@ -51,15 +55,15 @@ export const UpsertCardProductStep2: FC = () => {
         <Controller
           name='price'
           control={control}
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          render={({ field: { ref, onChange, onBlur, ...moreFields }, formState: { errors } }) => (
+          render={({ field: { onChange, onBlur, value, name }, formState: { errors } }) => (
             <NumberInput
               inputLeftAddonProps={{ w: LABEL_WIDTH }}
               leftComponent='Unit Price'
               error={errors && errors.price?.message}
+              name={name}
+              value={value}
               onChange={onChange}
               onBlur={() => handlePriceBlur(onBlur)}
-              {...moreFields}
             />
           )}
         />
@@ -69,7 +73,6 @@ export const UpsertCardProductStep2: FC = () => {
         <Controller
           name='image'
           control={control}
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
           render={({ field: { name, value, onChange } }) => (
             <ImageUpload
               name={name}

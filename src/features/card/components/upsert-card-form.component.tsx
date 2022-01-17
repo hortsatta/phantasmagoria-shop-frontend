@@ -76,8 +76,7 @@ const UpsertCardForm: FC<Props> = ({
       return defaultValues;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { attr, rarity, category, types, slug, image, coverImage, ...moreCard } = card;
+    const { attr, rarity, category, types, image, coverImage, slug, ...moreCard } = card;
 
     return {
       ...moreCard,

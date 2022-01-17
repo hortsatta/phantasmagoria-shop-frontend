@@ -91,7 +91,6 @@ export const ShippingAddress: FC<Props> = ({
       try {
         let targetAddresses: any;
         if (isAddressNew) {
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const { id: addressId, ...newAddress } = addressFormData;
           targetAddresses = [
             ...userCurrentAddresses.map(ca => ({ ...ca, isDefault: false })),

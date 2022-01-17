@@ -38,7 +38,6 @@ export const useEditUser = (id?: string): Result => {
       debounce();
 
       const targetAddressData = addressFormData.map((address: any) => {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { __typename, ...moreAddress } = address;
         return moreAddress;
       });

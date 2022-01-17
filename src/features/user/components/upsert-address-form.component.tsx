@@ -159,21 +159,22 @@ const UpsertAddressForm: FC<Props> = ({
         <Controller
           name='fullName'
           control={control}
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          render={({ field: { ref, ...moreFields }, formState: { errors } }) => (
+          render={({ field: { onChange, onBlur, value, name }, formState: { errors } }) => (
             <Input
               inputLeftAddonProps={{ w: LABEL_WIDTH }}
               leftComponent='Full Name'
               error={errors && errors?.fullName?.message}
-              {...moreFields}
+              name={name}
+              value={value}
+              onBlur={onBlur}
+              onChange={onChange}
             />
           )}
         />
         <Controller
           name='region'
           control={control}
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          render={({ field: { ref, onChange, value, ...moreFields }, formState: { errors } }) => (
+          render={({ field: { onChange, onBlur, value, name }, formState: { errors } }) => (
             <Select
               inputLeftAddonProps={{ w: LABEL_WIDTH }}
               leftComponent='Region'
@@ -183,17 +184,17 @@ const UpsertAddressForm: FC<Props> = ({
                   value: ''
                 }
               }
-              error={errors && errors?.region?.message}
+              name={name}
+              onBlur={onBlur}
               onChange={(val: any) => onChange(val.value)}
-              {...moreFields}
+              error={errors && errors?.region?.message}
             />
           )}
         />
         <Controller
           name='province'
           control={control}
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          render={({ field: { ref, onChange, value, ...moreFields }, formState: { errors } }) => (
+          render={({ field: { onChange, onBlur, value, name }, formState: { errors } }) => (
             <Select
               inputLeftAddonProps={{ w: LABEL_WIDTH }}
               leftComponent='Province'
@@ -203,18 +204,18 @@ const UpsertAddressForm: FC<Props> = ({
                   value: ''
                 }
               }
-              error={errors && errors?.province?.message}
+              name={name}
+              onBlur={onBlur}
               onChange={(val: any) => onChange(val.value)}
+              error={errors && errors?.province?.message}
               isLoading={phProvinceLoading}
-              {...moreFields}
             />
           )}
         />
         <Controller
           name='city'
           control={control}
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          render={({ field: { ref, onChange, value, ...moreFields }, formState: { errors } }) => (
+          render={({ field: { onChange, onBlur, value, name }, formState: { errors } }) => (
             <Select
               inputLeftAddonProps={{ w: LABEL_WIDTH }}
               leftComponent='City / Munici.'
@@ -222,18 +223,18 @@ const UpsertAddressForm: FC<Props> = ({
               value={
                 phCityOptions.find((item: SelectOption) => item.value === value) || { value: '' }
               }
-              error={errors && errors?.city?.message}
+              name={name}
+              onBlur={onBlur}
               onChange={(val: any) => onChange(val.value)}
+              error={errors && errors?.city?.message}
               isLoading={phCityLoading}
-              {...moreFields}
             />
           )}
         />
         <Controller
           name='barangay'
           control={control}
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          render={({ field: { ref, onChange, value, ...moreFields }, formState: { errors } }) => (
+          render={({ field: { onChange, onBlur, value, name }, formState: { errors } }) => (
             <Select
               inputLeftAddonProps={{ w: LABEL_WIDTH }}
               leftComponent='Barangay'
@@ -243,55 +244,57 @@ const UpsertAddressForm: FC<Props> = ({
                   value: ''
                 }
               }
-              error={errors && errors?.barangay?.message}
+              name={name}
+              onBlur={onBlur}
               onChange={(val: any) => onChange(val.value)}
+              error={errors && errors?.barangay?.message}
               isLoading={phBarangayLoading}
-              {...moreFields}
             />
           )}
         />
         <Controller
           name='addressLine'
           control={control}
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          render={({ field: { ref, ...moreFields }, formState: { errors } }) => (
+          render={({ field: { onChange, onBlur, value, name }, formState: { errors } }) => (
             <Input
               inputLeftAddonProps={{ w: LABEL_WIDTH }}
               leftComponent='Line'
               placeholder='Street Name, Building, House No.'
               error={errors && errors?.addressLine?.message}
-              {...moreFields}
+              name={name}
+              value={value}
+              onBlur={onBlur}
+              onChange={onChange}
             />
           )}
         />
         <Controller
           name='zipCode'
           control={control}
-          render={({
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            field: { onChange, value, ref, ...moreFields },
-            formState: { errors }
-          }) => (
+          render={({ field: { onChange, onBlur, value, name }, formState: { errors } }) => (
             <NumberInput
               inputLeftAddonProps={{ w: LABEL_WIDTH }}
               leftComponent='Zip Code'
-              error={errors && errors?.zipCode?.message}
-              onChange={val => onChange(!val.trim() ? 0 : parseInt(val, 10))}
+              name={name}
               value={value || undefined}
-              {...moreFields}
+              onBlur={onBlur}
+              onChange={val => onChange(!val.trim() ? 0 : parseInt(val, 10))}
+              error={errors && errors?.zipCode?.message}
             />
           )}
         />
         <Controller
           name='phoneNumber'
           control={control}
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          render={({ field: { ref, ...moreFields }, formState: { errors } }) => (
+          render={({ field: { onChange, onBlur, value, name }, formState: { errors } }) => (
             <Input
               inputLeftAddonProps={{ w: LABEL_WIDTH }}
               leftComponent='Phone No.'
               error={errors && errors?.phoneNumber?.message}
-              {...moreFields}
+              name={name}
+              value={value}
+              onBlur={onBlur}
+              onChange={onChange}
             />
           )}
         />

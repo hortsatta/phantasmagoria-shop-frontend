@@ -25,7 +25,6 @@ ReactDOM.render(
       </ApolloProvider>
     </HelmetProvider>
   </StrictMode>,
-  // eslint-disable-next-line no-undef
   document.getElementById('root')
 );
 

@@ -40,7 +40,6 @@ export const useEditCard = (slug: string): Result => {
       try {
         const { id: cardId, image: currentImage, coverImage: currentCoverImage } = cards[0] || {};
         const {
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
           id,
           coverImage,
           image,

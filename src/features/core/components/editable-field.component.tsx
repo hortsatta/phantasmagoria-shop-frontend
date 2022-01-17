@@ -43,7 +43,6 @@ const EditableControls: FC<EditableControlsProps> = ({ onSubmit, onCancel }) => 
     useEditableControls();
 
   const getSubmitProps: any = useCallback(() => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { ref, onClick, ...moreProps }: any = getSubmitButtonProps() || {};
 
     const handleClick = () => {
@@ -58,7 +57,6 @@ const EditableControls: FC<EditableControlsProps> = ({ onSubmit, onCancel }) => 
   }, [getSubmitButtonProps, onSubmit]);
 
   const getCancelProps: any = useCallback(() => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { ref, onClick, ...moreProps }: any = getCancelButtonProps() || {};
 
     const handleClick = () => {
@@ -73,7 +71,6 @@ const EditableControls: FC<EditableControlsProps> = ({ onSubmit, onCancel }) => 
   }, [getCancelButtonProps, onCancel]);
 
   const getEditProps: any = useCallback(() => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { ref, ...moreProps }: any = getEditButtonProps() || {};
     return moreProps;
   }, [getEditButtonProps]);
