@@ -27,7 +27,6 @@ export const useAddShopItem = (): Result => {
     debounce();
 
     try {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { image, id, cards, ...moreCardProdFormData } = cardProdFormData;
       const cardProduct = {
         ...moreCardProdFormData,

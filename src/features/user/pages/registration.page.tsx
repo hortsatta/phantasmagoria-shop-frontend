@@ -53,20 +53,21 @@ export const RegistrationPage: FC = () => {
 
   useEffect(() => {
     if (!isSignUpComplete) {
-      return;
+      return undefined;
     }
 
     const delay = setTimeout(() => {
       setStep(steps.length - 1);
     }, 300);
 
-    // eslint-disable-next-line consistent-return
-    return () => clearTimeout(delay);
+    return () => {
+      clearTimeout(delay);
+    };
   }, [isSignUpComplete]);
 
   useEffect(() => {
     if (!isOptionalDetailComplete) {
-      return;
+      return undefined;
     }
     // Navigate to main shop page or to the cart page
     const delay = setTimeout(() => {
@@ -74,7 +75,6 @@ export const RegistrationPage: FC = () => {
       changePage(nav?.key, nav?.path);
     }, 800);
 
-    // eslint-disable-next-line consistent-return
     return () => {
       clearTimeout(delay);
       // Sign in user

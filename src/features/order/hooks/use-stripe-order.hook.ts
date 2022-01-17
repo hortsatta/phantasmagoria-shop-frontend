@@ -58,7 +58,6 @@ export const useStripeOrder = (): Result => {
       debounce();
       try {
         const { cartItems, address, ...moreOrder } = orderFormData;
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { id: addressId, ...moreAddress } = address as any;
 
         const orderItems: any = cartItems.map(ci => ({

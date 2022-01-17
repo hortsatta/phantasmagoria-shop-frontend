@@ -9,7 +9,6 @@ export const makeVarPersisted = <T>(initialValue: T, storageName: string): React
   let value = initialValue;
 
   // Try to fetch the value from local storage
-  // eslint-disable-next-line no-undef
   const previousValue = localStorage.getItem(storageName);
   if (previousValue !== null) {
     try {
@@ -28,10 +27,8 @@ export const makeVarPersisted = <T>(initialValue: T, storageName: string): React
     try {
       // Try to add the value to local storage
       if (newValue === undefined) {
-        // eslint-disable-next-line no-undef
         localStorage.removeItem(storageName);
       } else {
-        // eslint-disable-next-line no-undef
         localStorage.setItem(storageName, getCleanValueForStorage(newValue));
       }
     } catch {

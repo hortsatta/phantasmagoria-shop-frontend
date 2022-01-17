@@ -15,7 +15,6 @@ export const UpsertCardStep2: FC = () => {
         <Controller
           name='image'
           control={control}
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
           render={({ field: { name, value, onChange } }) => (
             <ImageUpload
               name={name}
@@ -32,7 +31,6 @@ export const UpsertCardStep2: FC = () => {
         <Controller
           name='coverImage'
           control={control}
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
           render={({ field: { name, value, onChange } }) => (
             <ImageUpload
               name={name}

@@ -24,6 +24,7 @@
       }
     ],
     // typescript
+    "@typescript-eslint/no-unused-vars": ["error", { "ignoreRestSiblings": true }],
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/indent": ["error", 2],
     "@typescript-eslint/no-explicit-any": "off",
@@ -34,6 +35,7 @@
     "import/order": "off",
     "import/prefer-default-export": "off",
     // react
+    "react/no-array-index-key": "off",
     "react/jsx-filename-extension": ["error", { "extensions": [".tsx"] }],
     "react/jsx-max-props-per-line": [1, { "when": "multiline" }],
     "react/jsx-props-no-spreading": "off",
@@ -46,5 +48,9 @@
         "moduleDirectory": ["node_modules", "src/"]
       }
     }
+  },
+  "env": {
+    "browser": true,
+    "node": true
   }
 }

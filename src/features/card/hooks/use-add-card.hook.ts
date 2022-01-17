@@ -25,7 +25,6 @@ export const useAddCard = (): Result => {
     debounce();
 
     try {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { coverImage, image, id, offense, defense, cost, ...moreCardFormData } = cardFormData;
       const card = {
         ...moreCardFormData,

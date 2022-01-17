@@ -1,11 +1,10 @@
-/* eslint-disable @typescript-eslint/indent */
 import { FC, FormEvent, useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Box, BoxProps, Button, ButtonGroup, Flex, HStack, VStack } from '@chakra-ui/react';
 import { Rewind, RocketLaunch, SkipForward } from 'phosphor-react';
-import Lottie from 'lottie-react';
+import Lottie from 'react-lottie-player';
 
 import { Address, SelectOption, UserAccount } from 'models';
 import {
@@ -28,10 +27,11 @@ import {
 
 const LABEL_WIDTH = '125px';
 
-type UserOptionalFormData = Omit<UserAccount, 'id' | 'user' | 'addresses'> &
-  Omit<Address, 'id', 'fullName' | 'zipCode'> & {
-    zipCode: null | number;
-  };
+type AddressFormData = Omit<Address, 'id' | 'fullName' | 'zipCode'> & {
+  zipCode: null | number;
+};
+
+type UserOptionalFormData = Omit<UserAccount, 'id' | 'user' | 'addresses'> & AddressFormData;
 
 type Props = Omit<BoxProps, 'onSubmit'> & {
   onSubmit: (data: UserOptionalFormData) => void;
@@ -119,6 +119,7 @@ const SignUpOptionalForm: FC<Props> = ({ loading, onSkip, onSubmit, ...moreProps
               style={{ flexShrink: 0, marginRight: '8px', width: '120px', height: '120px' }}
               animationData={lottieDone}
               loop={false}
+              play
             />
             <SubHeading>
               Your account has been created! Add an address or continue to the shop.
@@ -127,26 +128,30 @@ const SignUpOptionalForm: FC<Props> = ({ loading, onSkip, onSubmit, ...moreProps
           <Controller
             name='displayName'
             control={control}
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            render={({ field: { ref, ...moreFields }, formState: { errors } }) => (
+            render={({ field: { onChange, onBlur, value, name }, formState: { errors } }) => (
               <Input
                 inputLeftAddonProps={{ w: LABEL_WIDTH }}
                 leftComponent='Display Name'
                 error={errors && errors.displayName?.message}
-                {...moreFields}
+                name={name}
+                value={value}
+                onBlur={onBlur}
+                onChange={onChange}
               />
             )}
           />
           <Controller
             name='fullName'
             control={control}
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            render={({ field: { ref, ...moreFields }, formState: { errors } }) => (
+            render={({ field: { onChange, onBlur, value, name }, formState: { errors } }) => (
               <Input
                 inputLeftAddonProps={{ w: LABEL_WIDTH }}
                 leftComponent='Full Name'
                 error={errors && errors.fullName?.message}
-                {...moreFields}
+                name={name}
+                value={value}
+                onBlur={onBlur}
+                onChange={onChange}
               />
             )}
           />
@@ -156,8 +161,7 @@ const SignUpOptionalForm: FC<Props> = ({ loading, onSkip, onSubmit, ...moreProps
           <Controller
             name='region'
             control={control}
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            render={({ field: { ref, onChange, value, ...moreFields }, formState: { errors } }) => (
+            render={({ field: { onChange, onBlur, value, name }, formState: { errors } }) => (
               <Select
                 inputLeftAddonProps={{ w: LABEL_WIDTH }}
                 leftComponent='Region'
@@ -167,17 +171,17 @@ const SignUpOptionalForm: FC<Props> = ({ loading, onSkip, onSubmit, ...moreProps
                     value: ''
                   }
                 }
-                error={errors && errors.region?.message}
+                name={name}
+                onBlur={onBlur}
                 onChange={(val: any) => onChange(val.value)}
-                {...moreFields}
+                error={errors && errors.region?.message}
               />
             )}
           />
           <Controller
             name='province'
             control={control}
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            render={({ field: { ref, onChange, value, ...moreFields }, formState: { errors } }) => (
+            render={({ field: { onChange, onBlur, value, name }, formState: { errors } }) => (
               <Select
                 inputLeftAddonProps={{ w: LABEL_WIDTH }}
                 leftComponent='Province'
@@ -187,18 +191,18 @@ const SignUpOptionalForm: FC<Props> = ({ loading, onSkip, onSubmit, ...moreProps
                     value: ''
                   }
                 }
-                error={errors && errors.province?.message}
+                name={name}
+                onBlur={onBlur}
                 onChange={(val: any) => onChange(val.value)}
+                error={errors && errors.province?.message}
                 isLoading={phProvinceLoading}
-                {...moreFields}
               />
             )}
           />
           <Controller
             name='city'
             control={control}
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            render={({ field: { ref, onChange, value, ...moreFields }, formState: { errors } }) => (
+            render={({ field: { onChange, onBlur, value, name }, formState: { errors } }) => (
               <Select
                 inputLeftAddonProps={{ w: LABEL_WIDTH }}
                 leftComponent='City / Munici.'
@@ -206,18 +210,18 @@ const SignUpOptionalForm: FC<Props> = ({ loading, onSkip, onSubmit, ...moreProps
                 value={
                   phCityOptions.find((item: SelectOption) => item.value === value) || { value: '' }
                 }
-                error={errors && errors.city?.message}
+                name={name}
+                onBlur={onBlur}
                 onChange={(val: any) => onChange(val.value)}
+                error={errors && errors.city?.message}
                 isLoading={phCityLoading}
-                {...moreFields}
               />
             )}
           />
           <Controller
             name='barangay'
             control={control}
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            render={({ field: { ref, onChange, value, ...moreFields }, formState: { errors } }) => (
+            render={({ field: { onChange, onBlur, value, name }, formState: { errors } }) => (
               <Select
                 inputLeftAddonProps={{ w: LABEL_WIDTH }}
                 leftComponent='Barangay'
@@ -227,24 +231,27 @@ const SignUpOptionalForm: FC<Props> = ({ loading, onSkip, onSubmit, ...moreProps
                     value: ''
                   }
                 }
-                error={errors && errors.barangay?.message}
+                name={name}
+                onBlur={onBlur}
                 onChange={(val: any) => onChange(val.value)}
+                error={errors && errors.barangay?.message}
                 isLoading={phBarangayLoading}
-                {...moreFields}
               />
             )}
           />
           <Controller
             name='addressLine'
             control={control}
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            render={({ field: { ref, ...moreFields }, formState: { errors } }) => (
+            render={({ field: { onChange, onBlur, value, name }, formState: { errors } }) => (
               <Input
                 inputLeftAddonProps={{ w: LABEL_WIDTH }}
                 leftComponent='Line'
                 placeholder='Street Name, Building, House No.'
                 error={errors && errors.addressLine?.message}
-                {...moreFields}
+                name={name}
+                value={value}
+                onBlur={onBlur}
+                onChange={onChange}
               />
             )}
           />
@@ -252,31 +259,30 @@ const SignUpOptionalForm: FC<Props> = ({ loading, onSkip, onSubmit, ...moreProps
             <Controller
               name='zipCode'
               control={control}
-              render={({
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                field: { onChange, value, ref, ...moreFields },
-                formState: { errors }
-              }) => (
+              render={({ field: { onChange, onBlur, value, name }, formState: { errors } }) => (
                 <NumberInput
                   inputLeftAddonProps={{ w: LABEL_WIDTH }}
                   leftComponent='Zip Code'
-                  error={errors && errors.zipCode?.message}
-                  onChange={val => onChange(!val.trim() ? 0 : parseInt(val, 10))}
+                  name={name}
                   value={value || undefined}
-                  {...moreFields}
+                  onBlur={onBlur}
+                  onChange={val => onChange(!val.trim() ? 0 : parseInt(val, 10))}
+                  error={errors && errors.zipCode?.message}
                 />
               )}
             />
             <Controller
               name='phoneNumber'
               control={control}
-              // eslint-disable-next-line @typescript-eslint/no-unused-vars
-              render={({ field: { ref, ...moreFields }, formState: { errors } }) => (
+              render={({ field: { onChange, onBlur, value, name }, formState: { errors } }) => (
                 <Input
                   inputLeftAddonProps={{ w: LABEL_WIDTH }}
                   leftComponent='Phone No.'
                   error={errors && errors.phoneNumber?.message}
-                  {...moreFields}
+                  name={name}
+                  value={value}
+                  onBlur={onBlur}
+                  onChange={onChange}
                 />
               )}
             />

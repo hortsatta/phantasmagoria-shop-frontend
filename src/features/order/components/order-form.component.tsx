@@ -39,7 +39,7 @@ type OrderFormData = Omit<Order, 'id' | 'userAccount' | 'date' | 'orderItems' | 
 };
 
 type Props = Omit<FlexProps, 'onSubmit'> & {
-  userAccount: UserAccount;
+  userAccount: UserAccount | null;
   cartItems: CartItemFormData[];
   onAddOrder: (orderFormData: OrderFormData, orderCompletePath?: string) => void;
   loading?: boolean;
@@ -82,7 +82,7 @@ const OrderForm: FC<Props> = ({ userAccount, cartItems, loading, onAddOrder, ...
     onClose: paymentModalOnClose
   } = useDisclosure();
 
-  const { addresses: userCurrentAddresses = [] } = userAccount;
+  const { addresses: userCurrentAddresses = [] } = userAccount || {};
 
   const userCurrentAddress: any = useMemo(() => {
     if (!userCurrentAddresses.length) {
@@ -171,6 +171,10 @@ const OrderForm: FC<Props> = ({ userAccount, cartItems, loading, onAddOrder, ...
     },
     [userCurrentAddress]
   );
+
+  if (!userAccount) {
+    return null;
+  }
 
   return (
     <>

@@ -43,26 +43,30 @@ export const UpsertCardStep1: FC = () => {
       <Controller
         name='name'
         control={control}
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        render={({ field: { ref, ...moreFields }, formState: { errors } }) => (
+        render={({ field: { onChange, onBlur, value, name }, formState: { errors } }) => (
           <Input
             inputLeftAddonProps={{ w: LABEL_WIDTH }}
             leftComponent='Name'
             error={errors && errors.name?.message}
-            {...moreFields}
+            name={name}
+            value={value}
+            onChange={onChange}
+            onBlur={onBlur}
           />
         )}
       />
       <Controller
         name='description'
         control={control}
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        render={({ field: { ref, ...moreFields }, formState: { errors } }) => (
+        render={({ field: { onChange, onBlur, value, name }, formState: { errors } }) => (
           <Input
             inputLeftAddonProps={{ w: LABEL_WIDTH }}
             leftComponent='Description'
             error={errors && errors.description?.message}
-            {...moreFields}
+            name={name}
+            value={value}
+            onChange={onChange}
+            onBlur={onBlur}
           />
         )}
       />
@@ -71,42 +75,45 @@ export const UpsertCardStep1: FC = () => {
         <Controller
           name='offense'
           control={control}
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          render={({ field: { ref, onChange, ...moreFields }, formState: { errors } }) => (
+          render={({ field: { onChange, onBlur, value, name }, formState: { errors } }) => (
             <NumberInput
               inputLeftAddonProps={{ w: LABEL_WIDTH }}
               leftComponent='Offense'
               error={errors && errors.offense?.message}
+              name={name}
+              value={value}
+              onBlur={onBlur}
               onChange={val => onChange(!val.trim() ? 0 : parseInt(val, 10))}
-              {...moreFields}
             />
           )}
         />
         <Controller
           name='defense'
           control={control}
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          render={({ field: { ref, onChange, ...moreFields }, formState: { errors } }) => (
+          render={({ field: { onChange, onBlur, value, name }, formState: { errors } }) => (
             <NumberInput
               inputLeftAddonProps={{ w: LABEL_WIDTH }}
               leftComponent='Defense'
               error={errors && errors.defense?.message}
+              name={name}
+              value={value}
+              onBlur={onBlur}
               onChange={val => onChange(!val.trim() ? 0 : parseInt(val, 10))}
-              {...moreFields}
             />
           )}
         />
         <Controller
           name='cost'
           control={control}
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          render={({ field: { ref, onChange, ...moreFields }, formState: { errors } }) => (
+          render={({ field: { onChange, onBlur, value, name }, formState: { errors } }) => (
             <NumberInput
               inputLeftAddonProps={{ w: LABEL_WIDTH }}
               leftComponent='Cost'
               error={errors && errors.cost?.message}
+              name={name}
+              value={value}
+              onBlur={onBlur}
               onChange={val => onChange(!val.trim() ? 0 : parseInt(val, 10))}
-              {...moreFields}
             />
           )}
         />
@@ -116,32 +123,32 @@ export const UpsertCardStep1: FC = () => {
         <Controller
           name='rarity'
           control={control}
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          render={({ field: { ref, onChange, value, ...moreFields }, formState: { errors } }) => (
+          render={({ field: { onChange, onBlur, value, name }, formState: { errors } }) => (
             <Select
               inputLeftAddonProps={{ w: LABEL_WIDTH }}
               leftComponent='Rarity'
               options={cardRarityOptions}
+              name={name}
               value={cardRarityOptions.find(item => item.value === value) || { value: 0 }}
-              error={errors && errors.cost?.message}
+              onBlur={onBlur}
               onChange={(val: any) => onChange(val.value)}
-              {...moreFields}
+              error={errors && errors.cost?.message}
             />
           )}
         />
         <Controller
           name='category'
           control={control}
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          render={({ field: { ref, onChange, value, ...moreFields }, formState: { errors } }) => (
+          render={({ field: { onChange, onBlur, value, name }, formState: { errors } }) => (
             <Select
               inputLeftAddonProps={{ w: LABEL_WIDTH }}
               leftComponent='Category'
               options={cardCategoryOptions}
+              name={name}
               value={cardCategoryOptions.find(item => item.value === value) || { value: 0 }}
-              error={errors && errors.cost?.message}
+              onBlur={onBlur}
               onChange={(val: any) => onChange(val.value)}
-              {...moreFields}
+              error={errors && errors.cost?.message}
             />
           )}
         />
@@ -149,17 +156,17 @@ export const UpsertCardStep1: FC = () => {
       <Controller
         name='types'
         control={control}
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        render={({ field: { ref, onChange, value, ...moreFields }, formState: { errors } }) => (
+        render={({ field: { onChange, onBlur, value, name }, formState: { errors } }) => (
           <Select
             inputLeftAddonProps={{ w: LABEL_WIDTH }}
             leftComponent='Types'
             options={cardTypeOptions}
+            name={name}
             value={cardTypeOptions.filter(item => value.find(v => v === item.value))}
-            error={errors && errors.cost?.message}
+            onBlur={onBlur}
             onChange={(val: any) => onChange(val.map((item: any) => item.value))}
+            error={errors && errors.cost?.message}
             isMulti
-            {...moreFields}
           />
         )}
       />

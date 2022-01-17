@@ -10,7 +10,6 @@ const httpLink = createUploadLink({ uri: process.env.REACT_APP_API_URI });
 
 const authLink = setContext((_, { headers }) => {
   // Get the authentication token from local storage if it exists.
-  // eslint-disable-next-line no-undef
   const token = localStorage.getItem('token');
   // Return the headers to the context so httpLink can read them.
   return {

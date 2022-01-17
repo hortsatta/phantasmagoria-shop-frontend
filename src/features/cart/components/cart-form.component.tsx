@@ -111,8 +111,7 @@ const CartForm: FC<Props> = ({
   const handleSubmit = useCallback(
     (event: FormEvent) => {
       event.preventDefault();
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      submitForm((cartFormData: CartFormData) => {
+      submitForm(() => {
         onSubmit();
       })();
     },
@@ -124,7 +123,7 @@ const CartForm: FC<Props> = ({
       // Update cart item form value
       onChange(cartItem);
       // Update total price
-      const tp = getValues('cartItems').reduce((t, value) => {
+      const tp: any = getValues('cartItems').reduce((t, value) => {
         const cq = value.currentQuantity === undefined ? 0 : value.quantity + value.currentQuantity;
         return t + value.cardProduct.price * cq;
       }, 0);

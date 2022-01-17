@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import { useEffect } from 'react';
 
 export const useOnClickOutside = (ref: any, callback: any) => {

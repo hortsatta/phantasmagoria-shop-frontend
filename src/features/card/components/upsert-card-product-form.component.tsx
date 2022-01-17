@@ -112,7 +112,6 @@ const UpsertCardProductForm: FC<Props> = ({
       return;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     submitForm(async (cardProductFormData: CardProductFormData) => {
       setStep(steps.length);
       const { cards } = getValues();

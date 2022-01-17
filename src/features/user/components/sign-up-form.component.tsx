@@ -71,22 +71,23 @@ const SignUpForm: FC<Props> = ({ loading, onSubmit, ...moreProps }) => {
           <Controller
             name='email'
             control={control}
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            render={({ field: { ref, ...moreFields }, formState: { errors } }) => (
+            render={({ field: { onChange, onBlur, value, name }, formState: { errors } }) => (
               <Input
                 inputLeftAddonProps={{ w: LABEL_WIDTH }}
                 leftComponent='Email'
                 error={errors && errors.email?.message}
                 type='email'
-                {...moreFields}
+                name={name}
+                value={value}
+                onBlur={onBlur}
+                onChange={onChange}
               />
             )}
           />
           <Controller
             name='password'
             control={control}
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            render={({ field: { ref, ...moreFields }, formState: { errors } }) => (
+            render={({ field: { onChange, onBlur, value, name }, formState: { errors } }) => (
               <Input
                 inputLeftAddonProps={{ w: LABEL_WIDTH }}
                 leftComponent='Password'
@@ -103,21 +104,26 @@ const SignUpForm: FC<Props> = ({ loading, onSubmit, ...moreProps }) => {
                     />
                   </InputRightElement>
                 }
-                {...moreFields}
+                name={name}
+                value={value}
+                onBlur={onBlur}
+                onChange={onChange}
               />
             )}
           />
           <Controller
             name='confirmPassword'
             control={control}
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            render={({ field: { ref, ...moreFields }, formState: { errors } }) => (
+            render={({ field: { onChange, onBlur, value, name }, formState: { errors } }) => (
               <Input
                 inputLeftAddonProps={{ w: LABEL_WIDTH }}
                 leftComponent='Confirm Password'
                 error={errors && errors.confirmPassword?.message}
                 type={showPassword ? 'default' : 'password'}
-                {...moreFields}
+                name={name}
+                value={value}
+                onBlur={onBlur}
+                onChange={onChange}
               />
             )}
           />

@@ -52,7 +52,6 @@ export const useEditShopItem = (slug: string): Result => {
 
       try {
         const { id: cardProductId, image: currentImage } = cardProducts[0] || {};
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { id, image, cards, ...moreCardProdFormData } = cardProdFormData;
 
         const cardProduct: any = {

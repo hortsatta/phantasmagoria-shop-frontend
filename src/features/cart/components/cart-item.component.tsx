@@ -34,7 +34,6 @@ export const CartItem: FC<Props> = ({ cartItem, onChange, ...moreProps }) => {
   }, [itemQuantity, cartItem]);
 
   const handleRemove = useCallback(() => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { currentQuantity: cq, ...moreCartItem } = cartItem;
     onChange && onChange({ ...moreCartItem, quantity: 0 });
   }, [itemQuantity, cartItem]);
