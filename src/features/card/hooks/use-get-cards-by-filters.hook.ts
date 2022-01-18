@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import { useLazyQuery } from '@apollo/client';
 
 import { Card } from 'models';
@@ -15,10 +14,14 @@ type Result = {
   setCardFilters: any;
 };
 
-export const useGetCardsByFilters = (locState?: any): Result => {
-  const history = useHistory();
-  const [getCards, { data: { cards = [] } = {}, loading: getCardsLoading, refetch }] =
-    useLazyQuery(GET_CARDS);
+export const useGetCardsByFilters = (): Result => {
+  const [getCards, { data: { cards = [] } = {}, loading: getCardsLoading }] = useLazyQuery(
+    GET_CARDS,
+    {
+      fetchPolicy: 'network-only',
+      nextFetchPolicy: 'cache-first'
+    }
+  );
   const [searchKeyword, setSearchKeyword] = useState('');
   const { debouncedValue: debounceSearchKeyword, loading: debounceSearchLoading } =
     useDebounceValue(searchKeyword);
@@ -44,15 +47,6 @@ export const useGetCardsByFilters = (locState?: any): Result => {
   useEffect(() => {
     getCards({ variables: cardVariables });
   }, [cardVariables]);
-
-  useEffect(() => {
-    if (!refetch || !locState?.refetch) {
-      return;
-    }
-    // Refetch and clear history state to prevent refetch on reload.
-    refetch(cardVariables);
-    history.replace({ state: {} });
-  }, [locState, refetch]);
 
   return {
     cards,

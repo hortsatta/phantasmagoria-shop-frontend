@@ -21,7 +21,7 @@ export const AddCardPage: FC = () => {
 
     const delay = setTimeout(() => {
       const cardListPath = `${appModules.admin.path}${appModules.card.path}`;
-      history.push(cardListPath, { refetch: true });
+      history.push(cardListPath);
     }, 1800);
 
     return () => {

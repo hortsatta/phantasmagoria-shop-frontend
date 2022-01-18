@@ -77,7 +77,6 @@ const UpsertCardForm: FC<Props> = ({
     }
 
     const { attr, rarity, category, types, image, coverImage, slug, ...moreCard } = card;
-
     return {
       ...moreCard,
       ...attr,

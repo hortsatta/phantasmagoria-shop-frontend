@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { useApolloClient, useReactiveVar } from '@apollo/client';
 
 import { favItemsLoadingVar, favoriteItemsVar } from 'config';
@@ -20,6 +20,7 @@ export const useUpsertFavoriteCache = (isRemoveOnly?: boolean): Result => {
     favoriteItems,
     DEBOUNCE_DURATION
   );
+  const currentFavoriteItems = useRef<any>([]);
 
   const processingFavItems = useMemo(() => {
     if (!favItemsLoading) {
@@ -48,14 +49,16 @@ export const useUpsertFavoriteCache = (isRemoveOnly?: boolean): Result => {
     (item: CardProduct) => {
       const { id, favorites } = item;
       const isFavorite = !favorites?.length;
-      const targetItem = favoriteItems.find(fi => fi.id === id);
+      const targetItem = currentFavoriteItems.current.find((fi: any) => fi.id === id);
       // Add item and set isFavorite field
       if (targetItem) {
-        favoriteItemsVar(
-          favoriteItems.map(fi => (fi.id === targetItem.id ? { ...fi, isFavorite } : fi))
+        currentFavoriteItems.current = currentFavoriteItems.current.map((fi: any) =>
+          fi.id === targetItem.id ? { ...fi, isFavorite } : fi
         );
+        favoriteItemsVar(currentFavoriteItems.current);
       } else {
-        favoriteItemsVar([...favoriteItems, { ...item, isFavorite }]);
+        currentFavoriteItems.current = [...currentFavoriteItems.current, { ...item, isFavorite }];
+        favoriteItemsVar(currentFavoriteItems.current);
       }
 
       if (isRemoveOnly) {
@@ -65,12 +68,19 @@ export const useUpsertFavoriteCache = (isRemoveOnly?: boolean): Result => {
       clientCache.modify({
         id: clientCache.identify(item),
         fields: {
-          favorites: () => (favorites?.length ? [] : [{ id: '0' }])
+          favorites: () => (!isFavorite ? [] : [{ id: '1' }])
         }
       });
     },
-    [favoriteItems, isRemoveOnly]
+    [currentFavoriteItems, isRemoveOnly]
   );
+
+  useEffect(() => {
+    if (favoriteItems.length) {
+      return;
+    }
+    currentFavoriteItems.current = [];
+  }, [favoriteItems]);
 
   return {
     favoriteItems,

@@ -1,8 +1,7 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useEffect, useMemo, useState } from 'react';
 import { useLazyQuery, useReactiveVar } from '@apollo/client';
 
-import { currentUserAccountVar, favoriteItemsVar } from 'config';
+import { currentUserAccountVar } from 'config';
 import { CardProduct } from 'models';
 import { GET_CARD_PRODUCTS } from 'services/graphql';
 import { useDebounceValue } from 'features/core/hooks';
@@ -18,16 +17,14 @@ type Result = {
   setItemFilters: any;
 };
 
-export const useGetShopItemsByFilters = (locState?: any): Result => {
-  const history = useHistory();
-  const hasRefetched = useRef(false);
-  const favoriteItems = useReactiveVar(favoriteItemsVar);
+export const useGetShopItemsByFilters = (): Result => {
   const currentUserAccount = useReactiveVar(currentUserAccountVar);
   // Card products query search with product or card name as keyword
-  const [
-    getCardProducts,
-    { data: { cardProducts = [] } = {}, loading: getCardProductsLoading, refetch }
-  ] = useLazyQuery(GET_CARD_PRODUCTS);
+  const [getCardProducts, { data: { cardProducts = [] } = {}, loading: getCardProductsLoading }] =
+    useLazyQuery(GET_CARD_PRODUCTS, {
+      fetchPolicy: 'network-only',
+      nextFetchPolicy: 'cache-first'
+    });
   const [itemFilters, setItemFilters] = useState<any>(null);
   const [itemSort, setItemSort] = useState<string | null>(null);
   const [searchKeyword, setSearchKeyword] = useState('');
@@ -68,24 +65,6 @@ export const useGetShopItemsByFilters = (locState?: any): Result => {
   useEffect(() => {
     getCardProducts({ variables: itemVariables });
   }, [itemVariables]);
-
-  useEffect(() => {
-    if (favoriteItems.length || hasRefetched.current) {
-      return;
-    }
-    hasRefetched.current = true;
-    refetch && refetch();
-  }, [favoriteItems, refetch]);
-
-  useEffect(() => {
-    if (!locState?.refetch) {
-      return;
-    }
-
-    // Refetch and clear history state to prevent refetch on reload.
-    refetch && refetch(itemVariables);
-    history.replace({ state: {} });
-  }, [locState, refetch]);
 
   return {
     items: cardProducts,
