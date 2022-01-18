@@ -161,9 +161,14 @@ export const ShopListPage: FC = () => {
                 onChange={handleSearchChange}
                 {...(searchKeyword && {
                   rightComponent: (
-                    <InputRightElement>
+                    <InputRightElement h='100%'>
                       <IconButton
+                        alignItems='center'
+                        justifyContent='center'
                         pr={2}
+                        d='flex'
+                        h='100%'
+                        borderRadius={0}
                         cursor='pointer'
                         aria-label='clear search'
                         icon={<Icon as={XSvg} w={4} />}
