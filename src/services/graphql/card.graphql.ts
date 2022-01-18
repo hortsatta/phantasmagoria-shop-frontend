@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 
 const GET_ALL_RARITIES = gql`
-  query GetRarities($sort: String = "name:asc") {
+  query GetRarities($sort: String = "id:asc") {
     rarities(sort: $sort) {
       id
       name
@@ -129,6 +129,7 @@ const GET_CARDS_DETAIL_EDIT = gql`
       name
       description
       slug
+      isActive
       attr {
         offense
         defense
