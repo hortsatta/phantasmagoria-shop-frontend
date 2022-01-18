@@ -1,5 +1,5 @@
 import { CSSProperties, FC, useCallback, useContext, useState } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useReactiveVar } from '@apollo/client';
 import {
   Box,
@@ -63,7 +63,6 @@ export const ShopListPage: FC = () => {
   const { canActivate } = useGuard();
   const { userAccount } = useGetUser();
   const history = useHistory();
-  const { state: locState } = useLocation();
   const appModules: any = useReactiveVar(appModulesVar);
   const {
     items,
@@ -74,7 +73,7 @@ export const ShopListPage: FC = () => {
     setSearchKeyword,
     setItemSort,
     setItemFilters
-  } = useGetShopItemsByFilters(locState);
+  } = useGetShopItemsByFilters();
   const { addCartItem } = useUpsertCart();
   const { updateFavoriteItem } = useUpsertFavoriteCache();
   const [currentItemDetail, setCurrentItemDetail] = useState<CardProduct | null>(null);
@@ -144,9 +143,16 @@ export const ShopListPage: FC = () => {
           </VStack>
         </Scrollbars>
       </Box>
-      <Flex pb='60px' w='100%' minH='100vh' justifyContent='center' alignItems='flex-start'>
+      <Flex
+        pb='60px'
+        w='100%'
+        h='100%'
+        minH='100vh'
+        justifyContent='center'
+        alignItems='flex-start'
+      >
         <Box {...boxFillerProps} />
-        <Flex w='100%' maxW='7xl' pos='relative' alignItems='flex-start'>
+        <Flex w='100%' h='100%' maxW='7xl' pos='relative' alignItems='flex-start'>
           <Divider pos='absolute' h='100%' orientation='vertical' />
           <Flex flexDir='column' alignItems='flex-start' flex={1} p={8}>
             <Box mt={6} mb={12} mx='auto' w='xl'>

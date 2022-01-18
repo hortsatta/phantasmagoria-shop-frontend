@@ -23,9 +23,7 @@ export const EditShopItemPage: FC = () => {
     }
 
     const delay = setTimeout(() => {
-      changePage(appModules.shop.children?.list.key, appModules.shop.path, false, {
-        refetch: true
-      });
+      changePage(appModules.shop.children?.list.key, appModules.shop.path, false);
     }, 1800);
 
     return () => {
