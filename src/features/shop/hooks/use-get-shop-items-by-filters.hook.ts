@@ -58,7 +58,7 @@ export const useGetShopItemsByFilters = (): Result => {
           }
         ]
       },
-      ...(currentUserAccount && { userAccountId: currentUserAccount?.id })
+      userAccountId: currentUserAccount?.id || '0'
     };
   }, [debounceSearchKeyword, itemFilters, itemSort, currentUserAccount]);
 
