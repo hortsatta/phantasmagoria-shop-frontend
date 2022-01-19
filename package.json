@@ -1,7 +1,7 @@
 {
   "name": "phantasmagoria-shop-frontend",
   "author": "Erwin Errol Calanuga",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "private": true,
   "scripts": {
     "start": "react-scripts start",
