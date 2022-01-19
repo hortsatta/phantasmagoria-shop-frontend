@@ -98,6 +98,7 @@ export const UpsertCardProductStep1: FC = () => {
                   pr={2}
                   cursor='pointer'
                   aria-label='clear search'
+                  tooltip='clear search'
                   icon={<Icon as={XSvg} w={4} />}
                   onClick={() => setSearchKeyword('')}
                 />
@@ -111,6 +112,7 @@ export const UpsertCardProductStep1: FC = () => {
               rightComponent={
                 <IconButton
                   aria-label='view card filters'
+                  tooltip='view card filters'
                   pos='relative'
                   icon={<Icon w={6} boxSizing='content-box' as={Funnel} />}
                   onClick={filterModalOnOpen}

@@ -38,6 +38,7 @@ const MenuItem: FC<MenuItemProps> = ({ active, item, onClick }) => {
   return (
     <NavItem
       aria-label={item.label}
+      tooltip={item.label}
       active={active}
       iconAs={props => <Component {...props} />}
       onClick={onClick}

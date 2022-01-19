@@ -35,7 +35,7 @@ export const AddToCartButton: FC<Props> = ({ wrapperProps, onClick, ...moreProps
 
   return (
     <Box pos='relative' {...wrapperProps}>
-      <IconButton onClick={handleClick} {...moreProps} />
+      <IconButton tooltip='add to cart' onClick={handleClick} {...moreProps} />
       <MotionFlex
         alignItems='center'
         justifyContent='center'

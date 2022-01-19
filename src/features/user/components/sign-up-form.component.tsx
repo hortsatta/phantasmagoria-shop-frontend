@@ -97,6 +97,7 @@ const SignUpForm: FC<Props> = ({ loading, onSubmit, ...moreProps }) => {
                   <InputRightElement pr={4}>
                     <IconButton
                       aria-label='show/hide Password'
+                      tooltip='show/hide Password'
                       icon={
                         <Icon w={6} boxSizing='content-box' as={showPassword ? Eye : EyeClosed} />
                       }

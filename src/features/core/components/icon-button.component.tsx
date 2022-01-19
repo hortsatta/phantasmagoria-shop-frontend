@@ -1,10 +1,17 @@
 import { ComponentProps, FC } from 'react';
-import { IconButton as ChIconButton, IconButtonProps } from '@chakra-ui/react';
+import { IconButton as ChIconButton, IconButtonProps, Tooltip } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 
 import variables from 'assets/styles/_variables.module.scss';
 
-const MotionChIconButton = motion<Omit<IconButtonProps, 'transition'>>(ChIconButton);
+type Props = IconButtonProps & {
+  tooltip?: string;
+};
+
+const OPEN_DELAY = 800;
+const CLOSE_DELAY = 400;
+
+const MotionChIconButton = motion<Omit<Props, 'transition'>>(ChIconButton);
 
 const buttonProps = {
   color: 'rgba(255,255,255,0.7)',
@@ -14,10 +21,21 @@ const buttonProps = {
   variant: 'unstyled'
 };
 
-const IconButton: FC<IconButtonProps> = props => <ChIconButton {...buttonProps} {...props} />;
-
-const MotionIconButton: FC<ComponentProps<typeof MotionChIconButton>> = props => (
-  <MotionChIconButton {...buttonProps} {...props} />
+const IconButton: FC<Props> = ({ tooltip, ...moreProps }) => (
+  <Tooltip label={tooltip} openDelay={OPEN_DELAY} closeDelay={CLOSE_DELAY}>
+    <ChIconButton {...buttonProps} {...moreProps} />
+  </Tooltip>
 );
+
+const MotionIconButton: FC<ComponentProps<typeof MotionChIconButton>> = ({
+  tooltip,
+  ...moreProps
+}) => (
+  <Tooltip label={tooltip} openDelay={OPEN_DELAY} closeDelay={CLOSE_DELAY}>
+    <MotionChIconButton {...buttonProps} {...moreProps} />
+  </Tooltip>
+);
+
+IconButton.defaultProps = { tooltip: '' };
 
 export { IconButton, MotionIconButton };

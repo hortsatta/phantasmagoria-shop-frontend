@@ -9,9 +9,10 @@ import { NavActiveIndicator } from './nav-active-indicator.component';
 type Props = IconButtonProps & {
   iconAs: As;
   active?: boolean;
+  tooltip?: string;
 };
 
-export const NavItem: FC<Props> = ({ active, iconAs, ...moreProps }) => {
+export const NavItem: FC<Props> = ({ active, tooltip, iconAs, ...moreProps }) => {
   const { pageLoading } = useContext(PageContext);
 
   return (
@@ -22,6 +23,7 @@ export const NavItem: FC<Props> = ({ active, iconAs, ...moreProps }) => {
         h='100%'
         zIndex={2}
         icon={<Icon boxSizing='content-box' px={10} as={iconAs} active={active} />}
+        tooltip={tooltip}
         {...moreProps}
       />
       <Divider w='1px' h='70%' _groupHover={{ opacity: 0.1 }} opacity={0} orientation='vertical' />
@@ -31,5 +33,6 @@ export const NavItem: FC<Props> = ({ active, iconAs, ...moreProps }) => {
 };
 
 NavItem.defaultProps = {
-  active: false
+  active: false,
+  tooltip: undefined
 };

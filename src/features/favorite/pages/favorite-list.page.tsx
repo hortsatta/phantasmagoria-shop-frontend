@@ -60,6 +60,7 @@ export const FavoriteListPage: FC = () => {
                     borderRadius={0}
                     cursor='pointer'
                     aria-label='clear search'
+                    tooltip='clear search'
                     icon={<Icon as={XSvg} w={4} />}
                     onClick={() => setSearchKeyword('')}
                   />
