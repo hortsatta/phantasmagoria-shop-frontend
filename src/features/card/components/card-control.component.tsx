@@ -42,6 +42,7 @@ export const CardControl: FC<Props> = ({ onDetailClick, onEditClick }) => {
           <IconButton
             {...iconButtonProps}
             aria-label='view card detail'
+            tooltip='view card detail'
             icon={<Icon w={6} boxSizing='content-box' as={Brain} />}
             onClick={onDetailClick}
           />
@@ -51,6 +52,7 @@ export const CardControl: FC<Props> = ({ onDetailClick, onEditClick }) => {
             <IconButton
               {...iconButtonProps}
               aria-label='edit card'
+              tooltip='view card detail'
               icon={<Icon w={6} boxSizing='content-box' as={PenNib} />}
               onClick={onEditClick}
             />

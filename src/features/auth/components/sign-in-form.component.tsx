@@ -77,6 +77,7 @@ export const SignInForm: FC<Props> = ({ loading, onSubmit, ...moreProps }) => {
                     <IconButton
                       opacity={0.6}
                       aria-label='show/hide password'
+                      tooltip='show/hide password'
                       icon={
                         <Icon w={7} boxSizing='content-box' as={showPassword ? Eye : EyeClosed} />
                       }

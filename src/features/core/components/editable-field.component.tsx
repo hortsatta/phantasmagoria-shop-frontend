@@ -82,7 +82,12 @@ const EditableControls: FC<EditableControlsProps> = ({ onSubmit, onCancel }) => 
     </ButtonGroup>
   ) : (
     <Flex justifyContent='center'>
-      <IconButton size='xs' icon={<Icon {...iconProps} as={PenNib} />} {...getEditProps()} />
+      <IconButton
+        tooltip='edit'
+        size='xs'
+        icon={<Icon {...iconProps} as={PenNib} />}
+        {...getEditProps()}
+      />
     </Flex>
   );
 };

@@ -20,6 +20,7 @@ export const RemoveIconButton: FC<Props> = ({ onClick, icon, disabled }) => {
   return confirmRemove ? (
     <IconButton
       aria-label='confirm remove'
+      tooltip='confirm remove'
       color='orange.400'
       icon={<Icon as={WarningCircle} w={7} />}
       onBlur={() => setConfirmRemove(false)}
@@ -29,6 +30,7 @@ export const RemoveIconButton: FC<Props> = ({ onClick, icon, disabled }) => {
   ) : (
     <IconButton
       aria-label='remove'
+      tooltip='remove'
       icon={icon || <Icon as={XCircle} w={7} />}
       onClick={() => setConfirmRemove(true)}
       disabled={disabled}

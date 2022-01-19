@@ -40,6 +40,7 @@ export const FavoriteButton: FC<Props> = ({ isActive, wrapperProps, onClick, ...
     <Box {...wrapperProps}>
       <Box pos='relative' w='100%' h='100%'>
         <IconButton
+          tooltip={isActive ? 'remove from favourites' : 'add to favourites'}
           onClick={handleClick}
           pos='absolute'
           left={0}

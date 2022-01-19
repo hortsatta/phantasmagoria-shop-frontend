@@ -67,6 +67,7 @@ export const ShopItemDetail: FC<Props> = ({
             w='100%'
             zIndex={2}
             aria-label='close detail'
+            tooltip='close detail'
             icon={<Icon w={6} boxSizing='content-box' as={XSvg} />}
             {...(onClose && { onClick: onClose })}
           />

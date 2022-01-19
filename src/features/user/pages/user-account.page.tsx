@@ -120,6 +120,7 @@ export const UserAccountPage: FC = () => {
                   <Box pos='relative' flex={1}>
                     <IconButton
                       aria-label='view card filters'
+                      tooltip='view card filters'
                       pos='absolute'
                       top={-2}
                       right={2}

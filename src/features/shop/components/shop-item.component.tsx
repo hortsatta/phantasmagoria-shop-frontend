@@ -126,6 +126,7 @@ export const ShopItem: FC<Props> = ({
             <IconButton
               {...iconButtonProps}
               aria-label='view item detail'
+              tooltip='view item detail'
               icon={<Icon w={6} boxSizing='content-box' as={Brain} />}
               {...(onDetailClick && { onClick: () => onDetailClick(item) })}
             />
@@ -147,6 +148,7 @@ export const ShopItem: FC<Props> = ({
                 <IconButton
                   {...iconButtonProps}
                   aria-label='edit item'
+                  tooltip='edit item'
                   icon={<Icon w={6} boxSizing='content-box' as={PenNib} />}
                   onClick={() => onEditClick && onEditClick(item)}
                 />

@@ -15,6 +15,7 @@ export const Quantity: FC<Props> = ({ value, onIncrement, onDecrement, disabled 
   <Flex alignItems='center'>
     <IconButton
       aria-label='decrement quantity'
+      tooltip='decrement quantity'
       icon={<Icon as={MinusCircle} w={7} />}
       onClick={onDecrement}
       disabled={disabled}
@@ -26,6 +27,7 @@ export const Quantity: FC<Props> = ({ value, onIncrement, onDecrement, disabled 
     </Box>
     <IconButton
       aria-label='increment quantity'
+      tooltip='increment quantity'
       icon={<Icon as={PlusCircle} w={7} />}
       onClick={onIncrement}
       disabled={disabled}
